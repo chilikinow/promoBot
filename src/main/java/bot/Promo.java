@@ -11,28 +11,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Promo {
 
     private Map <String, String> promoInfoMap;
 
     public Promo(){
-        promoInfoMap = addMap();
+            this.promoInfoMap = addMap();
     }
 
-    public Map <String, String> getInfo(){
-        return promoInfoMap;
-    }
-
-    @Override
-    public String toString(){
-        StringBuilder mapToString = new StringBuilder();
-        for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-            mapToString.append(entry.getKey())
-                    .append("\n")
-                    .append(entry.getValue());
-        }
-        return mapToString.toString();
+    public Map<String, String> getPromoInfoMap(){
+        return this.promoInfoMap;
     }
 
 
@@ -67,15 +58,25 @@ class Promo {
             for (int j = 1; j < cellList.size(); j++) { //без названия столбцов акции (0я строка)
                 String cellString = cellList.get(j).getStringCellValue();
 
-//                Pattern pattern = Pattern.compile("\\w+");
-//                Matcher matcher = pattern.matcher(cellString);
-//                while (matcher.matches()) {
-                    valueForMap.append(cellString + "\n");//название акции будет ключем к MAP
+                Pattern pattern = Pattern.compile("\\w+");
+                Matcher matcher = pattern.matcher(cellString);
+                while (matcher.find()) {
+                    valueForMap.append(cellString + "\n\n");//название акции будет ключем к MAP
                     break;
-//                }
+                }
             }
             map.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
+
         }
+
+//            for (Map.Entry<String, String> entry: map.entrySet()){
+//                StringBuilder mapToString = new StringBuilder();
+//                mapToString.append(entry.getKey())
+//                        .append("\n\n")
+//                        .append(entry.getValue());
+//                System.out.println(mapToString.toString());
+//            }
+
         return map;
     }
 }

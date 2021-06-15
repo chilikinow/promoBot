@@ -53,6 +53,20 @@ public class Bot extends TelegramLongPollingBot {
         return this.BOT_TOKEN;
     }
 
+    @Override
+    public void onUpdateReceived(Update update) {
+        message = update.getMessage();
+
+        if (message == null)
+            return;
+
+        authorizationUser();
+
+        if (this.pass) {
+            processingMessage();
+        }
+    }
+
     public void sendMessage(String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
@@ -94,20 +108,6 @@ public class Bot extends TelegramLongPollingBot {
 
     }
 
-    @Override
-    public void onUpdateReceived(Update update) {
-        message = update.getMessage();
-
-        if (message == null)
-            return;
-
-        authorizationUser();
-
-        if (this.pass) {
-            processingMessage();
-        }
-    }
-
     public void processingMessage(){ //разобраться
 
         if (message.getText().equals(BOT_PASSWORD))
@@ -125,9 +125,19 @@ public class Bot extends TelegramLongPollingBot {
                 return;
         }
 
+        //обработка информации об акциях
         if (messageText.equalsIgnoreCase("акции") || messageText.equalsIgnoreCase("promo")){
-            //обработка информации об акциях
-            System.out.println(new Promo());
+            Map <String, String> promoInfoMap = new Promo().getPromoInfoMap();
+
+            StringBuilder mapToString;
+            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
+                mapToString = new StringBuilder();
+                mapToString.append(entry.getKey())
+                        .append("\n\n")
+                        .append(entry.getValue());
+                sendMessage(mapToString.toString());
+            }
+
             sendMessage("https://galaxystore.ru/promo/");
             return;
         }
