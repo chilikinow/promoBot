@@ -7,6 +7,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.*;
@@ -24,6 +27,7 @@ public class Bot extends TelegramLongPollingBot {
     private Message message;
     private int messageCounter;
     private boolean pass;
+    private ReplyKeyboardMarkup replyKeyboardMarkup;
 
     static {
             Path botInfoPropertiesFile = Paths.get
@@ -42,7 +46,8 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         {
-            this.messageCounter = 0;
+            this.replyKeyboardMarkup = new ReplyKeyboardMarkup();
+            this.messageCounter = 1;
             this.pass = false;
         }
 
@@ -58,25 +63,41 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        message = update.getMessage();
+        this.message = update.getMessage();
 
-        if (message == null)
+        if (this.message == null)
             return;
 
-        authorizationUser();
+        if (this.message.getText().equals("/start") || !this.pass) {
+            authorizationUser();
+        }
 
         if (this.pass) {
             processingMessage();
         }
     }
 
+    public void sendMessageWIthKeyboard(String text){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(this.message.getChatId().toString());
+//        sendMessage.setReplyToMessageId(message.getMessageId());
+            sendMessage.setReplyMarkup(this.replyKeyboardMarkup);
+        try {
+            sendMessage.setText(text);
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendMessage(String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setChatId(this.message.getChatId().toString());
 //        sendMessage.setReplyToMessageId(message.getMessageId());
-        sendMessage.setText(text);
         try {
+            sendMessage.setText(text);
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -85,7 +106,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public void authorizationUser(){
 
-        if (message.getText().equals("/start")){
+        if (this.message.getText().equals("/start")){
             this.messageCounter = 1;
             this.pass = false;
         }
@@ -96,34 +117,53 @@ public class Bot extends TelegramLongPollingBot {
             return;
         }
 
+        //Финальная часть авторизации
         if (this.messageCounter == 2) {
-            this.messageCounter++;
-            if (BOT_PASSWORD.equals(message.getText())) {
-                sendMessage("Доступ Разрешен...\n");
+            if (BOT_PASSWORD.equals(this.message.getText())) {
+                this.messageCounter++;
                 this.pass = true;
+                sendMessage("Доступ Разрешен...\n\n");
             }
             else {
                 sendMessage("Я Вас не знаю, всего Доброго...\n");
-                this.messageCounter = 0;
+                this.messageCounter = 1;
             }
             return;
         }
-
     }
 
     public void processingMessage(){ //разобраться
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
 
-        if (message.getText().equals(BOT_PASSWORD))
+        replyKeyboardMarkup.setResizeKeyboard(true);//размер клавиатуры адаптируется под количество клавиш
+        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
+        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
+
+        if (this.messageCounter == 3) {
+            keyboard.clear();
+            keyboardFirstRow.add("Акции");
+            keyboardFirstRow.add("Справка");
+            keyboardFirstRow.add("Помощь");
+            keyboardFirstRow.add("Инфо");
+            keyboard.add(keyboardFirstRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            this.messageCounter++;
+            sendMessageWIthKeyboard("Меню:");
+        }
+
+        if (this.message.getText().equals(BOT_PASSWORD))
             return;
 
-        User user = message.getFrom();
-        String messageText = message.getText().toLowerCase(Locale.ROOT);
+
+        User user = this.message.getFrom();
+        String messageText = this.message.getText().toLowerCase(Locale.ROOT);
 
         switch (messageText) {
-            case "/help":
+            case "Помощь":
                 sendMessage(new HelpCommand().init());
                 return;
-            case "/info":
+            case "Инфо":
                 sendMessage(new InfoCommand().init());
                 return;
         }
@@ -131,6 +171,14 @@ public class Bot extends TelegramLongPollingBot {
         //обработка информации об акциях
         if (messageText.equalsIgnoreCase("акции") || messageText.equalsIgnoreCase("promo")){
             Map <String, String> promoInfoMap = Promo.getInstance();
+
+//            keyboard.clear();
+//            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()) {
+//                keyboardFirstRow.add(entry.getKey());
+//            }
+//            keyboard.add(keyboardFirstRow);
+//            replyKeyboardMarkup.setKeyboard(keyboard);
+//            sendMessageWIthKeyboard("Акции");
 
             StringBuilder mapToString;
             for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
@@ -142,7 +190,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             sendMessage("Список акций интернет магазина:\n" +
-                    "https://galaxystore.ru/promo/");
+                             "https://galaxystore.ru/promo/");
             return;
         }
         if (!(messageText.startsWith("tab")
@@ -152,11 +200,11 @@ public class Bot extends TelegramLongPollingBot {
                 || messageText.startsWith("smart"))) {
             sendMessage("У Компании Samsung нет такого продукта!");
             return;
+        }else {
+            sendMessage("Всю необходимую информацию об "
+                    + message.getText()
+                    + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
         }
-
-                sendMessage("Всю необходимую информацию об "
-                        + message.getText()
-                        +" ты можещь найти здесь:\nhttp://uspmobile.ru/");
 
     }
 
