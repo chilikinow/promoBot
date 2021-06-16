@@ -43,32 +43,40 @@ class Promo {
         ArrayList<Row> rowList = new ArrayList<>();
         Iterator<Row> rowIterator = sheet.rowIterator();
         while (rowIterator.hasNext()){
-            rowList.add(rowIterator.next());//строка
+            rowList.add(rowIterator.next());//получаем лист строк
         }
 
         Map <String, String> map = new HashMap<>();
 
-        for (int i = 1; i < rowList.size(); i++) { //без названий столбцов
+        //перебираем лист строк без первой строки, где хронятся названия столбцов
+        for (int i = 1; i < rowList.size(); i++) {
             ArrayList<Cell> cellList = new ArrayList<>();
             Iterator<Cell> cellIterator = rowList.get(i).iterator();
+            //формируем лист ячеек из строки
             while (cellIterator.hasNext()){
                 cellList.add(cellIterator.next());
             }
+
+            //переменная для формирования информации со всех ячеек (подробности акции) кроме названия акции
             StringBuilder valueForMap = new StringBuilder();
-            for (int j = 1; j < cellList.size(); j++) { //без названия столбцов акции (0я строка)
+            for (int j = 1; j < cellList.size(); j++) {
                 String cellString = cellList.get(j).getStringCellValue();
 
+                //проверяем значение ячейки на наличие символов, изключаем пустые
                 Pattern pattern = Pattern.compile("\\w+");
                 Matcher matcher = pattern.matcher(cellString);
                 while (matcher.find()) {
-                    valueForMap.append(cellString + "\n\n");//название акции будет ключем к MAP
+                    //формируем подробную информацию об условиях и механики проведения акции
+                    valueForMap.append(cellString + "\n\n");
                     break;
                 }
             }
+            //создаем элемент Map, где key- название акции, value- подробности акции
             map.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
 
         }
 
+        //блок для проверки вывода Map в консоль
 //            for (Map.Entry<String, String> entry: map.entrySet()){
 //                StringBuilder mapToString = new StringBuilder();
 //                mapToString.append(entry.getKey())
