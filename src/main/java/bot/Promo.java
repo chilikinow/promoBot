@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Promo {
+class Promo {
 
     private static Map <String, String> promoInfoMap;
 
@@ -32,7 +32,7 @@ public class Promo {
 
     private static Map<String, String> addMap() {
 
-        Path PromoFilePath = Paths.get("src/main/resources/Samsung_Календарь акций.xlsx");
+        Path PromoFilePath = Paths.get(Bot.PROMO_INFO_FILE_ADDRESS);
         XSSFWorkbook workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
             workBook = new XSSFWorkbook(fIS);//получили книгу exel

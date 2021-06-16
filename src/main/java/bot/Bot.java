@@ -16,6 +16,8 @@ import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
+    public static final String PROMO_INFO_FILE_ADDRESS;
+
     private static final String BOT_NAME;
     private static final String BOT_TOKEN;
     private static final String BOT_PASSWORD;
@@ -36,6 +38,7 @@ public class Bot extends TelegramLongPollingBot {
             BOT_NAME = botInfoProperties.getProperty("botUsername");
             BOT_TOKEN = botInfoProperties.getProperty("botToken");
             BOT_PASSWORD = botInfoProperties.getProperty("botPassword");
+            PROMO_INFO_FILE_ADDRESS = botInfoProperties.getProperty("promoInfoFileAddress");
         }
 
         {
@@ -83,17 +86,17 @@ public class Bot extends TelegramLongPollingBot {
     public void authorizationUser(){
 
         if (message.getText().equals("/start")){
-            this.messageCounter = 0;
+            this.messageCounter = 1;
             this.pass = false;
         }
 
-        if (this.messageCounter == 0) {
+        if (this.messageCounter == 1) {
             sendMessage("Добро пожаловать!\nВведите пароль:\n");
             this.messageCounter++;
             return;
         }
 
-        if (this.messageCounter == 1) {
+        if (this.messageCounter == 2) {
             this.messageCounter++;
             if (BOT_PASSWORD.equals(message.getText())) {
                 sendMessage("Доступ Разрешен...\n");
