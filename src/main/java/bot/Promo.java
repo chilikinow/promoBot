@@ -14,20 +14,23 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Promo {
+public class Promo {
 
-    private Map <String, String> promoInfoMap;
+    private static Map <String, String> promoInfoMap;
 
-    public Promo(){
-            this.promoInfoMap = addMap();
+    private Promo(){
     }
 
-    public Map<String, String> getPromoInfoMap(){
-        return this.promoInfoMap;
+    //Singleton
+    public static Map<String, String> getInstance(){
+        if (promoInfoMap == null) {
+            promoInfoMap = new HashMap<>(addMap());
+        }
+        return promoInfoMap;
     }
 
 
-    private Map<String, String> addMap() {
+    private static Map<String, String> addMap() {
 
         Path PromoFilePath = Paths.get("src/main/resources/Samsung_Календарь акций.xlsx");
         XSSFWorkbook workBook = null;

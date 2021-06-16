@@ -127,7 +127,7 @@ public class Bot extends TelegramLongPollingBot {
 
         //обработка информации об акциях
         if (messageText.equalsIgnoreCase("акции") || messageText.equalsIgnoreCase("promo")){
-            Map <String, String> promoInfoMap = new Promo().getPromoInfoMap();
+            Map <String, String> promoInfoMap = Promo.getInstance();
 
             StringBuilder mapToString;
             for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
@@ -138,7 +138,8 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(mapToString.toString());
             }
 
-            sendMessage("https://galaxystore.ru/promo/");
+            sendMessage("Список акций интернет магазина:\n" +
+                    "https://galaxystore.ru/promo/");
             return;
         }
         if (!(messageText.startsWith("tab")
