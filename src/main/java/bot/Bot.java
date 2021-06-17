@@ -140,7 +140,7 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("акции")
                 || messageText.equalsIgnoreCase("promo")){
 
-            replyKeyboardMarkup = new MenuKeybord().getPromoMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getPromoMenu();
             sendMessageWIthKeyboard("Список акций интернет магазина:\n" +
                     "https://galaxystore.ru/promo/");
 
@@ -159,7 +159,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(new HelpCommand().init());
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
                 sendMessageWIthKeyboard("Меню:");
 
                 return;
@@ -168,10 +168,10 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("инфо")
                 || messageText.equalsIgnoreCase("info")){
 
-                sendMessage(new InfoCommand().init());
+                sendMessage(new InfoCommand().getInfo());
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
                 sendMessageWIthKeyboard("Меню:");
 
                 return;
@@ -187,7 +187,7 @@ public class Bot extends TelegramLongPollingBot {
                     + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
             sendMessageWIthKeyboard("Меню:");
 
             return;
@@ -195,15 +195,15 @@ public class Bot extends TelegramLongPollingBot {
 
 
         Map <String, String> promoInfoMap = Promo.getInstance();
-        for (int i = 0; i < MenuKeybord.getButtonPromoList().size(); i++) {
-            if (messageText.equalsIgnoreCase(MenuKeybord.getButtonPromoList().get(i))) {
+        for (int i = 0; i < MenuKeyboard.getButtonPromoList().size(); i++) {
+            if (messageText.equalsIgnoreCase(MenuKeyboard.getButtonPromoList().get(i))) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
                     if (messageText.equalsIgnoreCase(entry.getKey()))
                         sendMessage(entry.getKey()+"\n\n"+entry.getValue());
                 }
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
                 sendMessageWIthKeyboard("Меню:");
 
                 return;
@@ -226,14 +226,14 @@ public class Bot extends TelegramLongPollingBot {
                              "https://galaxystore.ru/promo/");
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
             sendMessageWIthKeyboard("Меню:");
 
             return;
         }
 
         //Стартовое меню
-        replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+        replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
         sendMessageWIthKeyboard("Меню:");
     }
 

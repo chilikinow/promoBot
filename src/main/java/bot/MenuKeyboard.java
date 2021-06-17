@@ -7,18 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class MenuKeybord {
+public class MenuKeyboard {
 
     private static List <String> buttonPromoList;
+    private static List <String> buttonFirstMenuList;
 
     static {
         buttonPromoList = new ArrayList<>();
+        buttonFirstMenuList = new ArrayList<>();
     }
 
     public static List<String> getButtonPromoList(){
         return buttonPromoList;
     }
 
+    public static List<String> getButtonFirstMenuList(){
+        return buttonFirstMenuList;
+    }
 
     public ReplyKeyboardMarkup getFirstMenu(){
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
@@ -35,6 +40,7 @@ class MenuKeybord {
         buttonList.add("Инфо");
         buttonList.add("Помощь");
 
+        buttonFirstMenuList = buttonList;
 
         for (int i = 0; i < buttonList.size(); i++) {
             KeyboardRow keyboardRowBuffer = new KeyboardRow();
