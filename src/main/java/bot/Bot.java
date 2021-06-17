@@ -44,6 +44,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         {
+            Promo.getInstance();
             this.replyKeyboardMarkup = new ReplyKeyboardMarkup();
             this.messageCounter = 1;
             this.pass = false;
@@ -135,6 +136,41 @@ public class Bot extends TelegramLongPollingBot {
         User user = this.message.getFrom();
         String messageText = this.message.getText().toLowerCase(Locale.ROOT);
 
+        //обработка информации об акциях
+        if (messageText.equalsIgnoreCase("акции")
+                || messageText.equalsIgnoreCase("promo")){
+
+            Map <String, String> promoInfoMap = Promo.getInstance();
+
+            StringBuilder mapToString;
+            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
+                mapToString = new StringBuilder();
+                mapToString.append(entry.getKey())
+                        .append("\n\n")
+                        .append(entry.getValue());
+                sendMessage(mapToString.toString());
+            }
+
+            sendMessage("Список акций интернет магазина:\n" +
+                             "https://galaxystore.ru/promo/");
+
+            //Стартовое меню
+            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            sendMessageWIthKeyboard("Меню:");
+
+//            replyKeyboardMarkup = new MenuKeybord().getPromoMenu();
+//            sendMessageWIthKeyboard("Список акций интернет магазина:\n" +
+//                    "https://galaxystore.ru/promo/");
+
+            return;
+        }
+
+        if (messageText.equalsIgnoreCase("характеристики устройств")
+            || messageText.equalsIgnoreCase("device info")){
+            sendMessage("Введите название интересующего Вас устройства:");
+            return;
+        }
+
         if (messageText.equalsIgnoreCase("помощь")
                 || messageText.equalsIgnoreCase("help")){
 
@@ -157,30 +193,6 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessageWIthKeyboard("Меню:");
 
                 return;
-        }
-
-        //обработка информации об акциях
-        if (messageText.equalsIgnoreCase("акции")
-                || messageText.equalsIgnoreCase("promo")){
-            Map <String, String> promoInfoMap = Promo.getInstance();
-
-            StringBuilder mapToString;
-            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-                mapToString = new StringBuilder();
-                mapToString.append(entry.getKey())
-                        .append("\n\n")
-                        .append(entry.getValue());
-                sendMessage(mapToString.toString());
-            }
-
-            sendMessage("Список акций интернет магазина:\n" +
-                             "https://galaxystore.ru/promo/");
-
-            //Стартовое меню
-            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
-            sendMessageWIthKeyboard("Меню:");
-
-            return;
         }
 
         if (messageText.startsWith("tab")

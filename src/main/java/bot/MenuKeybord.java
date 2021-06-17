@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 class MenuKeybord {
 
@@ -12,7 +13,6 @@ class MenuKeybord {
     public ReplyKeyboardMarkup getFirstMenu(){
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
-//        KeyboardRow keyboardFirstRow = new KeyboardRow();
         replyKeyboardMarkup.setResizeKeyboard(false);//размер клавиатуры адаптируется под количество клавиш
         replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
         replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
@@ -20,10 +20,10 @@ class MenuKeybord {
         keyboard.clear();
 
         List<String> buttonList = new ArrayList<>();
-        buttonList.add("Инфо");
-        buttonList.add("Помощь");
-        buttonList.add("Справка");
         buttonList.add("Акции");
+        buttonList.add("Характеристики устройств");
+        buttonList.add("Помощь");
+        buttonList.add("Инфо");
 
         for (int i = 0; i < buttonList.size(); i++) {
             KeyboardRow keyboardRowBuffer = new KeyboardRow();
@@ -31,18 +31,40 @@ class MenuKeybord {
             keyboard.add(keyboardRowBuffer);
         }
 
-//        keyboard.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
 
         return replyKeyboardMarkup;
     }
 
-    //            keyboard.clear();
-//            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()) {
-//                keyboardFirstRow.add(entry.getKey());
-//            }
-//            keyboard.add(keyboardFirstRow);
-//            replyKeyboardMarkup.setKeyboard(keyboard);
-//            sendMessageWIthKeyboard("Акции");
+    public ReplyKeyboardMarkup getPromoMenu(){
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        replyKeyboardMarkup.setResizeKeyboard(false);//размер клавиатуры адаптируется под количество клавиш
+        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
+        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
+
+        Map <String, String> promoInfoMap = Promo.getInstance();
+        List<String> buttonList = new ArrayList<>();
+
+        keyboard.clear();
+        for (Map.Entry<String, String> entry: promoInfoMap.entrySet()) {
+                buttonList.add(entry.getKey());
+        }
+
+//        System.out.println("Button List");
+//        for (int i = 0; i < buttonList.size(); i++) {
+//            System.out.println(buttonList.get(i));
+//        }
+
+        for (int i = 0; i < buttonList.size(); i++) {
+            KeyboardRow keyboardRowBuffer = new KeyboardRow();
+            keyboardRowBuffer.add(buttonList.get(i));
+            keyboard.add(keyboardRowBuffer);
+        }
+
+        replyKeyboardMarkup.setKeyboard(keyboard);
+
+        return replyKeyboardMarkup;
+    }
 
 }
