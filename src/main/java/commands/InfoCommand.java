@@ -33,17 +33,6 @@ public class InfoCommand implements Command{
         response.append("\nТак же в любой момент вы можете отправить ")
                 .append("любое сообщение для получения стартового меню.");
 
-//        sendMessage(message, "Доступные команды:\n"
-//                + "/help\n"
-//                + "/info\n"
-//                + "Акции\n"
-//                + "Модель устройства");
-//
-//        for (CommandType type: CommandType.values()) {
-//            String command = type.toString().toLowerCase(Locale.ROOT);
-//            response.append(String.format("/%s - %s%n", command, type.getDescription()));
-//        }
-
         return response.toString();
     }
 }
