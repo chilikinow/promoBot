@@ -8,8 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.*;
@@ -120,9 +118,9 @@ public class Bot extends TelegramLongPollingBot {
         //Финальная часть авторизации
         if (this.messageCounter == 2) {
             if (BOT_PASSWORD.equals(this.message.getText())) {
-                this.messageCounter++;
                 this.pass = true;
                 sendMessage("Доступ Разрешен...\n\n");
+                this.messageCounter++;
             }
             else {
                 sendMessage("Я Вас не знаю, всего Доброго...\n");
@@ -133,52 +131,38 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void processingMessage(){ //разобраться
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-
-        replyKeyboardMarkup.setResizeKeyboard(true);//размер клавиатуры адаптируется под количество клавиш
-        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
-        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
-
-        if (this.messageCounter == 3) {
-            keyboard.clear();
-            keyboardFirstRow.add("Акции");
-            keyboardFirstRow.add("Справка");
-            keyboardFirstRow.add("Помощь");
-            keyboardFirstRow.add("Инфо");
-            keyboard.add(keyboardFirstRow);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            this.messageCounter++;
-            sendMessageWIthKeyboard("Меню:");
-        }
-
-        if (this.message.getText().equals(BOT_PASSWORD))
-            return;
-
 
         User user = this.message.getFrom();
         String messageText = this.message.getText().toLowerCase(Locale.ROOT);
 
-        switch (messageText) {
-            case "Помощь":
+        if (messageText.equalsIgnoreCase("помощь")
+                || messageText.equalsIgnoreCase("help")){
+
                 sendMessage(new HelpCommand().init());
+
+                //Стартовое меню
+                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                sendMessageWIthKeyboard("Меню:");
+
                 return;
-            case "Инфо":
+        }
+
+        if (messageText.equalsIgnoreCase("инфо")
+                || messageText.equalsIgnoreCase("info")){
+
                 sendMessage(new InfoCommand().init());
+
+                //Стартовое меню
+                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                sendMessageWIthKeyboard("Меню:");
+
                 return;
         }
 
         //обработка информации об акциях
-        if (messageText.equalsIgnoreCase("акции") || messageText.equalsIgnoreCase("promo")){
+        if (messageText.equalsIgnoreCase("акции")
+                || messageText.equalsIgnoreCase("promo")){
             Map <String, String> promoInfoMap = Promo.getInstance();
-
-//            keyboard.clear();
-//            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()) {
-//                keyboardFirstRow.add(entry.getKey());
-//            }
-//            keyboard.add(keyboardFirstRow);
-//            replyKeyboardMarkup.setKeyboard(keyboard);
-//            sendMessageWIthKeyboard("Акции");
 
             StringBuilder mapToString;
             for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
@@ -191,21 +175,33 @@ public class Bot extends TelegramLongPollingBot {
 
             sendMessage("Список акций интернет магазина:\n" +
                              "https://galaxystore.ru/promo/");
+
+            //Стартовое меню
+            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            sendMessageWIthKeyboard("Меню:");
+
             return;
         }
-        if (!(messageText.startsWith("tab")
+
+        if (messageText.startsWith("tab")
                 || messageText.startsWith("s")
                 || messageText.startsWith("a")
                 || messageText.startsWith("buds")
-                || messageText.startsWith("smart"))) {
-            sendMessage("У Компании Samsung нет такого продукта!");
-            return;
-        }else {
+                || messageText.startsWith("smart")) {
             sendMessage("Всю необходимую информацию об "
                     + message.getText()
                     + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
+
+            //Стартовое меню
+            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            sendMessageWIthKeyboard("Меню:");
+
+            return;
         }
 
+        //Стартовое меню
+        replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+        sendMessageWIthKeyboard("Меню:");
     }
 
 }
