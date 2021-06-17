@@ -140,27 +140,9 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("акции")
                 || messageText.equalsIgnoreCase("promo")){
 
-            Map <String, String> promoInfoMap = Promo.getInstance();
-
-            StringBuilder mapToString;
-            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-                mapToString = new StringBuilder();
-                mapToString.append(entry.getKey())
-                        .append("\n\n")
-                        .append(entry.getValue());
-                sendMessage(mapToString.toString());
-            }
-
-            sendMessage("Список акций интернет магазина:\n" +
-                             "https://galaxystore.ru/promo/");
-
-            //Стартовое меню
-            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
-            sendMessageWIthKeyboard("Меню:");
-
-//            replyKeyboardMarkup = new MenuKeybord().getPromoMenu();
-//            sendMessageWIthKeyboard("Список акций интернет магазина:\n" +
-//                    "https://galaxystore.ru/promo/");
+            replyKeyboardMarkup = new MenuKeybord().getPromoMenu();
+            sendMessageWIthKeyboard("Список акций интернет магазина:\n" +
+                    "https://galaxystore.ru/promo/");
 
             return;
         }
@@ -203,6 +185,45 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage("Всю необходимую информацию об "
                     + message.getText()
                     + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
+
+            //Стартовое меню
+            replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+            sendMessageWIthKeyboard("Меню:");
+
+            return;
+        }
+
+
+        Map <String, String> promoInfoMap = Promo.getInstance();
+        for (int i = 0; i < MenuKeybord.getButtonPromoList().size(); i++) {
+            if (messageText.equalsIgnoreCase(MenuKeybord.getButtonPromoList().get(i))) {
+                for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
+                    if (messageText.equalsIgnoreCase(entry.getKey()))
+                        sendMessage(entry.getKey()+"\n\n"+entry.getValue());
+                }
+
+                //Стартовое меню
+                replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
+                sendMessageWIthKeyboard("Меню:");
+
+                return;
+            }
+        }
+
+        if(messageText.equalsIgnoreCase("все акции")
+                || messageText.equalsIgnoreCase("full promo")){
+
+            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
+                StringBuilder mapToString = new StringBuilder();
+                mapToString.append(entry.getKey())
+                        .append("\n\n")
+                        .append(entry.getValue());
+                mapToString.append("\n------------------\n");
+                sendMessage(mapToString.toString());
+            }
+
+            sendMessage("Список акций интернет магазина:\n" +
+                             "https://galaxystore.ru/promo/");
 
             //Стартовое меню
             replyKeyboardMarkup = new MenuKeybord().getFirstMenu();
