@@ -124,8 +124,8 @@ public class Bot extends TelegramLongPollingBot {
                 this.messageCounter++;
             }
             else {
-                sendMessage("Я Вас не знаю, всего Доброго...\n");
-                this.messageCounter = 1;
+                sendMessage("Пароль не от этого Бота, попробуйте другой...:\n");
+                this.messageCounter = 2;
             }
             return;
         }
