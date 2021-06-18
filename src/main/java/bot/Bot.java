@@ -150,8 +150,8 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(mapToString.toString());
             }
 
-            sendMessage("Список акций интернет магазина:\n" +
-                    "https://galaxystore.ru/promo/");
+            sendMessage("\nСписок акций интернет магазина:\n"
+                    +"https://galaxystore.ru/promo/");
 
             //Стартовое меню
             replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
@@ -165,9 +165,8 @@ public class Bot extends TelegramLongPollingBot {
                 || messageText.equalsIgnoreCase("promo")){
 
             replyKeyboardMarkup = new MenuKeyboard().getPromoMenu();
-            sendMessageWIthKeyboard("Список акций интернет магазина:\n" +
-                    "https://galaxystore.ru/promo/");
-
+            sendMessageWIthKeyboard("Список акций интернет магазина:\n"
+                                     + "https://galaxystore.ru/promo/");
             return;
         }
 
