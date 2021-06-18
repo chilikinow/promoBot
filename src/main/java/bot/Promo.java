@@ -1,5 +1,6 @@
-package bot;//
+package bot;
 
+import bot.Bot;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -32,7 +33,7 @@ public class Promo {
 
     private static Map<String, String> addMap() {
 
-        Path PromoFilePath = Paths.get(Bot.PROMO_INFO_FILE_ADDRESS);
+        Path PromoFilePath = Paths.get("src/main/resources/Samsung_Календарь акций.xlsx");
         XSSFWorkbook workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
             workBook = new XSSFWorkbook(fIS);//получили книгу exel

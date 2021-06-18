@@ -30,8 +30,8 @@ public class InfoCommand implements Command{
         for (int i = 0; i < MenuKeyboard.getButtonFirstMenuList().size(); i++) {
             response.append(MenuKeyboard.getButtonFirstMenuList().get(i) + "\n");
         }
-        response.append("\nТак же в любой момент вы можете отправить ")
-                .append("любое сообщение для получения стартового меню.");
+        response.append("\nДля вызова основного Меню вы можете нажать на любую ")
+                .append("ссылку /menu в чате, или отправить любое сообщение.");
 
         return response.toString();
     }

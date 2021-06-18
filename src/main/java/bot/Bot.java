@@ -17,7 +17,7 @@ import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
-    public static final String PROMO_INFO_FILE_ADDRESS;
+    public static final String DOWNLOAD_PROMO_INFO_FILE_DIRECTORY_ADDRESS;
 
     private static final String BOT_NAME;
     private static final String BOT_TOKEN;
@@ -26,6 +26,7 @@ public class Bot extends TelegramLongPollingBot {
     private int messageCounter;
     private boolean pass;
     private ReplyKeyboardMarkup replyKeyboardMarkup;
+    Map <String, String> promoInfoMap;
 
     static {
             Path botInfoPropertiesFile = Paths.get
@@ -40,11 +41,11 @@ public class Bot extends TelegramLongPollingBot {
             BOT_NAME = botInfoProperties.getProperty("botUsername");
             BOT_TOKEN = botInfoProperties.getProperty("botToken");
             BOT_PASSWORD = botInfoProperties.getProperty("botPassword");
-            PROMO_INFO_FILE_ADDRESS = botInfoProperties.getProperty("promoInfoFileAddress");
+            DOWNLOAD_PROMO_INFO_FILE_DIRECTORY_ADDRESS = botInfoProperties.getProperty("promoInfoFileAddress");
         }
 
         {
-            Promo.getInstance();
+            promoInfoMap = Promo.getInstance();
             this.replyKeyboardMarkup = new ReplyKeyboardMarkup();
             this.messageCounter = 1;
             this.pass = false;
@@ -131,12 +132,35 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void processingMessage(){ //разобраться
+    public void processingMessage(){
 
         User user = this.message.getFrom();
         String messageText = this.message.getText().toLowerCase(Locale.ROOT);
 
-        //обработка информации об акциях
+        //Вывод всех акций с подробным описанием механики исполнения
+        if(messageText.equalsIgnoreCase("все акции")
+                || messageText.equalsIgnoreCase("full promo")){
+
+            for (Map.Entry<String, String> entry: this.promoInfoMap.entrySet()){
+                StringBuilder mapToString = new StringBuilder();
+                mapToString.append(entry.getKey())
+                        .append("\n\n")
+                        .append(entry.getValue());
+                mapToString.append("\n------------------\n");
+                sendMessage(mapToString.toString());
+            }
+
+            sendMessage("Список акций интернет магазина:\n" +
+                    "https://galaxystore.ru/promo/");
+
+            //Стартовое меню
+            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+            sendMessageWIthKeyboard("/menu");
+
+            return;
+        }
+
+        //формирование клавиатуры с перечнем акций
         if (messageText.equalsIgnoreCase("акции")
                 || messageText.equalsIgnoreCase("promo")){
 
@@ -160,7 +184,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 //Стартовое меню
                 replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-                sendMessageWIthKeyboard("Меню:");
+                sendMessageWIthKeyboard("/menu");
 
                 return;
         }
@@ -172,7 +196,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 //Стартовое меню
                 replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-                sendMessageWIthKeyboard("Меню:");
+                sendMessageWIthKeyboard("/menu");
 
                 return;
         }
@@ -188,13 +212,13 @@ public class Bot extends TelegramLongPollingBot {
 
             //Стартовое меню
             replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-            sendMessageWIthKeyboard("Меню:");
+            sendMessageWIthKeyboard("/menu");
 
             return;
         }
 
 
-        Map <String, String> promoInfoMap = Promo.getInstance();
+        promoInfoMap = Promo.getInstance();
         for (int i = 0; i < MenuKeyboard.getButtonPromoList().size(); i++) {
             if (messageText.equalsIgnoreCase(MenuKeyboard.getButtonPromoList().get(i))) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
@@ -204,37 +228,24 @@ public class Bot extends TelegramLongPollingBot {
 
                 //Стартовое меню
                 replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-                sendMessageWIthKeyboard("Меню:");
+                sendMessageWIthKeyboard("/menu");
 
                 return;
             }
         }
 
-        if(messageText.equalsIgnoreCase("все акции")
-                || messageText.equalsIgnoreCase("full promo")){
-
-            for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-                StringBuilder mapToString = new StringBuilder();
-                mapToString.append(entry.getKey())
-                        .append("\n\n")
-                        .append(entry.getValue());
-                mapToString.append("\n------------------\n");
-                sendMessage(mapToString.toString());
-            }
-
-            sendMessage("Список акций интернет магазина:\n" +
-                             "https://galaxystore.ru/promo/");
+        if(messageText.equalsIgnoreCase("/menu")){
 
             //Стартовое меню
             replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-            sendMessageWIthKeyboard("Меню:");
+            sendMessageWIthKeyboard("/menu");
 
             return;
         }
 
         //Стартовое меню
         replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
-        sendMessageWIthKeyboard("Меню:");
+        sendMessageWIthKeyboard("/menu");
     }
 
 }
