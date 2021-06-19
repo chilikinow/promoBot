@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 public class MenuKeyboard {
 
     public ReplyKeyboardMarkup getStartMenu(){
+
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         replyKeyboardMarkup.setResizeKeyboard(false);//размер клавиатуры адаптируется под количество клавиш
@@ -37,7 +38,6 @@ public class MenuKeyboard {
 
     public ReplyKeyboardMarkup getPromoMenu(){
 
-        PromoInfo.getInstance();
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
