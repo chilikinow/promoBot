@@ -45,7 +45,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         {
-            promoInfoMap = Promo.getInstance();
+            promoInfoMap = PromoInfo.getInstance();
             this.replyKeyboardMarkup = new ReplyKeyboardMarkup();
             this.messageCounter = 1;
             this.pass = false;
@@ -215,11 +215,9 @@ public class Bot extends TelegramLongPollingBot {
 
             return;
         }
-
-
-        promoInfoMap = Promo.getInstance();
-        for (int i = 0; i < MenuKeyboard.getButtonPromoList().size(); i++) {
-            if (messageText.equalsIgnoreCase(MenuKeyboard.getButtonPromoList().get(i))) {
+        promoInfoMap = PromoInfo.getInstance();
+        for (int i = 0; i < PromoInfo.getPromoKeys().size(); i++) {
+            if (messageText.equalsIgnoreCase(PromoInfo.getPromoKeys().get(i))) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
                     if (messageText.equalsIgnoreCase(entry.getKey()))
                         sendMessage(entry.getKey()+"\n\n"+entry.getValue());

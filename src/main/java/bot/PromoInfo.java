@@ -1,6 +1,5 @@
 package bot;
 
-import bot.Bot;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -15,21 +14,64 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Promo {
+public class PromoInfo {
 
-    private static Map <String, String> promoInfoMap;
+    private static Map <String, String> promoMap;
+    private static List <String> promoKeys;
 
-    private Promo(){
+    private PromoInfo(){
+    }
+
+    static {
+        promoMap = new HashMap<>();
+        promoKeys = new ArrayList<>();
     }
 
     //Singleton
     public static Map<String, String> getInstance(){
-        if (promoInfoMap == null) {
-            promoInfoMap = new HashMap<>(addMap());
+
+        if (promoMap.isEmpty()) {
+            promoMap = new HashMap<>(addMap());
         }
-        return promoInfoMap;
+
+        return promoMap;
     }
 
+    public static List<String> getPromoKeys(){
+
+        if (promoKeys.isEmpty()) {
+            promoKeys = new ArrayList<>(addKeysList());
+        }
+
+        return promoKeys;
+    }
+
+    private static List<String> addKeysList(){
+
+//        for (Map.Entry<String, String> entry : promoMap.entrySet()) {
+//            promoKeys.add(entry.getKey());
+//        }
+
+        promoKeys.add("ТРЕЙД-ИН");
+        promoKeys.add("Скидка до 5000 рублей на Galaxy Watch3 | Watch Active2 | Buds");
+        promoKeys.add("Скидки по акции ценопад");
+        promoKeys.add("Купи Galaxy Tab S6 или Tab A10.1 (2019) и получи чехол moonfish в подарок (только в рознице)");
+        promoKeys.add("Купи Galaxy S21|S21+|S21Ultra и получи Buds Live в подарок");
+        promoKeys.add("Купи ТВ и получи саундбар  в подарок");
+        promoKeys.add("Скидка до 8 000 рублей на Galaxy Tab S7 | S7+ | S6 Lite | А7");
+        promoKeys.add("Два чехла для Galaxy Buds|Buds+ по цене одного");
+        promoKeys.add("Купи Frame ТВ и получи рамку в  подарок");
+        promoKeys.add("4 месяца подписки на YouTube Premium");
+        promoKeys.add("Купи Lifestyle или QLED 8K ТВ и получи акустику в подарок");
+        promoKeys.add("Купи The Premiere и получи акустику  в подарок");
+
+//        System.out.println("keys List");
+//        for (int i = 0; i < promoKeys.size(); i++) {
+//            System.out.println(promoKeys.get(i));
+//        }
+
+        return promoKeys;
+    }
 
     private static Map<String, String> addMap() {
 
@@ -80,7 +122,7 @@ public class Promo {
 
         }
 
-        //блок для проверки вывода Map в консоль
+//        блок для проверки вывода Map в консоль
 //            for (Map.Entry<String, String> entry: map.entrySet()){
 //                StringBuilder mapToString = new StringBuilder();
 //                mapToString.append(entry.getKey())
