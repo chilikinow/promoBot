@@ -154,7 +154,7 @@ public class Bot extends TelegramLongPollingBot {
                     +"https://galaxystore.ru/promo/");
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
             sendMessageWIthKeyboard("/menu");
 
             return;
@@ -182,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(new HelpCommand().init());
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
                 sendMessageWIthKeyboard("/menu");
 
                 return;
@@ -194,7 +194,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(new InfoCommand().getInfo());
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
                 sendMessageWIthKeyboard("/menu");
 
                 return;
@@ -210,7 +210,7 @@ public class Bot extends TelegramLongPollingBot {
                     + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
             sendMessageWIthKeyboard("/menu");
 
             return;
@@ -224,7 +224,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
                 sendMessageWIthKeyboard("/menu");
 
                 return;
@@ -234,14 +234,14 @@ public class Bot extends TelegramLongPollingBot {
         if(messageText.equalsIgnoreCase("/menu")){
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
             sendMessageWIthKeyboard("/menu");
 
             return;
         }
 
         //Стартовое меню
-        replyKeyboardMarkup = new MenuKeyboard().getFirstMenu();
+        replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
         sendMessageWIthKeyboard("/menu");
     }
 

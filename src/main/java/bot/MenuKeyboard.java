@@ -19,7 +19,7 @@ public class MenuKeyboard {
         return buttonFirstMenuList;
     }
 
-    public ReplyKeyboardMarkup getFirstMenu(){
+    public ReplyKeyboardMarkup getStartMenu(){
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         replyKeyboardMarkup.setResizeKeyboard(false);//размер клавиатуры адаптируется под количество клавиш
