@@ -27,8 +27,8 @@ public class InfoCommand implements Command{
                 .append("запрашиваемой техники.\n\n")
                 .append("Список команд:\n\n");
 
-        for (int i = 0; i < MenuKeyboard.getButtonFirstMenuList().size(); i++) {
-            response.append(MenuKeyboard.getButtonFirstMenuList().get(i) + "\n");
+        for (int i = 0; i < new MenuKeyboard().getStartMenu().getKeyboard().size(); i++) {
+            response.append( new MenuKeyboard().getStartMenu().getKeyboard().get(i) + "\n");
         }
         response.append("\nДля вызова основного Меню вы можете нажать на любую ")
                 .append("ссылку /menu в чате, или отправить любое сообщение.");

@@ -9,16 +9,6 @@ import java.util.stream.Stream;
 
 public class MenuKeyboard {
 
-    private static List <String> buttonFirstMenuList;
-
-    static {
-        buttonFirstMenuList = new ArrayList<>();
-    }
-
-    public static List<String> getButtonFirstMenuList(){
-        return buttonFirstMenuList;
-    }
-
     public ReplyKeyboardMarkup getStartMenu(){
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
@@ -34,8 +24,6 @@ public class MenuKeyboard {
         buttonList.add("Инфо");
         buttonList.add("Помощь");
 
-        buttonFirstMenuList = buttonList;
-
         for (int i = 0; i < buttonList.size(); i++) {
             KeyboardRow keyboardRowBuffer = new KeyboardRow();
             keyboardRowBuffer.add(buttonList.get(i));
@@ -49,6 +37,7 @@ public class MenuKeyboard {
 
     public ReplyKeyboardMarkup getPromoMenu(){
 
+        PromoInfo.getInstance();
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();

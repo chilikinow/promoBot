@@ -215,7 +215,6 @@ public class Bot extends TelegramLongPollingBot {
 
             return;
         }
-        promoInfoMap = PromoInfo.getInstance();
         for (int i = 0; i < PromoInfo.getPromoKeys().size(); i++) {
             if (messageText.equalsIgnoreCase(PromoInfo.getPromoKeys().get(i))) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){

@@ -49,7 +49,7 @@ public class PromoInfo {
     private static List<String> addKeysList(){
 
 //        for (Map.Entry<String, String> entry : promoMap.entrySet()) {
-//            promoKeys.add(entry.getKey());
+//            promoKeys.add(String.valueOf(entry.getKey()));
 //        }
 
         promoKeys.add("ТРЕЙД-ИН");
