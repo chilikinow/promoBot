@@ -15,6 +15,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static bot.Response.createTextMessage;
+import static bot.Response.createTextMessageWithStartKeyboard;
+
 public class Bot extends TelegramLongPollingBot {
 
     public static final String DOWNLOAD_PROMO_INFO_FILE_DIRECTORY_ADDRESS;
@@ -46,7 +49,6 @@ public class Bot extends TelegramLongPollingBot {
 
         {
             promoInfoMap = PromoInfo.getInstance();
-            this.replyKeyboardMarkup = new ReplyKeyboardMarkup();
             this.messageCounter = 1;
             this.pass = false;
         }
@@ -90,12 +92,12 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
+//
     public void sendMessage(String text){
+
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(this.message.getChatId().toString());
-//        sendMessage.setReplyToMessageId(message.getMessageId());
         try {
             sendMessage.setText(text);
             execute(sendMessage);
@@ -222,6 +224,7 @@ public class Bot extends TelegramLongPollingBot {
                         sendMessage(entry.getKey()+"\n\n"+entry.getValue());
                 }
 
+
                 //Стартовое меню
                 replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
                 sendMessageWIthKeyboard("/menu");
@@ -230,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-        if(messageText.equalsIgnoreCase("/menu")){
+        if (messageText.equalsIgnoreCase("/menu")){
 
             //Стартовое меню
             replyKeyboardMarkup = new MenuKeyboard().getStartMenu();

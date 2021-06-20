@@ -31,49 +31,35 @@ public class PromoInfo {
     public static Map<String, String> getInstance(){
 
         if (promoMap.isEmpty()) {
-            promoMap = new HashMap<>(addMap());
+            addMap();
         }
 
+        promoMap.remove("");
         return promoMap;
     }
 
     public static List<String> getPromoKeys(){
 
         if (promoKeys.isEmpty()) {
-            promoKeys = new ArrayList<>(addKeysList());
+            addKeysList();
         }
 
         return promoKeys;
     }
 
-    private static List<String> addKeysList(){
+    private static void addKeysList(){
 
-//        for (Map.Entry<String, String> entry : promoMap.entrySet()) {
-//            promoKeys.add(String.valueOf(entry.getKey()));
-//        }
+        for (Map.Entry<String, String> entry : promoMap.entrySet()) {
+            promoKeys.add(String.valueOf(entry.getKey()));
+        }
 
-        promoKeys.add("ТРЕЙД-ИН");
-        promoKeys.add("Скидка до 5000 рублей на Galaxy Watch3 | Watch Active2 | Buds");
-        promoKeys.add("Скидки по акции ценопад");
-        promoKeys.add("Купи Galaxy Tab S6 или Tab A10.1 (2019) и получи чехол moonfish в подарок (только в рознице)");
-        promoKeys.add("Купи Galaxy S21|S21+|S21Ultra и получи Buds Live в подарок");
-        promoKeys.add("Купи ТВ и получи саундбар  в подарок");
-        promoKeys.add("Скидка до 8 000 рублей на Galaxy Tab S7 | S7+ | S6 Lite | А7");
-        promoKeys.add("Два чехла для Galaxy Buds|Buds+ по цене одного");
-        promoKeys.add("Купи Frame ТВ и получи рамку в  подарок");
-        promoKeys.add("4 месяца подписки на YouTube Premium");
-        promoKeys.add("Купи Lifestyle или QLED 8K ТВ и получи акустику в подарок");
-        promoKeys.add("Купи The Premiere и получи акустику  в подарок");
-
-//        System.out.println("keys List");
-//        for (int i = 0; i < promoKeys.size(); i++) {
-//            System.out.println(promoKeys.get(i));
-//        }
-
-        return promoKeys;
+        System.out.println("keys List");
+        for (int i = 0; i < promoKeys.size(); i++) {
+            System.out.println(promoKeys.get(i));
+        }
     }
 
-    private static Map<String, String> addMap() {
+    private static void addMap() {
 
         Path PromoFilePath = Paths.get("src/main/resources/Samsung_Календарь акций.xlsx");
         XSSFWorkbook workBook = null;
@@ -91,8 +77,6 @@ public class PromoInfo {
         while (rowIterator.hasNext()){
             rowList.add(rowIterator.next());//получаем лист строк
         }
-
-        Map <String, String> map = new HashMap<>();
 
         //перебираем лист строк без первой строки, где хронятся названия столбцов
         for (int i = 1; i < rowList.size(); i++) {
@@ -118,8 +102,7 @@ public class PromoInfo {
                 }
             }
             //создаем элемент Map, где key- название акции, value- подробности акции
-            map.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
-
+            promoMap.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
         }
 
 //        блок для проверки вывода Map в консоль
@@ -130,7 +113,5 @@ public class PromoInfo {
 //                        .append(entry.getValue());
 //                System.out.println(mapToString.toString());
 //            }
-
-        return map;
     }
 }
