@@ -7,16 +7,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
-import static bot.Response.createTextMessage;
-import static bot.Response.createTextMessageWithStartKeyboard;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -25,10 +20,10 @@ public class Bot extends TelegramLongPollingBot {
     private static final String BOT_NAME;
     private static final String BOT_TOKEN;
     private static final String BOT_PASSWORD;
+
     private Message message;
     private int messageCounter;
     private boolean pass;
-    private ReplyKeyboardMarkup replyKeyboardMarkup;
     Map <String, String> promoInfoMap;
 
     static {
@@ -79,31 +74,14 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMessageWIthKeyboard(String text){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(this.message.getChatId().toString());
-//        sendMessage.setReplyToMessageId(message.getMessageId());
-            sendMessage.setReplyMarkup(this.replyKeyboardMarkup);
-        try {
-            sendMessage.setText(text);
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-//
-    public void sendMessage(String text){
+    public void sendMessage(SendMessage sendMessage){
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(this.message.getChatId().toString());
         try {
-            sendMessage.setText(text);
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 
     public void authorizationUser(){
@@ -114,7 +92,8 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         if (this.messageCounter == 1) {
-            sendMessage("Добро пожаловать!\nВведите пароль:\n");
+            var replyMessage = Response.createTextMessage(this.message,"Добро пожаловать!\nВведите пароль:\n");
+            sendMessage(replyMessage);
             this.messageCounter++;
             return;
         }
@@ -123,11 +102,13 @@ public class Bot extends TelegramLongPollingBot {
         if (this.messageCounter == 2) {
             if (BOT_PASSWORD.equals(this.message.getText())) {
                 this.pass = true;
-                sendMessage("Доступ Разрешен...\n\n");
+                var replyMessage = Response.createTextMessage(this.message, "Доступ Разрешен...\n\n");
+                sendMessage(replyMessage);
                 this.messageCounter++;
             }
             else {
-                sendMessage("Пароль не от этого Бота, попробуйте другой...:\n");
+                var replyMessage = Response.createTextMessage(this.message, "Пароль не от этого Бота, попробуйте другой...:\n");
+                sendMessage(replyMessage);
                 this.messageCounter = 2;
             }
             return;
@@ -148,16 +129,18 @@ public class Bot extends TelegramLongPollingBot {
                 mapToString.append(entry.getKey())
                         .append("\n\n")
                         .append(entry.getValue());
-                mapToString.append("\n------------------\n");
-                sendMessage(mapToString.toString());
+                mapToString.append("\n-----------------------\n");
+                var replyMessage = Response.createTextMessage(this.message, mapToString.toString());
+                sendMessage(replyMessage);
             }
 
-            sendMessage("\nСписок акций интернет магазина:\n"
-                    +"https://galaxystore.ru/promo/");
+            var replyMessage = Response.createTextMessage(this.message,
+                    "\nСписок акций интернет магазина:\nhttps://galaxystore.ru/promo/");
+            sendMessage(replyMessage);
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-            sendMessageWIthKeyboard("/menu");
+            replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            sendMessage(replyMessage);
 
             return;
         }
@@ -166,26 +149,28 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("акции")
                 || messageText.equalsIgnoreCase("promo")){
 
-            replyKeyboardMarkup = new MenuKeyboard().getPromoMenu();
-            sendMessageWIthKeyboard("Список акций интернет магазина:\n"
-                                     + "https://galaxystore.ru/promo/");
+            var replyMessage = Response.createTextMessageWithStartKeyboard
+                    (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO);
+            sendMessage(replyMessage);
             return;
         }
 
         if (messageText.equalsIgnoreCase("характеристики устройств")
             || messageText.equalsIgnoreCase("device info")){
-            sendMessage("Введите название интересующего Вас устройства:");
+            var replyMessage = Response.createTextMessage(this.message, "Введите название интересующего Вас устройства:");
+            sendMessage(replyMessage);
             return;
         }
 
         if (messageText.equalsIgnoreCase("помощь")
                 || messageText.equalsIgnoreCase("help")){
 
-                sendMessage(new HelpCommand().init());
+                var replyMessage = Response.createTextMessage(this.message, new HelpCommand().init());
+                sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-                sendMessageWIthKeyboard("/menu");
+                replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                sendMessage(replyMessage);
 
                 return;
         }
@@ -193,11 +178,12 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("инфо")
                 || messageText.equalsIgnoreCase("info")){
 
-                sendMessage(new InfoCommand().getInfo());
+                var replyMessage = Response.createTextMessage(this.message, new InfoCommand().getInfo());
+                sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-                sendMessageWIthKeyboard("/menu");
+                replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                sendMessage(replyMessage);
 
                 return;
         }
@@ -207,27 +193,30 @@ public class Bot extends TelegramLongPollingBot {
                 || messageText.startsWith("a")
                 || messageText.startsWith("buds")
                 || messageText.startsWith("smart")) {
-            sendMessage("Всю необходимую информацию об "
-                    + message.getText()
-                    + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
+            var replyMessage = Response.createTextMessage(this.message,
+                    "Всю необходимую информацию об " + message.getText() + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
+            sendMessage(replyMessage);
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-            sendMessageWIthKeyboard("/menu");
+            replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            sendMessage(replyMessage);
 
             return;
         }
+
         for (int i = 0; i < PromoInfo.getPromoKeys().size(); i++) {
             if (messageText.equalsIgnoreCase(PromoInfo.getPromoKeys().get(i))) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-                    if (messageText.equalsIgnoreCase(entry.getKey()))
-                        sendMessage(entry.getKey()+"\n\n"+entry.getValue());
+                    if (messageText.equalsIgnoreCase(entry.getKey())) {
+                        var replyMessage = Response.createTextMessage(this.message, entry.getKey()+"\n\n"+entry.getValue());
+                        sendMessage(replyMessage);
+                    }
                 }
 
 
                 //Стартовое меню
-                replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-                sendMessageWIthKeyboard("/menu");
+                var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                sendMessage(replyMessage);
 
                 return;
             }
@@ -236,15 +225,15 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equalsIgnoreCase("/menu")){
 
             //Стартовое меню
-            replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-            sendMessageWIthKeyboard("/menu");
+            var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            sendMessage(replyMessage);
 
             return;
         }
 
         //Стартовое меню
-        replyKeyboardMarkup = new MenuKeyboard().getStartMenu();
-        sendMessageWIthKeyboard("/menu");
+        var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+        sendMessage(replyMessage);
     }
 
 }

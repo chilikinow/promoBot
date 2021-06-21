@@ -53,10 +53,10 @@ public class PromoInfo {
             promoKeys.add(String.valueOf(entry.getKey()));
         }
 
-        System.out.println("keys List");
-        for (int i = 0; i < promoKeys.size(); i++) {
-            System.out.println(promoKeys.get(i));
-        }
+//        System.out.println("keys List");
+//        for (int i = 0; i < promoKeys.size(); i++) {
+//            System.out.println(promoKeys.get(i));
+//        }
     }
 
     private static void addMap() {
