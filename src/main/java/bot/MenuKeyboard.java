@@ -4,7 +4,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MenuKeyboard {
 
@@ -19,7 +21,8 @@ public class MenuKeyboard {
         keyboard.clear();
 
         List<String> buttonList = new ArrayList<>();
-        buttonList.add("Акции");
+        buttonList.add("Акции Мобайл ТВ");
+        buttonList.add("Акции Бытовая техника");
         buttonList.add("Характеристики устройств");
         buttonList.add("Инфо");
         buttonList.add("Помощь");
@@ -35,7 +38,21 @@ public class MenuKeyboard {
         return replyKeyboardMarkup;
     }
 
-    public ReplyKeyboardMarkup getPromoMenu(){
+    public ReplyKeyboardMarkup getMobileTVPromoMenu(){
+
+        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
+
+        return createPromoMenu(set);
+    }
+
+    public ReplyKeyboardMarkup getAppliancesMenu(){
+
+        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
+
+        return createPromoMenu(set);
+    }
+
+    private ReplyKeyboardMarkup createPromoMenu(Set mapKeySet){
 
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -44,11 +61,9 @@ public class MenuKeyboard {
         replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
         replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
 
-        List<String> buttonList = new ArrayList<>(PromoInfo.getPromoKeys());
+        List<String> buttonList = new ArrayList<>(mapKeySet);
 
         keyboard.clear();
-
-        buttonList.add("Все акции");
 
         for (int i = 0; i < buttonList.size(); i++) {
             KeyboardRow keyboardRowBuffer = new KeyboardRow();

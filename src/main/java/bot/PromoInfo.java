@@ -5,64 +5,29 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PromoInfo {
 
-    private static Map <String, String> promoMap;
-    private static List <String> promoKeys;
+    private static Map <String, String> promoMobileTVMap;
+    private static Map <String, String> promoAppliancesMap;
+    private static XSSFWorkbook workBook;
 
     private PromoInfo(){
     }
 
     static {
-        promoMap = new HashMap<>();
-        promoKeys = new ArrayList<>();
-    }
-
-    //Singleton
-    public static Map<String, String> getInstance(){
-
-        if (promoMap.isEmpty()) {
-            addMap();
-        }
-
-        promoMap.remove("");
-        return promoMap;
-    }
-
-    public static List<String> getPromoKeys(){
-
-        if (promoKeys.isEmpty()) {
-            addKeysList();
-        }
-
-        return promoKeys;
-    }
-
-    private static void addKeysList(){
-
-        for (Map.Entry<String, String> entry : promoMap.entrySet()) {
-            promoKeys.add(String.valueOf(entry.getKey()));
-        }
-
-//        System.out.println("keys List");
-//        for (int i = 0; i < promoKeys.size(); i++) {
-//            System.out.println(promoKeys.get(i));
-//        }
-    }
-
-    private static void addMap() {
+        promoMobileTVMap = new HashMap<>();
+        promoAppliancesMap = new HashMap<>();
 
         Path PromoFilePath = Paths.get("src/main/resources/Samsung_Календарь акций.xlsx");
-        XSSFWorkbook workBook = null;
+        workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
             workBook = new XSSFWorkbook(fIS);//получили книгу exel
         } catch (FileNotFoundException e) {
@@ -70,48 +35,84 @@ public class PromoInfo {
         } catch (IOException e) {
             System.out.println("Файл не читается.");
         }
-        XSSFSheet sheet = workBook.getSheetAt(0);//получили страницу книги
+    }
 
+    //Singleton
+    public static Map<String, String> getInstancePromoMobileTV(){
+
+        if (promoMobileTVMap.isEmpty()) {
+            promoMobileTVMap = new HashMap<>(addMap(workBook,0));
+        }
+
+        return promoMobileTVMap;
+    }
+
+    //Singleton
+    public static Map<String, String> getInstancePromoAppliances(){
+
+        if (promoAppliancesMap.isEmpty()) {
+            promoAppliancesMap = new HashMap<>(addMap(workBook,1));
+        }
+
+        return promoAppliancesMap;
+    }
+
+    private static Map<String, String> addMap(XSSFWorkbook workBook, int sheetNumber) {
+
+        //получили страницу книги
+        XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
+
+        //получаем лист строк
         ArrayList<Row> rowList = new ArrayList<>();
-        Iterator<Row> rowIterator = sheet.rowIterator();
+
+        Iterator<Row> rowIterator = sheet.rowIterator(); //формируем список строк из страницы
         while (rowIterator.hasNext()){
-            rowList.add(rowIterator.next());//получаем лист строк
+            Row bufferRow = rowIterator.next();
+            if(!bufferRow.getCell(0).getStringCellValue().equals("")) {  //за исключением пустых
+                rowList.add(bufferRow);
+            }
         }
 
         //перебираем лист строк без первой строки, где хронятся названия столбцов
+        ArrayList<Cell> cellList = new ArrayList<>();
+        StringBuilder valueForMap = new StringBuilder();
+
+        Map<String, String> map = new HashMap<>();
+
         for (int i = 1; i < rowList.size(); i++) {
-            ArrayList<Cell> cellList = new ArrayList<>();
+            cellList = new ArrayList<>();
             Iterator<Cell> cellIterator = rowList.get(i).iterator();
-            //формируем лист ячеек из строки
-            while (cellIterator.hasNext()){
-                cellList.add(cellIterator.next());
+            Cell bufferCell;
+            while (cellIterator.hasNext()){  //формируем лист ячеек из строки
+                bufferCell = cellIterator.next();
+                if(!bufferCell.getStringCellValue().equals("")) {  //за исключением пустых
+                    cellList.add(bufferCell);
+                }
             }
 
             //переменная для формирования информации со всех ячеек (подробности акции) кроме названия акции
-            StringBuilder valueForMap = new StringBuilder();
+            valueForMap = new StringBuilder();
             for (int j = 1; j < cellList.size(); j++) {
                 String cellString = cellList.get(j).getStringCellValue();
-
-                //проверяем значение ячейки на наличие символов, изключаем пустые
-                Pattern pattern = Pattern.compile("\\w+");
-                Matcher matcher = pattern.matcher(cellString);
-                while (matcher.find()) {
-                    //формируем подробную информацию об условиях и механики проведения акции
-                    valueForMap.append(cellString + "\n\n");
-                    break;
-                }
+                    valueForMap.append(cellString + "\n");
             }
             //создаем элемент Map, где key- название акции, value- подробности акции
-            promoMap.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
+            map.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
         }
 
-//        блок для проверки вывода Map в консоль
+
+//            блок для проверки вывода Map в консоль
 //            for (Map.Entry<String, String> entry: map.entrySet()){
 //                StringBuilder mapToString = new StringBuilder();
 //                mapToString.append(entry.getKey())
 //                        .append("\n\n")
 //                        .append(entry.getValue());
 //                System.out.println(mapToString.toString());
+//                System.out.println("------------------------------");
 //            }
+//            System.out.println("_________End Map_________\n\n\n");
+
+
+        return map;
     }
 }

@@ -24,7 +24,7 @@ public class Bot extends TelegramLongPollingBot {
     private Message message;
     private int messageCounter;
     private boolean pass;
-    Map <String, String> promoInfoMap;
+//    Map <String, String> promoInfoMap;
 
     static {
             Path botInfoPropertiesFile = Paths.get
@@ -43,7 +43,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         {
-            promoInfoMap = PromoInfo.getInstance();
+//            promoInfoMap = PromoInfo.getInstance();
             this.messageCounter = 1;
             this.pass = false;
         }
@@ -118,71 +118,74 @@ public class Bot extends TelegramLongPollingBot {
     public void processingMessage(){
 
         User user = this.message.getFrom();
-        String messageText = this.message.getText().toLowerCase(Locale.ROOT);
+        String messageText = this.message.getText();
 
-        //Вывод всех акций с подробным описанием механики исполнения
-        if(messageText.equalsIgnoreCase("все акции")
-                || messageText.equalsIgnoreCase("full promo")){
-
-            for (Map.Entry<String, String> entry: this.promoInfoMap.entrySet()){
-                StringBuilder mapToString = new StringBuilder();
-                mapToString.append(entry.getKey())
-                        .append("\n\n")
-                        .append(entry.getValue());
-                mapToString.append("\n-----------------------\n");
-                var replyMessage = Response.createTextMessage(this.message, mapToString.toString());
-                sendMessage(replyMessage);
-            }
-
-            var replyMessage = Response.createTextMessage(this.message,
-                    "\nСписок акций интернет магазина:\nhttps://galaxystore.ru/promo/");
-            sendMessage(replyMessage);
+        if (messageText.equals(BOT_PASSWORD)){
 
             //Стартовое меню
-            replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            sendMessage(replyMessage);
+
+            return;
+        }
+
+        if (messageText.equals("/menu")){
+
+            //Стартовое меню
+            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
             sendMessage(replyMessage);
 
             return;
         }
 
         //формирование клавиатуры с перечнем акций
-        if (messageText.equalsIgnoreCase("акции")
-                || messageText.equalsIgnoreCase("promo")){
+        if (messageText.equals("Акции Мобайл ТВ")
+                || messageText.equals("Promo Mobile TV")){
 
-            var replyMessage = Response.createTextMessageWithStartKeyboard
-                    (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO);
+            var replyMessage = Response.createTextMessageWithKeyboard
+                    (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO_MOBILE_TV);
             sendMessage(replyMessage);
             return;
         }
 
-        if (messageText.equalsIgnoreCase("характеристики устройств")
-            || messageText.equalsIgnoreCase("device info")){
+        //формирование клавиатуры с перечнем акций
+        if (messageText.equals("Акции Бытовая техника")
+                || messageText.equals("Promo Appliances")){
+
+            var replyMessage = Response.createTextMessageWithKeyboard
+                    (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO_APPLIANCES);
+            sendMessage(replyMessage);
+            return;
+        }
+
+        if (messageText.equals("Характеристики устройств")
+            || messageText.equals("Device info")){
             var replyMessage = Response.createTextMessage(this.message, "Введите название интересующего Вас устройства:");
             sendMessage(replyMessage);
             return;
         }
 
-        if (messageText.equalsIgnoreCase("помощь")
-                || messageText.equalsIgnoreCase("help")){
+        if (messageText.equals("Помощь")
+                || messageText.equals("Help")){
 
                 var replyMessage = Response.createTextMessage(this.message, new HelpCommand().init());
                 sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
                 sendMessage(replyMessage);
 
                 return;
         }
 
-        if (messageText.equalsIgnoreCase("инфо")
-                || messageText.equalsIgnoreCase("info")){
+        if (messageText.equals("Инфо")
+                || messageText.equals("Info")){
 
                 var replyMessage = Response.createTextMessage(this.message, new InfoCommand().getInfo());
                 sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
                 sendMessage(replyMessage);
 
                 return;
@@ -198,41 +201,38 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage(replyMessage);
 
             //Стартовое меню
-            replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
             sendMessage(replyMessage);
 
             return;
         }
-
-        for (int i = 0; i < PromoInfo.getPromoKeys().size(); i++) {
-            if (messageText.equalsIgnoreCase(PromoInfo.getPromoKeys().get(i))) {
+        Map<String, String> promoInfoMap = PromoInfo.getInstancePromoMobileTV();
+        for (String keyPromoInfoMap: promoInfoMap.keySet()) {
+            if (messageText.equals(keyPromoInfoMap)) {
                 for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
-                    if (messageText.equalsIgnoreCase(entry.getKey())) {
+                    if (messageText.equals(entry.getKey())) {
                         var replyMessage = Response.createTextMessage(this.message, entry.getKey()+"\n\n"+entry.getValue());
                         sendMessage(replyMessage);
+
+                        //Стартовое меню
+                        replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                        sendMessage(replyMessage);
+
+                        return;
                     }
                 }
 
 
                 //Стартовое меню
-                var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
                 sendMessage(replyMessage);
 
                 return;
             }
         }
 
-        if (messageText.equalsIgnoreCase("/menu")){
-
-            //Стартовое меню
-            var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
-            sendMessage(replyMessage);
-
-            return;
-        }
-
         //Стартовое меню
-        var replyMessage = Response.createTextMessageWithStartKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+        var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
         sendMessage(replyMessage);
     }
 

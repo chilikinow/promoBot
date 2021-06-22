@@ -17,15 +17,18 @@ public class Response {
         return sendMessage;
     }
 
-    public static SendMessage createTextMessageWithStartKeyboard(Message message, String text, TypeKeyboard typeKeyboard){
+    public static SendMessage createTextMessageWithKeyboard(Message message, String text, TypeKeyboard typeKeyboard){
 
         SendMessage sendMessage = createTextMessage(message, text);
 
         if (typeKeyboard == TypeKeyboard.START) {
             sendMessage.setReplyMarkup(new MenuKeyboard().getStartMenu());
         }
-        if (typeKeyboard == TypeKeyboard.PROMO){
-            sendMessage.setReplyMarkup(new MenuKeyboard().getPromoMenu());
+        if (typeKeyboard == TypeKeyboard.PROMO_MOBILE_TV){
+            sendMessage.setReplyMarkup(new MenuKeyboard().getMobileTVPromoMenu());
+        }
+        if (typeKeyboard == TypeKeyboard.PROMO_APPLIANCES){
+            sendMessage.setReplyMarkup(new MenuKeyboard().getAppliancesMenu());
         }
 
         return sendMessage;
@@ -33,6 +36,8 @@ public class Response {
 
     public enum TypeKeyboard{
         START,
-        PROMO
+        PROMO_APPLIANCES,
+        PROMO_MOBILE_TV
+
     }
 }
