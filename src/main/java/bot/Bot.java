@@ -189,12 +189,12 @@ public class Bot extends TelegramLongPollingBot {
 
                 return;
         }
-
-        if (messageText.startsWith("tab")
-                || messageText.startsWith("s")
-                || messageText.startsWith("a")
-                || messageText.startsWith("buds")
-                || messageText.startsWith("smart")) {
+        String bufferMessageText = messageText.toLowerCase(Locale.ROOT);
+        if (bufferMessageText.startsWith("tab")
+                || bufferMessageText.startsWith("s")
+                || bufferMessageText.startsWith("a")
+                || bufferMessageText.startsWith("buds")
+                || bufferMessageText.startsWith("smart")) {
             var replyMessage = Response.createTextMessage(this.message,
                     "Всю необходимую информацию об " + message.getText() + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
             sendMessage(replyMessage);
@@ -206,7 +206,7 @@ public class Bot extends TelegramLongPollingBot {
             return;
         }
 
-
+        //поиск акций БТ
         Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
 
         if (promoAppliancesInfoMap.keySet().contains(messageText)){
@@ -224,7 +224,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-
+        //поиск акций мобайл и тв
         Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
 
         if (promoMobileTVInfoMap.keySet().contains(messageText)){
