@@ -194,7 +194,8 @@ public class Bot extends TelegramLongPollingBot {
                 || bufferMessageText.startsWith("s")
                 || bufferMessageText.startsWith("a")
                 || bufferMessageText.startsWith("buds")
-                || bufferMessageText.startsWith("smart")) {
+                || bufferMessageText.startsWith("smart")
+                || bufferMessageText.startsWith("galaxy")) {
             var replyMessage = Response.createTextMessage(this.message,
                     "Всю необходимую информацию об " + message.getText() + " ты можещь найти здесь:\nhttp://uspmobile.ru/");
             sendMessage(replyMessage);
