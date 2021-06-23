@@ -75,7 +75,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void sendMessage(SendMessage sendMessage){
-
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -206,10 +205,30 @@ public class Bot extends TelegramLongPollingBot {
 
             return;
         }
-        Map<String, String> promoInfoMap = PromoInfo.getInstancePromoMobileTV();
-        for (String keyPromoInfoMap: promoInfoMap.keySet()) {
-            if (messageText.equals(keyPromoInfoMap)) {
-                for (Map.Entry<String, String> entry: promoInfoMap.entrySet()){
+
+
+        Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
+
+        if (promoAppliancesInfoMap.keySet().contains(messageText)){
+            for (Map.Entry<String, String> entry: promoAppliancesInfoMap.entrySet()){
+                if (messageText.equals(entry.getKey())) {
+                    var replyMessage = Response.createTextMessage(this.message, entry.getKey()+"\n\n"+entry.getValue());
+                    sendMessage(replyMessage);
+
+                    //Стартовое меню
+                    replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                    sendMessage(replyMessage);
+
+                    return;
+                }
+            }
+        }
+
+
+        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
+
+        if (promoMobileTVInfoMap.keySet().contains(messageText)){
+                for (Map.Entry<String, String> entry: promoMobileTVInfoMap.entrySet()){
                     if (messageText.equals(entry.getKey())) {
                         var replyMessage = Response.createTextMessage(this.message, entry.getKey()+"\n\n"+entry.getValue());
                         sendMessage(replyMessage);
@@ -221,15 +240,7 @@ public class Bot extends TelegramLongPollingBot {
                         return;
                     }
                 }
-
-
-                //Стартовое меню
-                var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
-                sendMessage(replyMessage);
-
-                return;
             }
-        }
 
         //Стартовое меню
         var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);

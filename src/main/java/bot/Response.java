@@ -11,7 +11,7 @@ public class Response {
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
 //        sendMessage.setReplyToMessageId(message.getMessageId());
-
+        sendMessage.enableMarkdown(false);
         sendMessage.setText(text);
 
         return sendMessage;

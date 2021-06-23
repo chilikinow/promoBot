@@ -97,7 +97,7 @@ public class PromoInfo {
                     valueForMap.append(cellString + "\n");
             }
             //создаем элемент Map, где key- название акции, value- подробности акции
-            map.put(cellList.get(0).getStringCellValue(), valueForMap.toString());
+            map.put(cellList.get(0).getStringCellValue()+"1", valueForMap.toString());
         }
 
 
@@ -111,6 +111,8 @@ public class PromoInfo {
 //                System.out.println("------------------------------");
 //            }
 //            System.out.println("_________End Map_________\n\n\n");
+
+//        for (map.keySet())
 
 
         return map;
