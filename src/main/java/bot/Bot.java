@@ -107,16 +107,16 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equals(botPassword)){
 
             //Стартовое меню
-            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
             sendMessage(replyMessage);
 
             return;
         }
 
-        if (messageText.equals("/menu")){
+        if (messageText.equals("/startMenu")){
 
             //Стартовое меню
-            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
             sendMessage(replyMessage);
 
             return;
@@ -156,7 +156,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
                 sendMessage(replyMessage);
 
                 return;
@@ -169,7 +169,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
                 sendMessage(replyMessage);
 
                 return;
@@ -186,7 +186,7 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage(replyMessage);
 
             //Стартовое меню
-            replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+            replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
             sendMessage(replyMessage);
 
             return;
@@ -202,7 +202,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMessage(replyMessage);
 
                     //Стартовое меню
-                    replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                    replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
                     sendMessage(replyMessage);
 
                     return;
@@ -220,7 +220,7 @@ public class Bot extends TelegramLongPollingBot {
                         sendMessage(replyMessage);
 
                         //Стартовое меню
-                        replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+                        replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
                         sendMessage(replyMessage);
 
                         return;
@@ -229,7 +229,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
         //Стартовое меню
-        var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
+        var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
         sendMessage(replyMessage);
     }
 
