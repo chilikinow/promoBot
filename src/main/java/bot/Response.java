@@ -1,7 +1,11 @@
 package bot;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.io.File;
 
 public class Response {
 
@@ -15,6 +19,24 @@ public class Response {
         sendMessage.setText(text);
 
         return sendMessage;
+    }
+
+    public static SendPhoto createPhotoMessage(Message message, String path){
+
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(message.getChatId().toString());
+//        sendPhoto.setReplyToMessageId(message.getMessageId());
+        sendPhoto.setPhoto(new InputFile(new File(path)));
+
+        return sendPhoto;
+    }
+
+    public static SendPhoto createPhotoMessage(Message message, String text, String path){
+
+        SendPhoto sendPhoto = createPhotoMessage(message, path);
+        sendPhoto.setCaption(text);
+
+        return sendPhoto;
     }
 
     public static SendMessage createTextMessageWithKeyboard(Message message, String text, TypeKeyboard typeKeyboard){

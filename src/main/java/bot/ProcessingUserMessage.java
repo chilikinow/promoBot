@@ -1,16 +1,12 @@
 package bot;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.w3c.dom.stylesheets.LinkStyle;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProcessingUserMessage {
 
-    MessageType messageType;
+    private MessageType messageType;
 
     public enum MessageType {
         START_MENU,
