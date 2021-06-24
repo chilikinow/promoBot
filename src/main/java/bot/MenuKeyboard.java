@@ -3,10 +3,7 @@ package bot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MenuKeyboard {
 
@@ -20,12 +17,7 @@ public class MenuKeyboard {
 
         keyboard.clear();
 
-        List<String> buttonList = new ArrayList<>();
-        buttonList.add("Акции Мобайл ТВ");
-        buttonList.add("Акции Бытовая техника");
-        buttonList.add("Характеристики устройств");
-        buttonList.add("Инфо");
-        buttonList.add("Помощь");
+        List<String> buttonList = new ArrayList<>(new StartMenu().getList());
 
         for (int i = 0; i < buttonList.size(); i++) {
             KeyboardRow keyboardRowBuffer = new KeyboardRow();

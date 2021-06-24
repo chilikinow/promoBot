@@ -8,13 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class HelpCommand implements Command{
+public class HelpCommand{
 
 
-    private CommandType type = CommandType.HELP;
-
-    @Override
-    public String init() {
+    public String create() {
         StringBuilder response = new StringBuilder();
 
         Path phonesInfoPropertiesFile = Paths.get("src/main/resources/phonesInfo.properties");

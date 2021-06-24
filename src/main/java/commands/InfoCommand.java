@@ -1,23 +1,11 @@
 package commands;
 
 import bot.MenuKeyboard;
+import bot.StartMenu;
 
-public class InfoCommand implements Command{
+public class InfoCommand{
 
-    private CommandType type = CommandType.INFO;
-    private String info;
-
-    public InfoCommand(){
-        info = init();
-    }
-
-    public String getInfo(){
-        return info;
-    }
-
-
-    @Override
-    public String init() {
+    public String create() {
         StringBuilder response = new StringBuilder();
 
         response.append("Привет!\n")
@@ -27,8 +15,8 @@ public class InfoCommand implements Command{
                 .append("запрашиваемой техники.\n\n")
                 .append("Список команд:\n\n");
 
-        for (int i = 0; i < new MenuKeyboard().getStartMenu().getKeyboard().size(); i++) {
-            response.append( new MenuKeyboard().getStartMenu().getKeyboard().get(i) + "\n");
+        for (String elementMenu: new StartMenu().getList()) {
+            response.append( elementMenu + "\n");
         }
         response.append("\nДля вызова основного Меню вы можете нажать на любую ")
                 .append("ссылку /menu в чате, или отправить любое сообщение.");

@@ -8,55 +8,40 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
-    public static final String DOWNLOAD_PROMO_INFO_FILE_DIRECTORY_ADDRESS;
-
-    private static final String BOT_NAME;
-    private static final String BOT_TOKEN;
-    private static final String BOT_PASSWORD;
+    private String botName;
+    private String botToken;
+    private String botPassword;
 
     private Message message;
     private int messageCounter;
     private boolean pass;
-//    Map <String, String> promoInfoMap;
 
-    static {
-            Path botInfoPropertiesFile = Paths.get
-                    ("src/main/resources/botInfo.properties");
-            Properties botInfoProperties = new Properties();
-            try {
-                botInfoProperties.load(new FileReader(botInfoPropertiesFile.toFile()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    {
+        BotData botData = new BotData();
 
-            BOT_NAME = botInfoProperties.getProperty("botUsername");
-            BOT_TOKEN = botInfoProperties.getProperty("botToken");
-            BOT_PASSWORD = botInfoProperties.getProperty("botPassword");
-            DOWNLOAD_PROMO_INFO_FILE_DIRECTORY_ADDRESS = botInfoProperties.getProperty("promoInfoFileAddress");
-        }
+        botName = botData.getBotName();
+        botToken = botData.getBotToken();
+        botPassword = botData.getBotPassword();
 
-        {
-//            promoInfoMap = PromoInfo.getInstance();
-            this.messageCounter = 1;
-            this.pass = false;
-        }
+        this.messageCounter = 1;
+        this.pass = false;
+    }
 
     @Override
     public String getBotUsername() {
-        return this.BOT_NAME;
+        return this.botName;
     }
 
     @Override
     public String getBotToken() {
-        return this.BOT_TOKEN;
+        return this.botToken;
     }
+
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -99,7 +84,7 @@ public class Bot extends TelegramLongPollingBot {
 
         //Финальная часть авторизации
         if (this.messageCounter == 2) {
-            if (BOT_PASSWORD.equals(this.message.getText())) {
+            if (botPassword.equals(this.message.getText())) {
                 this.pass = true;
                 var replyMessage = Response.createTextMessage(this.message, "Доступ Разрешен...\n\n");
                 sendMessage(replyMessage);
@@ -119,7 +104,7 @@ public class Bot extends TelegramLongPollingBot {
         User user = this.message.getFrom();
         String messageText = this.message.getText();
 
-        if (messageText.equals(BOT_PASSWORD)){
+        if (messageText.equals(botPassword)){
 
             //Стартовое меню
             var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/menu", Response.TypeKeyboard.START);
@@ -167,7 +152,7 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equals("Помощь")
                 || messageText.equals("Help")){
 
-                var replyMessage = Response.createTextMessage(this.message, new HelpCommand().init());
+                var replyMessage = Response.createTextMessage(this.message, new HelpCommand().create());
                 sendMessage(replyMessage);
 
                 //Стартовое меню
@@ -180,7 +165,7 @@ public class Bot extends TelegramLongPollingBot {
         if (messageText.equals("Инфо")
                 || messageText.equals("Info")){
 
-                var replyMessage = Response.createTextMessage(this.message, new InfoCommand().getInfo());
+                var replyMessage = Response.createTextMessage(this.message, new InfoCommand().create());
                 sendMessage(replyMessage);
 
                 //Стартовое меню
