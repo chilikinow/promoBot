@@ -62,15 +62,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-//    public void sendPhotoMessage(SendPhoto sendPhoto){
-//        try {
-//            execute(sendPhoto);
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
     public void sendReply(Object reply){
 
             try {

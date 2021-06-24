@@ -3,13 +3,11 @@ package bot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ProcessingUserMessage {
 
-    private MessageType messageType;
-
     public enum MessageType {
-        START_MENU,
         PROMO_MOBILE_TV_MENU,
         PROMO_APPLIANCES,
         DEVICE,
@@ -21,13 +19,8 @@ public class ProcessingUserMessage {
 
         String messageText = message.getText();
 
-        //если сообщение содержит команду стартового меню
-        if (new StartMenu().getList().contains(messageText)){
-           return MessageType.START_MENU;
-        }
-
         //если сообщение содержит команду меню Акций Мобайл ТВ
-        var bufferPromoMobileTVSet = PromoInfo.getInstancePromoMobileTV().keySet();
+        Set<String> bufferPromoMobileTVSet = PromoInfo.getInstancePromoMobileTV().keySet();
             bufferPromoMobileTVSet.add("Акции Мобайл ТВ");
             bufferPromoMobileTVSet.add("Promo Mobile TV");
         if (bufferPromoMobileTVSet.contains(messageText)){
@@ -35,7 +28,7 @@ public class ProcessingUserMessage {
         }
 
         //если сообщение содержит команду меню акций БТ
-        var bufferPromoAppliancesSet = PromoInfo.getInstancePromoAppliances().keySet();
+        Set<String> bufferPromoAppliancesSet = PromoInfo.getInstancePromoAppliances().keySet();
             bufferPromoAppliancesSet.add("Акции Бытовая техника");
             bufferPromoAppliancesSet.add("Promo Appliances");
         if (bufferPromoAppliancesSet.contains(messageText)){
@@ -43,11 +36,14 @@ public class ProcessingUserMessage {
         }
 
         //если сообщение содержит название устройства
-        var bufferCategoryDeviceList = new CategoryDevice().getList();
+        List<String> bufferCategoryDeviceList = new CategoryDevice().getList();
             bufferCategoryDeviceList.add("Характеристики устройств");
             bufferCategoryDeviceList.add("Device info");
-        if (bufferCategoryDeviceList.contains(messageText)){
-            return MessageType.DEVICE;
+
+        for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
+            if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
+                return MessageType.DEVICE;
+            }
         }
 
         List<String> bufferSystemMessageList = new ArrayList<>();
