@@ -1,6 +1,5 @@
 package bot;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.IOException;
@@ -17,10 +16,10 @@ import java.util.stream.Collectors;
 public class Device {
 
     private List<String> categoryDeviceList;
-    private Path deviceInfoDB;
+    private Path deviceInfoDBDirectory;
 
     {
-        this.deviceInfoDB = Paths.get("src/main/resources/deviceInfoDB");
+        this.deviceInfoDBDirectory = Paths.get("src/main/resources/dataBaseProducts/mobile");
     }
 
     public List<String> getCategoryDeviceList(){
@@ -52,7 +51,7 @@ public class Device {
         List<Path> deviceInfoFilesList = new ArrayList<>();
 
         try {
-            deviceInfoFilesList =  Files.walk(this.deviceInfoDB)
+            deviceInfoFilesList =  Files.walk(this.deviceInfoDBDirectory)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -76,7 +75,7 @@ public class Device {
         List<Path> deviceInfoFilesList = new ArrayList<>();
 
         try {
-            deviceInfoFilesList =  Files.walk(this.deviceInfoDB)
+            deviceInfoFilesList =  Files.walk(this.deviceInfoDBDirectory)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
 
