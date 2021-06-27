@@ -1,6 +1,5 @@
-package commands;
+package commandSystem;
 
-import bot.MenuKeyboard;
 import bot.StartMenu;
 
 public class InfoCommand{

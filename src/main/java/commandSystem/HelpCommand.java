@@ -1,4 +1,4 @@
-package commands;
+package commandSystem;
 
 import java.io.FileReader;
 import java.io.IOException;

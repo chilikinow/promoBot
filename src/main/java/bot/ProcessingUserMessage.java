@@ -1,15 +1,14 @@
 package bot;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 public class ProcessingUserMessage {
 
     public enum MessageType {
         PROMO_MOBILE_TV_MENU,
-        PROMO_APPLIANCES,
+        PROMO_APPLIANCES_MENU,
         DEVICE,
         SYSTEM,
         OTHER
@@ -20,7 +19,8 @@ public class ProcessingUserMessage {
         String messageText = message.getText();
 
         //если сообщение содержит команду меню Акций Мобайл ТВ
-        Set<String> bufferPromoMobileTVSet = PromoInfo.getInstancePromoMobileTV().keySet();
+        var promoMobileTvSet = PromoInfo.getInstancePromoMobileTV().keySet();
+        Set<String> bufferPromoMobileTVSet = new HashSet<>(promoMobileTvSet);
             bufferPromoMobileTVSet.add("Акции Мобайл ТВ");
             bufferPromoMobileTVSet.add("Promo Mobile TV");
         if (bufferPromoMobileTVSet.contains(messageText)){
@@ -28,23 +28,28 @@ public class ProcessingUserMessage {
         }
 
         //если сообщение содержит команду меню акций БТ
-        Set<String> bufferPromoAppliancesSet = PromoInfo.getInstancePromoAppliances().keySet();
+        var promoAppliancesSet = PromoInfo.getInstancePromoAppliances().keySet();
+        Set<String> bufferPromoAppliancesSet = new HashSet<>(promoAppliancesSet);
             bufferPromoAppliancesSet.add("Акции Бытовая техника");
             bufferPromoAppliancesSet.add("Promo Appliances");
         if (bufferPromoAppliancesSet.contains(messageText)){
-            return MessageType.PROMO_APPLIANCES;
+            return MessageType.PROMO_APPLIANCES_MENU;
         }
 
         //если сообщение содержит название устройства
-        List<String> bufferCategoryDeviceList = new CategoryDevice().getList();
-            bufferCategoryDeviceList.add("Характеристики устройств");
-            bufferCategoryDeviceList.add("Device info");
+        var categoryDeviceList = new Device().getCategoryDeviceList();
+        List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
+            bufferCategoryDeviceList.add("Характеристики устройств".toLowerCase(Locale.ROOT));
+            bufferCategoryDeviceList.add("Device info".toLowerCase(Locale.ROOT));
+
+        String lowerMessageText = messageText.toLowerCase(Locale.ROOT);
 
         for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-            if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
+            if (lowerMessageText.startsWith(bufferCategoryDeviceList.get(i))){
                 return MessageType.DEVICE;
             }
         }
+
 
         List<String> bufferSystemMessageList = new ArrayList<>();
             bufferSystemMessageList.add(new BotData().getBotPassword());
