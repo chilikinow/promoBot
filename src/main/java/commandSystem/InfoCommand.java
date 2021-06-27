@@ -7,18 +7,14 @@ public class InfoCommand{
     public String create() {
         StringBuilder response = new StringBuilder();
 
-        response.append("Привет!\n")
-                .append("Бот позволяет узнать актуальную информацию ")
-                .append("о проходящих в компании акциях, ")
-                .append("так же узнать подробные характеристики ")
-                .append("запрашиваемой техники.\n\n")
-                .append("Список команд:\n\n");
+        response.append("Список доступных устройств:\n\n");
 
-        for (String elementMenu: new StartMenu().getList()) {
-            response.append( elementMenu + "\n");
-        }
-        response.append("\nДля вызова основного Меню вы можете нажать на любую ")
-                .append("ссылку /menu в чате, или отправить любое сообщение.");
+//        for (String elementMenu: new StartMenu().getList()) {
+//            response.append( elementMenu + "\n");
+//        }
+
+        response.append("\nДля вызова основного Меню достаточно отправить\n")
+                .append("любое сообщение или использовать ссылку /startMenu в чате.");
 
         return response.toString();
     }

@@ -1,6 +1,6 @@
 package bot;
 
-import commandSystem.HelpCommand;
+import commandSystem.ServiceInfoCommand;
 import commandSystem.InfoCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,14 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -95,7 +89,12 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         if (this.messageCounter == 1) {
-            var replyMessage = Response.createTextMessage(this.message,"Добро пожаловать!\nВведите пароль:\n");
+            var replyMessage = Response.createTextMessage(this.message,
+                    "Приветствую!\n\n" +
+                            "Данный Бот, создан Продавцом для Продавцов.\n\n"
+                            + "Позволяет оперативно узнать актуальную информацию о проходящих в компании "
+                            + "маркетинговых акциях, а так же узнать подробные характеристики запрашиваемой техники.\n"
+                            + "\nВведите пароль:\n");
             sendReply(replyMessage);
             this.messageCounter++;
 
@@ -212,10 +211,8 @@ public class Bot extends TelegramLongPollingBot {
             for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
                 if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
 
-                    Path deviceInfoDB = Paths.get("src/main/resources/deviceDB/");
-
                     List<Path> resultDeviceInfoList = new ArrayList<>();
-                    resultDeviceInfoList = new Device().findDeviceInfo(this.message, deviceInfoDB);
+                    resultDeviceInfoList = new Device().findDeviceInfo(this.message);
 
                     for (Path resultDeviseInfo: resultDeviceInfoList){
                         SendPhoto replyPhoto = Response.createPhotoMessage(this.message, "Технические характеристики и USP:\nhttp://uspmobile.ru/"
@@ -254,10 +251,10 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
 
-            if (messageText.equals("Помощь")
-                    || messageText.equals("Help")){
+            if (messageText.equals("Сервис")
+                    || messageText.equals("Service")){
 
-                var replyMessage = Response.createTextMessage(this.message, new HelpCommand().create());
+                var replyMessage = Response.createTextMessage(this.message, new ServiceInfoCommand().create());
                 sendReply(replyMessage);
 
                 //Стартовое меню
@@ -348,7 +345,7 @@ public class Bot extends TelegramLongPollingBot {
 //        if (messageText.equals("Помощь")
 //                || messageText.equals("Help")){
 //
-//                var replyMessage = Response.createTextMessage(this.message, new HelpCommand().create());
+//                var replyMessage = Response.createTextMessage(this.message, new ServiceInfoCommand().create());
 //                sendReply(replyMessage);
 //
 //                //Стартовое меню

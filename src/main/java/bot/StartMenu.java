@@ -14,7 +14,7 @@ public class StartMenu {
         this.startMenuList.add("Акции Бытовая техника");
         this.startMenuList.add("Характеристики устройств");
         this.startMenuList.add("Инфо");
-        this.startMenuList.add("Помощь");
+        this.startMenuList.add("Сервис");
     }
 
     public List<String> getList(){

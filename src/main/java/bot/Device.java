@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,7 +17,11 @@ import java.util.stream.Collectors;
 public class Device {
 
     private List<String> categoryDeviceList;
-//    private String messageText;
+    private Path deviceInfoDB;
+
+    {
+        this.deviceInfoDB = Paths.get("src/main/resources/deviceInfoDB");
+    }
 
     public List<String> getCategoryDeviceList(){
 
@@ -24,6 +29,7 @@ public class Device {
 
         this.categoryDeviceList.add("galaxy");
         this.categoryDeviceList.add("s");
+        this.categoryDeviceList.add("note");
         this.categoryDeviceList.add("z");
         this.categoryDeviceList.add("a");
         this.categoryDeviceList.add("tab");
@@ -34,7 +40,7 @@ public class Device {
         return categoryDeviceList;
     }
 
-    public List<Path> findDeviceInfo(Message message, Path deviceInfoDBDirectory){
+    public List<Path> findDeviceInfo(Message message){
 
 
         String messageText = message.getText().toLowerCase(Locale.ROOT).replaceAll(" ", "");
@@ -42,15 +48,11 @@ public class Device {
         messageText = messageText.replace("galaxy", "");
 
         messageText = messageText.replace("samsung", "");
-        messageText.concat(".");
-
-        System.out.println(messageText);
 
         List<Path> deviceInfoFilesList = new ArrayList<>();
-        Path resultDeviceInfoFilePath;
 
         try {
-            deviceInfoFilesList =  Files.walk(deviceInfoDBDirectory)
+            deviceInfoFilesList =  Files.walk(this.deviceInfoDB)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -63,10 +65,31 @@ public class Device {
             Matcher matcher = pattern.matcher(deviceInfoFile.getFileName().toString());
             if (matcher.find()){
                 resultDeviceInfoList.add(deviceInfoFile);
-                System.out.println(deviceInfoFile.getFileName().toString());
             }
         }
 
         return resultDeviceInfoList;
+    }
+
+    public List<String> getDeviceInfoFilesName(){
+
+        List<Path> deviceInfoFilesList = new ArrayList<>();
+
+        try {
+            deviceInfoFilesList =  Files.walk(this.deviceInfoDB)
+                    .filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> deviceInfoFilesNameList = new ArrayList<>();
+
+        for(Path deviceInfo : deviceInfoFilesList){
+            deviceInfoFilesNameList.add(deviceInfo.getFileName().toString().split(".")[0]);
+        }
+
+        return deviceInfoFilesNameList;
     }
 }

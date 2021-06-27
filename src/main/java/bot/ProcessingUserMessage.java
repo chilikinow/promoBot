@@ -54,8 +54,8 @@ public class ProcessingUserMessage {
         List<String> bufferSystemMessageList = new ArrayList<>();
             bufferSystemMessageList.add(new BotData().getBotPassword());
             bufferSystemMessageList.add("/startMenu");
-            bufferSystemMessageList.add("Помощь");
-            bufferSystemMessageList.add("Help");
+            bufferSystemMessageList.add("Сервис");
+            bufferSystemMessageList.add("Service");
             bufferSystemMessageList.add("Инфо");
             bufferSystemMessageList.add("Info");
         if (bufferSystemMessageList.contains(messageText)){
