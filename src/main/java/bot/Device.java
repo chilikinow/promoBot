@@ -32,6 +32,7 @@ public class Device {
         this.categoryDeviceList.add("tab");
         this.categoryDeviceList.add("buds");
         this.categoryDeviceList.add("smart");
+        this.categoryDeviceList.add("tag");
         this.categoryDeviceList.add("watch");
         this.categoryDeviceList.add("active");
         this.categoryDeviceList.add("rb");
