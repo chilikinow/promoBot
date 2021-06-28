@@ -212,12 +212,19 @@ public class Bot extends TelegramLongPollingBot {
                 if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
 
                     List<Path> resultDeviceInfoList = new ArrayList<>();
-                    resultDeviceInfoList = new Device().findDeviceInfo(this.message);
+                    resultDeviceInfoList = new Device().findInfo(this.message, "src/main/resources/dataBaseProducts");
 
-                    for (Path resultDeviseInfo: resultDeviceInfoList){
-                        SendPhoto replyPhoto = Response.createPhotoMessage(this.message, "Технические характеристики и USP:\nhttp://uspmobile.ru/"
-                                ,resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
-                        sendReply(replyPhoto);
+                    if (!resultDeviceInfoList.isEmpty()) {
+                        for (Path resultDeviseInfo : resultDeviceInfoList) {
+                            SendPhoto replyPhoto = Response.createPhotoMessage(this.message, "Технические характеристики и USP:\nhttp://uspmobile.ru/"
+                                    , resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
+                            sendReply(replyPhoto);
+                        }
+                    }else{
+                        var replyMessage = Response.createTextMessage(this.message,
+                                "Устройство не найдено!\n\nСписок доступных для поиска устройств\n" +
+                                        "находится в разделе ИНФО стартового меню.");
+                        sendReply(replyMessage);
                     }
 
                     //Стартовое меню

@@ -12,15 +12,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FilenameUtils;
 
 public class Device {
 
     private List<String> categoryDeviceList;
-    private Path deviceInfoDBDirectory;
-
-    {
-        this.deviceInfoDBDirectory = Paths.get("src/main/resources/dataBaseProducts/mobile");
-    }
 
     public List<String> getCategoryDeviceList(){
 
@@ -35,12 +31,15 @@ public class Device {
         this.categoryDeviceList.add("buds");
         this.categoryDeviceList.add("smart");
         this.categoryDeviceList.add("watch");
+        this.categoryDeviceList.add("rb");
+        this.categoryDeviceList.add("ww");
 
         return categoryDeviceList;
     }
 
-    public List<Path> findDeviceInfo(Message message){
+    public List<Path> findInfo(Message message, String directory){
 
+        Path directoryPath = Paths.get(directory);
 
         String messageText = message.getText().toLowerCase(Locale.ROOT).replaceAll(" ", "");
 
@@ -51,7 +50,7 @@ public class Device {
         List<Path> deviceInfoFilesList = new ArrayList<>();
 
         try {
-            deviceInfoFilesList =  Files.walk(this.deviceInfoDBDirectory)
+            deviceInfoFilesList =  Files.walk(directoryPath)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -70,12 +69,14 @@ public class Device {
         return resultDeviceInfoList;
     }
 
-    public List<String> getDeviceInfoFilesName(){
+    public List<String> getFilesName(String directory){
 
-        List<Path> deviceInfoFilesList = new ArrayList<>();
+        Path directoryPath = Paths.get(directory);
+
+        List<Path> filesList = new ArrayList<>();
 
         try {
-            deviceInfoFilesList =  Files.walk(this.deviceInfoDBDirectory)
+            filesList =  Files.walk(directoryPath)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
 
@@ -83,12 +84,15 @@ public class Device {
             e.printStackTrace();
         }
 
-        List<String> deviceInfoFilesNameList = new ArrayList<>();
+        List<String> filesNamesList = new ArrayList<>();
 
-        for(Path deviceInfo : deviceInfoFilesList){
-            deviceInfoFilesNameList.add(deviceInfo.getFileName().toString().split(".")[0]);
+        for(Path deviceInfo : filesList){
+            String bufferFileName = deviceInfo.getFileName().toString();
+//            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");
+            bufferFileName = FilenameUtils.removeExtension(bufferFileName);
+            filesNamesList.add(bufferFileName);
         }
 
-        return deviceInfoFilesNameList;
+        return filesNamesList;
     }
 }
