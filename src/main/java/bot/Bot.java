@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -63,7 +64,6 @@ public class Bot extends TelegramLongPollingBot {
 
             this.processingTypeMessage(this.message, messageType);
 
-//            processingMessage();
         }
     }
 
@@ -91,29 +91,29 @@ public class Bot extends TelegramLongPollingBot {
         if (this.messageCounter == 1) {
             var replyMessage = Response.createTextMessage(this.message,
                     "Приветствую!\n\n" +
-                            "Бот позволяет оперативно узнать актуальную информацию о проходящих в компании "+
-                            "маркетинговых акциях, а так же узнать подробные характеристики запрашиваемой техники.\n\n" +
-                            "[ Акции Мобайл ТВ ]\n\n" +
-                            "перечень актуальных акций категорий:\n\n" +
-                            "- Смартфоны\n" +
-                            "- Планшеты\n" +
-                            "- Носимые устройства\n\n" +
-                            "[ Акции Бытовая техника ]\n\n" +
-                            "перечень актуальных акций категорий:\n\n" +
-                            "- Стиральные машины\n" +
-                            "- Холодильники\n" +
-                            "- Пылесосы\n" +
-                            "- Микроволновки\n" +
-                            "- Духовые шкафы\n" +
-                            "- Варочные панели\n\n" +
-                            "[ Характеристики устройств ]\n\n" +
-                            "поиск технических характеристик и USP\n\n" +
-                            "[ Инфо ]\n\n" +
-                            "список устройств, доступных для быстрого поиска (постоянно пополняется)\n\n" +
-                            "[ Сервис ]\n\n" +
-                            "справочная информация Сервисных служб Samsung\n\n" +
-                            "Вызов Стартового меню: /startMenu\n"
-                            + "\n\nВведите пароль:");
+                        "Бот позволяет оперативно узнать актуальную информацию о проходящих в компании "+
+                        "маркетинговых акциях, а так же узнать подробные характеристики запрашиваемой техники.\n\n" +
+                        "[ Акции Мобайл ТВ ]\n\n" +
+                        "перечень актуальных акций категорий:\n\n" +
+                        "- Смартфоны\n" +
+                        "- Планшеты\n" +
+                        "- Носимые устройства\n\n" +
+                        "[ Акции Бытовая техника ]\n\n" +
+                        "перечень актуальных акций категорий:\n\n" +
+                        "- Стиральные машины\n" +
+                        "- Холодильники\n" +
+                        "- Пылесосы\n" +
+                        "- Микроволновки\n" +
+                        "- Духовые шкафы\n" +
+                        "- Варочные панели\n\n" +
+                        "[ Характеристики устройств ]\n\n" +
+                        "поиск технических характеристик и USP\n\n" +
+                        "[ Инфо ]\n\n" +
+                        "список устройств, доступных для быстрого поиска (постоянно пополняется)\n\n" +
+                        "[ Сервис ]\n\n" +
+                        "справочная информация Сервисных служб Samsung\n\n" +
+                        "Вызов Стартового меню: /startMenu\n" +
+                        "\n\nВведите пароль:");
             sendReply(replyMessage);
             this.messageCounter++;
 
@@ -127,12 +127,14 @@ public class Bot extends TelegramLongPollingBot {
         if (this.messageCounter == 2) {
             if (botPassword.equals(this.message.getText())) {
                 this.pass = true;
-                var replyMessage = Response.createTextMessage(this.message, "Доступ Разрешен...\n\n");
+                var replyMessage = Response.createTextMessage(this.message,
+                        "Доступ Разрешен...\n\n");
                 sendReply(replyMessage);
                 this.messageCounter++;
             }
             else {
-                var replyMessage = Response.createTextMessage(this.message, "Пароль не от этого Бота, попробуйте другой...:\n");
+                var replyMessage = Response.createTextMessage(this.message,
+                        "Пароль не от этого Бота, попробуйте другой...:\n");
                 sendReply(replyMessage);
                 this.messageCounter = 2;
             }
@@ -151,7 +153,8 @@ public class Bot extends TelegramLongPollingBot {
                     || messageText.equals("Promo Mobile TV")){
 
                 var replyMessage = Response.createTextMessageWithKeyboard
-                        (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO_MOBILE_TV);
+                        (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                                Response.TypeKeyboard.PROMO_MOBILE_TV);
                 sendReply(replyMessage);
                 return;
             }
@@ -162,11 +165,13 @@ public class Bot extends TelegramLongPollingBot {
             if (promoMobileTVInfoMap.keySet().contains(messageText)){
                 for (Map.Entry<String, String> entry: promoMobileTVInfoMap.entrySet()){
                     if (messageText.equals(entry.getKey())) {
-                        var replyMessage = Response.createTextMessage(message, entry.getKey()+"\n\n"+entry.getValue());
+                        var replyMessage = Response.createTextMessage(message,
+                                entry.getKey()+"\n\n"+entry.getValue());
                         sendReply(replyMessage);
 
                         //Стартовое меню
-                        replyMessage = Response.createTextMessageWithKeyboard(message, "/startMenu", Response.TypeKeyboard.START);
+                        replyMessage = Response.createTextMessageWithKeyboard(message,
+                                "/startMenu", Response.TypeKeyboard.START);
                         sendReply(replyMessage);
 
                         return;
@@ -185,7 +190,8 @@ public class Bot extends TelegramLongPollingBot {
                     || messageText.equals("Promo Appliances")){
 
                 var replyMessage = Response.createTextMessageWithKeyboard
-                        (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/", Response.TypeKeyboard.PROMO_APPLIANCES);
+                        (this.message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                                Response.TypeKeyboard.PROMO_APPLIANCES);
                 sendReply(replyMessage);
                 return;
             }
@@ -196,11 +202,13 @@ public class Bot extends TelegramLongPollingBot {
             if (promoAppliancesInfoMap.keySet().contains(messageText)){
                 for (Map.Entry<String, String> entry: promoAppliancesInfoMap.entrySet()){
                     if (messageText.equals(entry.getKey())) {
-                        var replyMessage = Response.createTextMessage(this.message, entry.getKey()+"\n\n"+entry.getValue());
+                        var replyMessage = Response.createTextMessage(this.message,
+                                entry.getKey()+"\n\n"+entry.getValue());
                         sendReply(replyMessage);
 
                         //Стартовое меню
-                        replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                        replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                                "/startMenu", Response.TypeKeyboard.START);
                         sendReply(replyMessage);
 
                         return;
@@ -216,7 +224,8 @@ public class Bot extends TelegramLongPollingBot {
 
             if (messageText.equals("Характеристики устройств")
                     || messageText.equals("Device info")){
-                var replyMessage = Response.createTextMessage(this.message, "Введите название интересующего Вас устройства:");
+                var replyMessage = Response.createTextMessage(this.message,
+                        "Введите название интересующего Вас устройства:");
                 sendReply(replyMessage);
                 return;
             }
@@ -230,13 +239,16 @@ public class Bot extends TelegramLongPollingBot {
             for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
                 if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
 
+                    String separator = File.separator;
                     List<Path> resultDeviceInfoList = new ArrayList<>();
-                    resultDeviceInfoList = new Device().findInfo(this.message, "src/main/resources/dataBaseProducts");
+                    resultDeviceInfoList = new Device().findInfo(this.message,
+                            "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts");
 
                     if (!resultDeviceInfoList.isEmpty()) {
                         for (Path resultDeviseInfo : resultDeviceInfoList) {
-                            SendPhoto replyPhoto = Response.createPhotoMessage(this.message, "Технические характеристики и USP:\nhttp://uspmobile.ru/"
-                                    , resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
+                            SendPhoto replyPhoto = Response.createPhotoMessage(this.message,
+                                    "Технические характеристики и USP:\nhttp://uspmobile.ru/",
+                                    resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
                             sendReply(replyPhoto);
                         }
                     }else{
@@ -247,7 +259,8 @@ public class Bot extends TelegramLongPollingBot {
                     }
 
                     //Стартовое меню
-                    var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                    var replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                            "/startMenu", Response.TypeKeyboard.START);
                     sendReply(replyMessage);
 
                     return;
@@ -262,7 +275,8 @@ public class Bot extends TelegramLongPollingBot {
             if (messageText.equals(botPassword)){
 
                 //Стартовое меню
-                var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                var replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                        "/startMenu", Response.TypeKeyboard.START);
                 sendReply(replyMessage);
 
                 return;
@@ -271,7 +285,8 @@ public class Bot extends TelegramLongPollingBot {
             if (messageText.equals("/startMenu")){
 
                 //Стартовое меню
-                var replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                var replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                        "/startMenu", Response.TypeKeyboard.START);
                 sendReply(replyMessage);
 
                 return;
@@ -280,11 +295,13 @@ public class Bot extends TelegramLongPollingBot {
             if (messageText.equals("Сервис")
                     || messageText.equals("Service")){
 
-                var replyMessage = Response.createTextMessage(this.message, new ServiceInfoCommand().create());
+                var replyMessage = Response.createTextMessage(this.message,
+                        new ServiceInfoCommand().create());
                 sendReply(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                        "/startMenu", Response.TypeKeyboard.START);
                 sendReply(replyMessage);
 
                 return;
@@ -297,7 +314,8 @@ public class Bot extends TelegramLongPollingBot {
                 sendReply(replyMessage);
 
                 //Стартовое меню
-                replyMessage = Response.createTextMessageWithKeyboard(this.message, "/startMenu", Response.TypeKeyboard.START);
+                replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                        "/startMenu", Response.TypeKeyboard.START);
                 sendReply(replyMessage);
 
                 return;

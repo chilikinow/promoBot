@@ -1,5 +1,6 @@
 package bot;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,8 +19,9 @@ public class BotData {
     }
 
     private void init(){
+        String separator = File.separator;
         Path botInfoPropertiesFile = Paths.get
-                ("src/main/resources/botInfo.properties");
+                ("src" + separator + "main" + separator + "resources" + separator + "botInfo.properties");
         Properties botInfoProperties = new Properties();
         try {
             botInfoProperties.load(new FileReader(botInfoPropertiesFile.toFile()));

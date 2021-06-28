@@ -1,5 +1,6 @@
 package commandSystem;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,8 +14,8 @@ public class ServiceInfoCommand {
 
     public String create() {
 
-
-        Path phonesInfoPropertiesFile = Paths.get("src/main/resources/phonesInfo.properties");
+        String separator = File.separator;
+        Path phonesInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "phonesInfo.properties");
         Properties phonesInfoProperties = new Properties();
         try {
             phonesInfoProperties.load(new FileReader(phonesInfoPropertiesFile.toFile()));

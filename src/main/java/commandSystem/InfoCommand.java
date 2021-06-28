@@ -1,6 +1,8 @@
 package commandSystem;
 
 import bot.Device;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,8 @@ public class InfoCommand{
 
         List<String> productNamesList = new ArrayList<>();
 
-        productNamesList = new Device().getFilesName("src/main/resources/dataBaseProducts/mobile");
+        String separator = File.separator;
+        productNamesList = new Device().getFilesName("src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile");
 
         for (String mobileName: productNamesList){
             response.append(mobileName + "\n");
@@ -24,7 +27,7 @@ public class InfoCommand{
 
         response.append("\nТелевизоры:\n\n");
 
-        productNamesList = new Device().getFilesName("src/main/resources/dataBaseProducts/tv");
+        productNamesList = new Device().getFilesName("src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "tv");
 
         for (String tvName: productNamesList){
             response.append(tvName + "\n");
@@ -34,7 +37,7 @@ public class InfoCommand{
 
         response.append("\nБытовая техника:\n\n");
 
-        productNamesList = new Device().getFilesName("src/main/resources/dataBaseProducts/appliances");
+        productNamesList = new Device().getFilesName("src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "appliances");
 
         for (String applianceName: productNamesList){
             response.append(applianceName + "\n");

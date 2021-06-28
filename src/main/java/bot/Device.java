@@ -57,6 +57,8 @@ public class Device {
 
         messageText = messageText.replace("samsung", "");
 
+        messageText = messageText.replace("plus", "+");
+
         List<Path> deviceInfoFilesList = new ArrayList<>();
 
         try {
