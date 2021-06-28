@@ -29,9 +29,9 @@ public class ServiceInfoCommand {
 
         StringBuilder response = new StringBuilder();
         response.append("При обращении в ремонт – направьте клиента:\n\n" +
-                "- в коллцентр (КЦ) Самсунг 8-800-555-55-55\n– 15 минут\n" +
+                "- в коллцентр (КЦ) Самсунг 8-800-555-55-55\n 15 минут\n" +
                 "- в Сервис Плазу или в АСЦ – ремонт за 1 час\n" +
-                "- в бесплатную доставку смартфона через КЦ\n– 3 дня\n\n");
+                "- в бесплатную доставку смартфона через КЦ\n 3 дня\n\n");
         response.append("Обязательно предупредите клиента что:\n\n" +
                 "- ремонт через магазин в среднем\n- 20 дней (до 45)\n" +
                 "- клиенту нужно сохранить данные\n" +
@@ -51,7 +51,7 @@ public class ServiceInfoCommand {
             response.append(entry.getKey()+ ": ")
                     .append(entry.getValue()+"\n");
         }
-        return response.toString();
+        return response.toString().trim();
 
     }
 }

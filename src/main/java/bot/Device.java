@@ -26,13 +26,23 @@ public class Device {
         this.categoryDeviceList.add("s");
         this.categoryDeviceList.add("note");
         this.categoryDeviceList.add("z");
+        this.categoryDeviceList.add("fold");
+        this.categoryDeviceList.add("flip");
         this.categoryDeviceList.add("a");
         this.categoryDeviceList.add("tab");
         this.categoryDeviceList.add("buds");
         this.categoryDeviceList.add("smart");
         this.categoryDeviceList.add("watch");
+        this.categoryDeviceList.add("active");
         this.categoryDeviceList.add("rb");
+        this.categoryDeviceList.add("rs");
+        this.categoryDeviceList.add("brb");
         this.categoryDeviceList.add("ww");
+        this.categoryDeviceList.add("wd");
+        this.categoryDeviceList.add("dv");
+        this.categoryDeviceList.add("jet");
+        this.categoryDeviceList.add("vc");
+        this.categoryDeviceList.add("vr");
 
         return categoryDeviceList;
     }

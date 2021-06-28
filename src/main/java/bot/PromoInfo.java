@@ -15,6 +15,7 @@ import java.util.*;
 
 public class PromoInfo {
 
+    private static Calendar date;
     private static Map <String, String> promoMobileTVMap;
     private static Map <String, String> promoAppliancesMap;
     private static XSSFWorkbook workBook;
@@ -23,6 +24,7 @@ public class PromoInfo {
     }
 
     static {
+        date = Calendar.getInstance();
         promoMobileTVMap = new HashMap<>();
         promoAppliancesMap = new HashMap<>();
 
@@ -39,9 +41,10 @@ public class PromoInfo {
 
     //Singleton
     public static Map<String, String> getInstancePromoMobileTV(){
-
-        if (promoMobileTVMap.isEmpty()) {
+        Calendar currentDate = Calendar.getInstance();
+        if (promoMobileTVMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
             promoMobileTVMap = new HashMap<>(addMap(workBook,0));
+            date = currentDate;
         }
 
         return promoMobileTVMap;
@@ -49,9 +52,10 @@ public class PromoInfo {
 
     //Singleton
     public static Map<String, String> getInstancePromoAppliances(){
-
-        if (promoAppliancesMap.isEmpty()) {
+        Calendar currentDate = Calendar.getInstance();
+        if (promoAppliancesMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
             promoAppliancesMap = new HashMap<>(addMap(workBook,1));
+            date = currentDate;
         }
 
         return promoAppliancesMap;
