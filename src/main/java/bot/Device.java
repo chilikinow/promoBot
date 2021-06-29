@@ -44,17 +44,14 @@ public class Device {
 
         Path directoryPath = Paths.get(directory);
 
-        String messageText = message.getText().toLowerCase(Locale.ROOT).replaceAll(" ", "");
-
-        messageText = messageText.replace("galaxy", "");
-
-        messageText = messageText.replace("samsung", "");
-
-        messageText = messageText.replace("-", "");
-
-        messageText = messageText.replace("_", "");
-
-        messageText = messageText.replace("plus", "+");
+        String messageText = message.getText()
+                .toLowerCase(Locale.ROOT)
+                .replaceAll(" ", "")
+                .replace("galaxy", "")
+                .replace("samsung", "")
+                .replace("-", "")
+                .replace("_", "")
+                .replace("plus", "+");
 
         Set<Path> deviceInfoFilesList = new TreeSet<>();
 
@@ -68,8 +65,17 @@ public class Device {
 
         Set<Path> resultDeviceInfoList = new TreeSet<>();
         for (Path deviceInfoFile : deviceInfoFilesList){
+            String tempDeviceInfoFile = deviceInfoFile.getFileName().toString();
+            tempDeviceInfoFile = tempDeviceInfoFile
+                    .toLowerCase(Locale.ROOT)
+                    .replaceAll(" ", "")
+                    .replace("galaxy", "")
+                    .replace("samsung", "")
+                    .replace("-", "")
+                    .replace("_", "")
+                    .replace("plus", "+");
             Pattern pattern = Pattern.compile(messageText);
-            Matcher matcher = pattern.matcher(deviceInfoFile.getFileName().toString().toLowerCase(Locale.ROOT));
+            Matcher matcher = pattern.matcher(tempDeviceInfoFile);
             if (matcher.find()){
                 resultDeviceInfoList.add(deviceInfoFile);
             }
@@ -100,7 +106,7 @@ public class Device {
 //            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");
             bufferFileName = FilenameUtils.removeExtension(bufferFileName);
             if (!bufferFileName.equals(""))
-                filesNamesList.add(bufferFileName.toLowerCase(Locale.ROOT));
+                filesNamesList.add(bufferFileName);
         }
 
         return filesNamesList;
