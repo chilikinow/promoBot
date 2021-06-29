@@ -2,6 +2,7 @@ package bot;
 
 import commandSystem.ServiceInfoCommand;
 import commandSystem.InfoCommand;
+import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -249,7 +250,8 @@ public class Bot extends TelegramLongPollingBot {
                     if (!resultDeviceInfoList.isEmpty()) {
                         for (Path resultDeviseInfo : resultDeviceInfoList) {
                             SendPhoto replyPhoto = Response.createPhotoMessage(this.message,
-                                    "Технические характеристики и USP:\nhttp://uspmobile.ru/",
+                                    FilenameUtils.removeExtension(resultDeviseInfo.getFileName().toString())
+                                    + "\n\nТехнические характеристики и USP:\nhttp://uspmobile.ru/",
                                     resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
                             sendReply(replyPhoto);
                         }
