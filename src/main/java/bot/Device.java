@@ -33,8 +33,7 @@ public class Device {
 
         for (String tempCategoryName: tempCategoryList){
             if (!tempCategoryName.equals("")) {
-                this.categoryDeviceList.add(tempCategoryName);
-                System.out.println(tempCategoryName);
+                this.categoryDeviceList.add(tempCategoryName.toLowerCase(Locale.ROOT));
             }
         }
 
@@ -70,7 +69,7 @@ public class Device {
         Set<Path> resultDeviceInfoList = new TreeSet<>();
         for (Path deviceInfoFile : deviceInfoFilesList){
             Pattern pattern = Pattern.compile(messageText);
-            Matcher matcher = pattern.matcher(deviceInfoFile.getFileName().toString());
+            Matcher matcher = pattern.matcher(deviceInfoFile.getFileName().toString().toLowerCase(Locale.ROOT));
             if (matcher.find()){
                 resultDeviceInfoList.add(deviceInfoFile);
             }
@@ -101,7 +100,7 @@ public class Device {
 //            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");
             bufferFileName = FilenameUtils.removeExtension(bufferFileName);
             if (!bufferFileName.equals(""))
-                filesNamesList.add(bufferFileName);
+                filesNamesList.add(bufferFileName.toLowerCase(Locale.ROOT));
         }
 
         return filesNamesList;
