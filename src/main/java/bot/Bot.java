@@ -112,9 +112,11 @@ public class Bot extends TelegramLongPollingBot {
                         "список устройств, доступных для быстрого поиска (постоянно пополняется)\n\n" +
                         "[ Сервис ]\n\n" +
                         "справочная информация Сервисных служб Samsung\n\n" +
-                        "Вызов Стартового меню: /startMenu\n" +
-                        "\n\nВведите пароль:");
+                        "Вызов Стартового меню: /startMenu\n\n");
             sendReply(replyMessage);
+            replyMessage = Response.createTextMessage(this.message, "Введите пароль:");
+            sendReply(replyMessage);
+
             this.messageCounter++;
 
             PromoInfo.getInstancePromoMobileTV();
@@ -240,7 +242,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (messageText.startsWith(bufferCategoryDeviceList.get(i))){
 
                     String separator = File.separator;
-                    List<Path> resultDeviceInfoList = new ArrayList<>();
+                    Set<Path> resultDeviceInfoList = new TreeSet<>();
                     resultDeviceInfoList = new Device().findInfo(this.message,
                             "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts");
 

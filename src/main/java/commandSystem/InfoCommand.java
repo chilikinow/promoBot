@@ -5,6 +5,8 @@ import bot.Device;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class InfoCommand{
 
@@ -12,9 +14,9 @@ public class InfoCommand{
         StringBuilder response = new StringBuilder();
 
         response.append("Список доступных для поиска устройств:\n\n");
-        response.append("Мобильная электроника:");
+        response.append("Мобильная электроника:\n\n");
 
-        List<String> productNamesList = new ArrayList<>();
+        Set<String> productNamesList = new TreeSet<>();
 
         String separator = File.separator;
         productNamesList = new Device().getFilesName("src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile");

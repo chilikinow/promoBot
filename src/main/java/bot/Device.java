@@ -2,13 +2,12 @@ package bot;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,39 +15,33 @@ import org.apache.commons.io.FilenameUtils;
 
 public class Device {
 
-    private List<String> categoryDeviceList;
+    private Set<String> categoryDeviceList;
 
-    public List<String> getCategoryDeviceList(){
+    public Set<String> getCategoryDeviceList(){
 
-        this.categoryDeviceList = new ArrayList<>();
+        String separator = File.separator;
+        String directory = "src" + separator + "main" + separator + "resources" + separator + "categoryDeviceForFind.txt";
+        List<String> tempCategoryList = new ArrayList<>();
+        try {
+            tempCategoryList = new ArrayList<>(Files.readAllLines(Paths.get(directory)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        this.categoryDeviceList.add("galaxy");
-        this.categoryDeviceList.add("s");
-        this.categoryDeviceList.add("note");
-        this.categoryDeviceList.add("z");
-        this.categoryDeviceList.add("fold");
-        this.categoryDeviceList.add("flip");
-        this.categoryDeviceList.add("a");
-        this.categoryDeviceList.add("tab");
-        this.categoryDeviceList.add("buds");
-        this.categoryDeviceList.add("smart");
-        this.categoryDeviceList.add("tag");
-        this.categoryDeviceList.add("watch");
-        this.categoryDeviceList.add("active");
-        this.categoryDeviceList.add("rb");
-        this.categoryDeviceList.add("rs");
-        this.categoryDeviceList.add("brb");
-        this.categoryDeviceList.add("ww");
-        this.categoryDeviceList.add("wd");
-        this.categoryDeviceList.add("dv");
-        this.categoryDeviceList.add("jet");
-        this.categoryDeviceList.add("vc");
-        this.categoryDeviceList.add("vr");
+
+        this.categoryDeviceList = new TreeSet<>();
+
+        for (String tempCategoryName: tempCategoryList){
+            if (!tempCategoryName.equals("")) {
+                this.categoryDeviceList.add(tempCategoryName);
+                System.out.println(tempCategoryName);
+            }
+        }
 
         return categoryDeviceList;
     }
 
-    public List<Path> findInfo(Message message, String directory){
+    public Set<Path> findInfo(Message message, String directory){
 
         Path directoryPath = Paths.get(directory);
 
@@ -58,19 +51,23 @@ public class Device {
 
         messageText = messageText.replace("samsung", "");
 
+        messageText = messageText.replace("-", "");
+
+        messageText = messageText.replace("_", "");
+
         messageText = messageText.replace("plus", "+");
 
-        List<Path> deviceInfoFilesList = new ArrayList<>();
+        Set<Path> deviceInfoFilesList = new TreeSet<>();
 
         try {
             deviceInfoFilesList =  Files.walk(directoryPath)
                     .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        List<Path> resultDeviceInfoList = new ArrayList<>();
+        Set<Path> resultDeviceInfoList = new TreeSet<>();
         for (Path deviceInfoFile : deviceInfoFilesList){
             Pattern pattern = Pattern.compile(messageText);
             Matcher matcher = pattern.matcher(deviceInfoFile.getFileName().toString());
@@ -82,28 +79,29 @@ public class Device {
         return resultDeviceInfoList;
     }
 
-    public List<String> getFilesName(String directory){
+    public Set<String> getFilesName(String directory){
 
         Path directoryPath = Paths.get(directory);
 
-        List<Path> filesList = new ArrayList<>();
+        Set<Path> filesList = new TreeSet<>();
 
         try {
             filesList =  Files.walk(directoryPath)
                     .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        List<String> filesNamesList = new ArrayList<>();
+        Set<String> filesNamesList = new TreeSet<>();
 
         for(Path deviceInfo : filesList){
             String bufferFileName = deviceInfo.getFileName().toString();
 //            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");
             bufferFileName = FilenameUtils.removeExtension(bufferFileName);
-            filesNamesList.add(bufferFileName);
+            if (!bufferFileName.equals(""))
+                filesNamesList.add(bufferFileName);
         }
 
         return filesNamesList;
