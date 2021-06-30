@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 public class PromoInfo {
 
@@ -62,6 +63,15 @@ public class PromoInfo {
 
         return promoAppliancesMap;
     }
+
+    //Singleton
+//    public static Map<String, String> getDiscountsOnThePriceDropPromotionMap(){
+//
+//        Map<String, String> promotionMap =
+//                new HashMap<>(addDiscountsOnThePriceDropPromotionMap(workBook,5, Arrays.asList(1,)));
+//
+//        return promotionMap;
+//    }
 
     private static Map<String, String> addMap(XSSFWorkbook workBook, int sheetNumber) {
 
@@ -124,4 +134,59 @@ public class PromoInfo {
 
         return map;
     }
+
+
+
+
+
+    private static Map<String, String> addDiscountsOnThePriceDropPromotionMap(XSSFWorkbook workBook, int sheetNumber, List<Integer> needCells) { //sheetNumber 5
+
+        //получили страницу книги
+        XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
+
+        //получаем лист строк
+        ArrayList<Row> rowList = new ArrayList<>();
+
+        Iterator<Row> rowIterator = sheet.rowIterator(); //формируем список строк из страницы
+        while (rowIterator.hasNext()){
+            Row bufferRow = rowIterator.next();
+            if(!bufferRow.getCell(0).getStringCellValue().equals("")) {  //за исключением пустых
+                rowList.add(bufferRow);
+            }
+        }
+
+        //перебираем лист строк без первой строки, где хронятся названия столбцов
+        ArrayList<Cell> cellList = new ArrayList<>();
+        StringBuilder valueForMap = new StringBuilder();
+
+        Map<String, String> map = new HashMap<>();
+
+        for (int i = 1; i < rowList.size(); i++) {
+            cellList = new ArrayList<>();
+            Iterator<Cell> cellIterator = rowList.get(i).iterator();
+            Cell bufferCell;
+            while (cellIterator.hasNext()){  //формируем лист ячеек из строки
+                bufferCell = cellIterator.next();
+                if(!bufferCell.getStringCellValue().equals("")) {  //за исключением пустых
+                    cellList.add(bufferCell);
+                }
+            }
+
+            //переменная для формирования информации со всех (нужных) ячеек, кроме первой ячейки
+            valueForMap = new StringBuilder();
+            for (int j = 1; j < cellList.size(); j++) {
+                if (needCells.contains(j)){
+                    String cellString = cellList.get(j).getStringCellValue();
+                    valueForMap.append(cellString + "\n");
+                }
+            }
+            //создаем элемент Map, где key- 0я ячейка, value- конкатинация всех запрошенных ячеек начиная с 1ой
+            map.put(cellList.get(0).getStringCellValue().trim(), valueForMap.toString());//key очищается от лишних пробелов
+        }
+
+
+
+        return map;
+    }
+
 }

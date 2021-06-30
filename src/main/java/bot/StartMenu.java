@@ -11,9 +11,11 @@ public class StartMenu {
         this.startMenuList = new ArrayList<>();
 
         this.startMenuList.add("Акции Мобайл ТВ");
-        this.startMenuList.add("Акции Бытовая техника");
+        this.startMenuList.add("Акции БТ");
         this.startMenuList.add("Характеристики устройств");
-        this.startMenuList.add("Инфо");
+        this.startMenuList.add("Инфо БТ");
+        this.startMenuList.add("Инфо Мобайл");
+        this.startMenuList.add("Инфо ТВ");
         this.startMenuList.add("Сервис");
     }
 

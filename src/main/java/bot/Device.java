@@ -51,7 +51,8 @@ public class Device {
                 .replace("samsung", "")
                 .replace("-", "")
                 .replace("_", "")
-                .replace("plus", "+");
+                .replace("plus", "\\+")
+                .replace("+", "\\+");
 
         Set<Path> deviceInfoFilesList = new TreeSet<>();
 

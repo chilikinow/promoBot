@@ -21,6 +21,7 @@ public class ProcessingUserMessage {
         //если сообщение содержит команду меню Акций Мобайл ТВ
         var promoMobileTvSet = PromoInfo.getInstancePromoMobileTV().keySet();
         Set<String> bufferPromoMobileTVSet = new HashSet<>(promoMobileTvSet);
+            bufferPromoMobileTVSet.add("/promo_mobile_tv");
             bufferPromoMobileTVSet.add("Акции Мобайл ТВ");
             bufferPromoMobileTVSet.add("Promo Mobile TV");
         if (bufferPromoMobileTVSet.contains(messageText)){
@@ -30,7 +31,8 @@ public class ProcessingUserMessage {
         //если сообщение содержит команду меню акций БТ
         var promoAppliancesSet = PromoInfo.getInstancePromoAppliances().keySet();
         Set<String> bufferPromoAppliancesSet = new HashSet<>(promoAppliancesSet);
-            bufferPromoAppliancesSet.add("Акции Бытовая техника");
+            bufferPromoAppliancesSet.add("/promo_appliances");
+            bufferPromoAppliancesSet.add("Акции БТ");
             bufferPromoAppliancesSet.add("Promo Appliances");
         if (bufferPromoAppliancesSet.contains(messageText)){
             return MessageType.PROMO_APPLIANCES_MENU;
@@ -39,6 +41,7 @@ public class ProcessingUserMessage {
         //если сообщение содержит название устройства
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
+            bufferCategoryDeviceList.add("/device_info");
             bufferCategoryDeviceList.add("Характеристики устройств".toLowerCase(Locale.ROOT));
             bufferCategoryDeviceList.add("Device info".toLowerCase(Locale.ROOT));
 
@@ -53,11 +56,16 @@ public class ProcessingUserMessage {
 
         List<String> bufferSystemMessageList = new ArrayList<>();
             bufferSystemMessageList.add(new BotData().getBotPassword());
-            bufferSystemMessageList.add("/startMenu");
+            bufferSystemMessageList.add("/start_menu");
             bufferSystemMessageList.add("Сервис");
             bufferSystemMessageList.add("Service");
-            bufferSystemMessageList.add("Инфо");
-            bufferSystemMessageList.add("Info");
+            bufferSystemMessageList.add("/service");
+            bufferSystemMessageList.add("Инфо Мобайл");
+            bufferSystemMessageList.add("/mobile_info");
+            bufferSystemMessageList.add("Инфо ТВ");
+            bufferSystemMessageList.add("/tv_info");
+            bufferSystemMessageList.add("Инфо БТ");
+            bufferSystemMessageList.add("/appliances_info");
         if (bufferSystemMessageList.contains(messageText)){
             return MessageType.SYSTEM;
         }
