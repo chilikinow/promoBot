@@ -178,9 +178,21 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             if ("Скидки по акции ценопад".equals(messageText)){
+                Map<String, String> map = new TreeMap<>();
+                List<Integer> needColumns = new ArrayList<>();
+                needColumns.add(9);
+                map = PromoInfo.getOnePromoMap(5, 0, 0, needColumns);
+
+                StringBuilder discountsOnThePriceDropPromotion = new StringBuilder();
+                discountsOnThePriceDropPromotion.append("Подробности:\n\n");
+                for (Map.Entry<String, String> entry: map.entrySet()){
+                    discountsOnThePriceDropPromotion.append(entry.getKey()
+                            + "\n\n" + entry.getValue()
+                            + "-------------------------------------------------------\n\n");
+                }
 
                 var replyMessage = Response.createTextMessage(message,
-                        "\nПодробности\n");
+                        discountsOnThePriceDropPromotion.toString());
                 sendReply(replyMessage);
 
             }

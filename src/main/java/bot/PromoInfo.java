@@ -1,6 +1,7 @@
 package bot;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -46,7 +47,7 @@ public class PromoInfo {
     public static Map<String, String> getInstancePromoMobileTV(){
         Calendar currentDate = Calendar.getInstance();
         if (promoMobileTVMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
-            promoMobileTVMap = new HashMap<>(addMap(workBook,0));
+            promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
             date = currentDate;
         }
 
@@ -57,7 +58,7 @@ public class PromoInfo {
     public static Map<String, String> getInstancePromoAppliances(){
         Calendar currentDate = Calendar.getInstance();
         if (promoAppliancesMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
-            promoAppliancesMap = new HashMap<>(addMap(workBook,1));
+            promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
             date = currentDate;
         }
 
@@ -65,15 +66,16 @@ public class PromoInfo {
     }
 
     //Singleton
-//    public static Map<String, String> getDiscountsOnThePriceDropPromotionMap(){
-//
-//        Map<String, String> promotionMap =
-//                new HashMap<>(addDiscountsOnThePriceDropPromotionMap(workBook,5, Arrays.asList(1,)));
-//
-//        return promotionMap;
-//    }
+    public static Map<String, String> getOnePromoMap(int sheetNumber, int lineHeading, int columnKey, List<Integer> needColumns){
+        Map<String, String> onePromoMap = new TreeMap<>();
+        onePromoMap = addOnePromoMap(workBook, sheetNumber, lineHeading, columnKey, needColumns);
+        return onePromoMap;
+        }
 
-    private static Map<String, String> addMap(XSSFWorkbook workBook, int sheetNumber) {
+    private static Map<String, String> addSpecialMap(XSSFWorkbook workBook, int sheetNumber) {
+
+        //создание map, key 0я ячейка строки (За исключением 0й строки), value конкатинация содержимого всех
+        //не пустых ячеек тойже строки
 
         //получили страницу книги
         XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
@@ -129,64 +131,87 @@ public class PromoInfo {
 //            }
 //            System.out.println("_________End Map_________\n\n\n");
 
-//        for (map.keySet())
-
-
         return map;
     }
 
+    private static Map<String, String> addOnePromoMap(XSSFWorkbook workBook, int sheetNumber, int lineHeading, int columnKey, List<Integer> needColumns){
+        List<List<String>> tableStrings = new ArrayList<>();
+        List<String> lineHeadingList = new ArrayList<>();
+        tableStrings = addMap(workBook, sheetNumber);
+        needColumns.add(1);
+        needColumns.add(2);
+
+        lineHeadingList = tableStrings.get(lineHeading);
+        tableStrings.remove(lineHeading);
+
+        Map<String, String> finalMap = new TreeMap<>();
+        StringBuilder key = new StringBuilder();
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < tableStrings.size(); i++) {
+            for (int j = 0; j < tableStrings.get(i).size(); j++) {
+                if (j == columnKey) {
+                    key.append(lineHeadingList.get(j) + ": " + tableStrings.get(i).get(j));
+                    continue;
+                }
+                if (needColumns.contains(j))
+                    value.append(lineHeadingList.get(j) + ": " +  tableStrings.get(i).get(j) + "\n\n");
+            }
+
+            //test
+//            System.out.println("key : " + key + "\n\nvalue= "+ value);
+
+            finalMap.put(key.toString(), value.toString());
+            key = new StringBuilder();
+            value = new StringBuilder();
+        }
+
+        return finalMap;
+    }
 
 
-
-
-    private static Map<String, String> addDiscountsOnThePriceDropPromotionMap(XSSFWorkbook workBook, int sheetNumber, List<Integer> needCells) { //sheetNumber 5
+    private static List<List<String>> addMap(XSSFWorkbook workBook, int sheetNumber){
 
         //получили страницу книги
         XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
 
         //получаем лист строк
         ArrayList<Row> rowList = new ArrayList<>();
-
         Iterator<Row> rowIterator = sheet.rowIterator(); //формируем список строк из страницы
-        while (rowIterator.hasNext()){
+        while (rowIterator.hasNext()) {
             Row bufferRow = rowIterator.next();
-            if(!bufferRow.getCell(0).getStringCellValue().equals("")) {  //за исключением пустых
+            if (!bufferRow.getCell(0).getStringCellValue().equals("")) {  //за исключением пустых
                 rowList.add(bufferRow);
             }
         }
 
-        //перебираем лист строк без первой строки, где хронятся названия столбцов
-        ArrayList<Cell> cellList = new ArrayList<>();
-        StringBuilder valueForMap = new StringBuilder();
+        List<String> cellList;
+        List<List<String>> tableStrings = new ArrayList<>();
 
-        Map<String, String> map = new HashMap<>();
-
-        for (int i = 1; i < rowList.size(); i++) {
+        //перебираем лист строк
+        for (int i = 0; i < rowList.size(); i++) {
             cellList = new ArrayList<>();
             Iterator<Cell> cellIterator = rowList.get(i).iterator();
-            Cell bufferCell;
-            while (cellIterator.hasNext()){  //формируем лист ячеек из строки
-                bufferCell = cellIterator.next();
-                if(!bufferCell.getStringCellValue().equals("")) {  //за исключением пустых
-                    cellList.add(bufferCell);
-                }
+            while (cellIterator.hasNext()) {  //формируем лист ячеек из строки
+                Cell bufferCell = cellIterator.next();
+                if (bufferCell.getCellType().equals(CellType.STRING))
+                    if (!bufferCell.getStringCellValue().equals("")) {  //за исключением пустых
+                        cellList.add(bufferCell.getStringCellValue().trim());
+                    }
+                if (bufferCell.getCellType().equals(CellType.NUMERIC))
+                    if (bufferCell.getNumericCellValue() != 0) {  //за исключением пустых
+                        cellList.add(String.valueOf(bufferCell.getNumericCellValue()));
+                    }
             }
-
-            //переменная для формирования информации со всех (нужных) ячеек, кроме первой ячейки
-            valueForMap = new StringBuilder();
-            for (int j = 1; j < cellList.size(); j++) {
-                if (needCells.contains(j)){
-                    String cellString = cellList.get(j).getStringCellValue();
-                    valueForMap.append(cellString + "\n");
-                }
-            }
-            //создаем элемент Map, где key- 0я ячейка, value- конкатинация всех запрошенных ячеек начиная с 1ой
-            map.put(cellList.get(0).getStringCellValue().trim(), valueForMap.toString());//key очищается от лишних пробелов
+            tableStrings.add(new ArrayList<>(cellList));
         }
 
+        //test
+//        for (int i = 0; i < tableStrings.size(); i++) {
+//            System.out.println(tableStrings.get(i));
+//        }
 
-
-        return map;
+        return tableStrings;
     }
+
 
 }

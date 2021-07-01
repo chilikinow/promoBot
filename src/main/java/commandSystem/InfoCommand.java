@@ -2,7 +2,6 @@ package commandSystem;
 
 import bot.Device;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class InfoCommand{
 
@@ -10,7 +9,7 @@ public class InfoCommand{
 
         StringBuilder response = new StringBuilder();
         response.append(heading);
-        Set<String> productNamesList = new TreeSet<>();
+        Set<String> productNamesList;
         productNamesList = new Device().getFilesName(directory);
 
         for (String mobileName: productNamesList){
