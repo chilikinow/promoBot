@@ -19,21 +19,35 @@ public class MenuKeyboard {
 
         List<String> buttonList = new ArrayList<>(new StartMenu().getList());
 
-            KeyboardRow keyboardRowBuffer = new KeyboardRow();
-                keyboardRowBuffer.add(buttonList.get(1));
-                keyboardRowBuffer.add(buttonList.get(0));
-            keyboard.add(keyboardRowBuffer);
-                keyboardRowBuffer = new KeyboardRow();
-                keyboardRowBuffer.add(buttonList.get(2));
-            keyboard.add(keyboardRowBuffer);
-                keyboardRowBuffer = new KeyboardRow();
-                keyboardRowBuffer.add(buttonList.get(3));
-                keyboardRowBuffer.add(buttonList.get(4));
-                keyboardRowBuffer.add(buttonList.get(5));
-            keyboard.add(keyboardRowBuffer);
-                 keyboardRowBuffer = new KeyboardRow();
-                keyboardRowBuffer.add(buttonList.get(6));
-            keyboard.add(keyboardRowBuffer);
+        KeyboardRow keyboardRowBuffer = new KeyboardRow();
+        for (int i = 0; i < 2; i++) {
+            keyboardRowBuffer.add(buttonList.get(i));
+        }
+        keyboard.add(keyboardRowBuffer);
+
+        keyboardRowBuffer = new KeyboardRow();
+        for (int i = 2; i <= 2; i++) {
+            keyboardRowBuffer.add(buttonList.get(i));
+        }
+        keyboard.add(keyboardRowBuffer);
+
+        keyboardRowBuffer = new KeyboardRow();
+        for (int i = 3; i <= 5; i++) {
+            keyboardRowBuffer.add(buttonList.get(i));
+        }
+        keyboard.add(keyboardRowBuffer);
+
+        keyboardRowBuffer = new KeyboardRow();
+        for (int i = 6; i <= 6; i++) {
+            keyboardRowBuffer.add(buttonList.get(i));
+        }
+        keyboard.add(keyboardRowBuffer);
+
+        keyboardRowBuffer = new KeyboardRow();
+        for (int i = 7; i <= 7; i++) {
+            keyboardRowBuffer.add(buttonList.get(i));
+        }
+        keyboard.add(keyboardRowBuffer);
 
         replyKeyboardMarkup.setKeyboard(keyboard);
 

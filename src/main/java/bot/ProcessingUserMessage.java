@@ -11,6 +11,7 @@ public class ProcessingUserMessage {
         PROMO_APPLIANCES_MENU,
         DEVICE,
         SYSTEM,
+        BONUS,
         OTHER
     }
 
@@ -68,6 +69,15 @@ public class ProcessingUserMessage {
             bufferSystemMessageList.add("/appliances_info");
         if (bufferSystemMessageList.contains(messageText)){
             return MessageType.SYSTEM;
+        }
+
+        List<String> bufferBonusMessageList = new ArrayList<>();
+        bufferBonusMessageList.add("Программа Лояльности");
+        bufferBonusMessageList.add("/bonus_card");
+        if (bufferBonusMessageList.contains(messageText)
+        || messageText.startsWith("9")
+        || messageText.startsWith("20")){
+            return MessageType.BONUS;
         }
 
         return MessageType.OTHER;

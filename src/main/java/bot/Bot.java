@@ -178,18 +178,10 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             if ("Скидки по акции ценопад".equals(messageText)){
-                Map<String, String> map = new TreeMap<>();
-                List<Integer> needColumns = new ArrayList<>();
-                needColumns.add(9);
-                map = PromoInfo.getOnePromoMap(5, 0, 0, needColumns);
 
                 StringBuilder discountsOnThePriceDropPromotion = new StringBuilder();
                 discountsOnThePriceDropPromotion.append("Подробности:\n\n");
-                for (Map.Entry<String, String> entry: map.entrySet()){
-                    discountsOnThePriceDropPromotion.append(entry.getKey()
-                            + "\n\n" + entry.getValue()
-                            + "-------------------------------------------------------\n\n");
-                }
+                discountsOnThePriceDropPromotion.append(new BotData().getReadPromoInfoFileUrl());
 
                 var replyMessage = Response.createTextMessage(message,
                         discountsOnThePriceDropPromotion.toString());
@@ -393,6 +385,34 @@ public class Bot extends TelegramLongPollingBot {
 
                 return;
             }
+
+            return;
+        }
+
+        if (messageType == ProcessingUserMessage.MessageType.BONUS) {
+
+            if (messageText.equals("Программа Лояльности")
+                    || messageText.equals("/bonus_card")){
+
+                var replyMessage = Response.createTextMessage(this.message,
+                        "Введите номер бонусной карты или номер телефона Клиента начиная с 9..:");
+                sendReply(replyMessage);
+
+                return;
+            }
+
+            if(messageText.startsWith("9")
+                    || messageText.startsWith("200")){
+
+                var replyMessage = Response.createTextMessage(this.message,
+                        "Поиск пока в разработке...");
+                sendReply(replyMessage);
+            }
+
+            //Стартовое меню
+            var replyMessage = Response.createTextMessageWithKeyboard(this.message,
+                    "Команда не найдена!\n\n/start_menu", Response.TypeKeyboard.START);
+            sendReply(replyMessage);
 
             return;
         }

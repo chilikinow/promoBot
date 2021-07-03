@@ -5,14 +5,16 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.glassfish.jersey.server.Uri;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
 
@@ -41,6 +43,28 @@ public class PromoInfo {
         } catch (IOException e) {
             System.out.println("Файл не читается.");
         }
+
+//        Path tmpFile = null;
+//        try {
+//            URL downloadPromoFileUrl = new URL(new BotData().getDownloadPromoInfoFileUrl());
+//            URLConnection urlConnection = downloadPromoFileUrl.openConnection();
+//            urlConnection.setRequestProperty("User-Agent", "Mozilla 5.0 (Windows; U; "
+//                    + "Windows NT 5.1; en-US; rv:1.8.0.11) ");
+//            Path tmpFIle = Files.createTempFile("temp", null);
+//            InputStream inputStream = urlConnection.getInputStream();
+//            Files.copy(inputStream, tmpFIle, StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        workBook = null;
+//        try (FileInputStream fIS = new FileInputStream(tmpFile.toFile())) {
+//            workBook = new XSSFWorkbook(fIS);//получили книгу exel
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Файл не найден.");
+//        } catch (IOException e) {
+//            System.out.println("Файл не читается.");
+//        }
     }
 
     //Singleton
@@ -64,13 +88,6 @@ public class PromoInfo {
 
         return promoAppliancesMap;
     }
-
-    //Singleton
-    public static Map<String, String> getOnePromoMap(int sheetNumber, int lineHeading, int columnKey, List<Integer> needColumns){
-        Map<String, String> onePromoMap = new TreeMap<>();
-        onePromoMap = addOnePromoMap(workBook, sheetNumber, lineHeading, columnKey, needColumns);
-        return onePromoMap;
-        }
 
     private static Map<String, String> addSpecialMap(XSSFWorkbook workBook, int sheetNumber) {
 
@@ -134,10 +151,26 @@ public class PromoInfo {
         return map;
     }
 
-    private static Map<String, String> addOnePromoMap(XSSFWorkbook workBook, int sheetNumber, int lineHeading, int columnKey, List<Integer> needColumns){
+
+
+
+
+
+
+    //Singleton
+    public static Map<String, String> getDiscountsOnThePriceDropPromoMap(){
+        Map<String, String> onePromoMap = new TreeMap<>();
+        onePromoMap = addDiscountsOnThePriceDropPromoMap(workBook, 5);
+        return onePromoMap;
+    }
+
+    private static Map<String, String> addDiscountsOnThePriceDropPromoMap(XSSFWorkbook workBook, int sheetNumber){
         List<List<String>> tableStrings = new ArrayList<>();
         List<String> lineHeadingList = new ArrayList<>();
-        tableStrings = addMap(workBook, sheetNumber);
+        tableStrings = addTableStringsFromPromoFile(workBook, sheetNumber);
+        int lineHeading = 0;
+        int columnKey = 0;
+        List<Integer> needColumns = new ArrayList<>();
         needColumns.add(1);
         needColumns.add(2);
 
@@ -149,12 +182,13 @@ public class PromoInfo {
         StringBuilder value = new StringBuilder();
         for (int i = 0; i < tableStrings.size(); i++) {
             for (int j = 0; j < tableStrings.get(i).size(); j++) {
+                needColumns.add(tableStrings.get(i).size() - 1);
                 if (j == columnKey) {
-                    key.append(lineHeadingList.get(j) + ": " + tableStrings.get(i).get(j));
+                    key.append(tableStrings.get(i).get(j));
                     continue;
                 }
                 if (needColumns.contains(j))
-                    value.append(lineHeadingList.get(j) + ": " +  tableStrings.get(i).get(j) + "\n\n");
+                    value.append(tableStrings.get(i).get(j) + "\n");
             }
 
             //test
@@ -169,7 +203,7 @@ public class PromoInfo {
     }
 
 
-    private static List<List<String>> addMap(XSSFWorkbook workBook, int sheetNumber){
+    private static List<List<String>> addTableStringsFromPromoFile(XSSFWorkbook workBook, int sheetNumber){
 
         //получили страницу книги
         XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
