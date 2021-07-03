@@ -7,6 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bot extends TelegramLongPollingBot {
 
     private String botName;
@@ -59,16 +62,30 @@ public class Bot extends TelegramLongPollingBot {
 
     public void sendReply(Object reply){
 
-            try {
+        if(reply instanceof List){
+           List<SendPhoto> replyPhotoList = new ArrayList<>();
+           replyPhotoList = (List<SendPhoto>) reply;
+           for (SendPhoto replyPhoto: replyPhotoList){
+               sendReply(replyPhoto);
+           }
+            var replyMessage = Response.createTextMessageWithKeyboard(message
+                    ,"/start_menu"
+                    , Response.TypeKeyboard.START);
+            sendReply(replyMessage);
 
-                if (reply instanceof SendMessage)
-                    execute((SendMessage) reply);
-                if (reply instanceof SendPhoto)
-                    execute((SendPhoto) reply);
+            return;
+        }
 
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+        try {
+
+            if (reply instanceof SendMessage)
+                execute((SendMessage) reply);
+            if (reply instanceof SendPhoto)
+                execute((SendPhoto) reply);
+
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public void authorizationUser(){

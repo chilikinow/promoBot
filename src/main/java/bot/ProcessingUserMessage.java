@@ -117,14 +117,15 @@ public class ProcessingUserMessage {
                         "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts");
 
                 if (!resultDeviceInfoList.isEmpty()) {
+                    List<SendPhoto> replyPhotoList = new ArrayList<>();
                     for (Path resultDeviseInfo : resultDeviceInfoList) {
                         SendPhoto replyPhoto = Response.createPhotoMessage(message,
                                 FilenameUtils.removeExtension(resultDeviseInfo.getFileName().toString())
                                         + "\n\nТехнические характеристики и USP:\nhttp://uspmobile.ru/",
                                 resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
-
-                        return replyPhoto;
+                        replyPhotoList.add(replyPhoto);
                     }
+                    return replyPhotoList;
                 } else {
                     var replyMessage = Response.createTextMessageWithKeyboard(message,
                             "Устройство не найдено!\n\nСписок доступных для поиска устройств\n" +
