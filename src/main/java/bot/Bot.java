@@ -1,5 +1,6 @@
 package bot;
 
+import commandSystem.StartCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -96,32 +97,9 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         if (this.messageCounter == 1) {
-            var replyMessage = Response.createTextMessage(this.message,
-                    "Приветствую!\n\n" +
-                        "Бот позволяет оперативно узнать актуальную информацию о проходящих в компании "+
-                        "маркетинговых акциях, а так же узнать подробные характеристики запрашиваемой техники.\n\n" +
-                        "[ Акции Мобайл ТВ ]\n\n" +
-                        "перечень актуальных акций категорий:\n\n" +
-                        "- Смартфоны\n" +
-                        "- Планшеты\n" +
-                        "- Носимые устройства\n\n" +
-                        "[ Акции Бытовая техника ]\n\n" +
-                        "перечень актуальных акций категорий:\n\n" +
-                        "- Стиральные машины\n" +
-                        "- Холодильники\n" +
-                        "- Пылесосы\n" +
-                        "- Микроволновки\n" +
-                        "- Духовые шкафы\n" +
-                        "- Варочные панели\n\n" +
-                        "[ Характеристики устройств ]\n\n" +
-                        "поиск технических характеристик и USP\n\n" +
-                        "[ Инфо ]\n\n" +
-                        "список устройств, доступных для быстрого поиска (постоянно пополняется)\n\n" +
-                        "[ Сервис ]\n\n" +
-                        "справочная информация Сервисных служб Samsung\n\n" +
-                        "Вызов Стартового меню: /start_menu");
-            sendReply(replyMessage);
-            replyMessage = Response.createTextMessage(this.message, "Введите пароль:");
+
+            var replyMessage = Response.createTextMessage(this.message
+                    ,new StartCommand().create() + "\n\n\nВведите пароль:");
             sendReply(replyMessage);
 
             this.messageCounter++;

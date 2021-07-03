@@ -1,10 +1,8 @@
 package bot;
 
 import commandSystem.InfoCommand;
-import commandSystem.ServiceInfoCommand;
+import commandSystem.ServiceCommand;
 import org.apache.commons.io.FilenameUtils;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -201,7 +199,7 @@ public class ProcessingUserMessage {
                 || messageText.equals("/service")) {
 
             var replyMessage = Response.createTextMessageWithKeyboard(message
-                    , new ServiceInfoCommand().create()+ "\n\n" + "/start_menu"
+                    , new ServiceCommand().create()+ "\n\n" + "/start_menu"
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
