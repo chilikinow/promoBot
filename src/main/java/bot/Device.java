@@ -47,11 +47,11 @@ public class Device {
         String messageText = message.getText()
                 .toLowerCase(Locale.ROOT)
                 .replaceAll(" ", "")
-                .replace("galaxy", "")
-                .replace("samsung", "")
-                .replace("-", "")
-                .replace("_", "")
-                .replace("plus", "\\+")
+                .replaceAll("galaxy", "")
+                .replaceAll("samsung", "")
+                .replaceAll("-", "")
+                .replaceAll("_", "")
+                .replaceAll("plus", "\\+")
                 .replace("+", "\\+");
 
         Set<Path> deviceInfoFilesList = new TreeSet<>();
@@ -70,11 +70,8 @@ public class Device {
             tempDeviceInfoFile = tempDeviceInfoFile
                     .toLowerCase(Locale.ROOT)
                     .replaceAll(" ", "")
-                    .replace("galaxy", "")
-                    .replace("samsung", "")
                     .replace("-", "")
-                    .replace("_", "")
-                    .replace("plus", "+");
+                    .replace("_", "");
             Pattern pattern = Pattern.compile(messageText);
             Matcher matcher = pattern.matcher(tempDeviceInfoFile);
             if (matcher.find()){

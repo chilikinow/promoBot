@@ -106,11 +106,20 @@ public class ProcessingUserMessage {
 
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
-
         for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-            if (messageText.toLowerCase(Locale.ROOT).startsWith(bufferCategoryDeviceList.get(i))){ //перевели всю строку запроса в нижний регистр
+            String messageTextDevice = message.getText()
+                    .toLowerCase(Locale.ROOT)
+                    .replaceAll(" ", "")
+                    .replaceAll("galaxy", "")
+                    .replaceAll("samsung", "")
+                    .replaceAll("-", "")
+                    .replaceAll("_", "")
+                    .replaceAll("plus", "\\+")
+                    .replace("+", "\\+");
 
-                if (messageText.length() == 1){
+            if (messageTextDevice.startsWith(bufferCategoryDeviceList.get(i))){ //перевели всю строку запроса в нижний регистр
+
+                if (messageTextDevice.length() == 1){
                     SendMessage replyMessage = Response.createTextMessage(message
                             , "Уточните модель:");
 
@@ -215,6 +224,8 @@ public class ProcessingUserMessage {
 
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
+
+//            Bonus bonusCard = new Bonus.;
 
             SendMessage replyMessage = Response.createTextMessage(message,
                     "Введите номер бонусной карты\n\n" +
