@@ -12,6 +12,9 @@ public class BotData {
     private String botName;
     private String botToken;
     private String botPassword;
+    private String bonusBaseURI;
+    private String bonusLogin;
+    private String bonusPassword;
     private String readPromoInfoFileUrl;
     private String downloadPromoInfoFileUrl;
 
@@ -33,6 +36,10 @@ public class BotData {
         this.botName = botDataProperties.getProperty("botUsername");
         this.botToken = botDataProperties.getProperty("botToken");
         this.botPassword = botDataProperties.getProperty("botPassword");
+
+        this.bonusBaseURI = botDataProperties.getProperty("bonusBaseURI");
+        this.bonusLogin = botDataProperties.getProperty("bonusLogin");
+        this.bonusPassword = botDataProperties.getProperty("bonusPassword");
 
         this.readPromoInfoFileUrl = botDataProperties.getProperty("readPromoInfoFileUrl");
         this.downloadPromoInfoFileUrl = botDataProperties.getProperty("downloadPromoInfoFileUrl");
@@ -56,6 +63,18 @@ public class BotData {
 
     public String getBotPassword() {
         return botPassword;
+    }
+
+    public String getBonusBaseURI() {
+        return bonusBaseURI;
+    }
+
+    public String getBonusLogin() {
+        return bonusLogin;
+    }
+
+    public String getBonusPassword() {
+        return bonusPassword;
     }
 
 }
