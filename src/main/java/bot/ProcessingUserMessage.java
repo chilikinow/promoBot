@@ -225,7 +225,8 @@ public class ProcessingUserMessage {
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
 
-            new Bonus().getCard(message);
+//            new Bonus().getCard(message);
+            new BonusHttpClient().getCard(message);
 
             SendMessage replyMessage = Response.createTextMessage(message,
                     "Введите номер бонусной карты\n\n" +
