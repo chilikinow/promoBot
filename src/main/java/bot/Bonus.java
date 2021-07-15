@@ -1,121 +1,206 @@
 package bot;
 
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.config.RedirectConfig;
-import io.restassured.config.RestAssuredConfig;
-import io.restassured.http.*;
-import io.restassured.response.Response;
-import org.apache.http.HttpHeaders;
-import org.json.JSONObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.with;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class Bonus {
 
-    public void getCard(Message message){
+    private CloseableHttpClient httpСlient;
+    private String tokenValue;
+    private String tokenKey;
 
+    public String getInfo(String messageText) {
+
+        BotData botData = new BotData();
+        String urlBase = botData.getBonusBaseURI();
+
+        SSLContext context = null;
+        try {
+            context = SSLContext.getInstance("TLSv1.2");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        TrustManager[] trustManager = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certificate, String str) {
+                    }
+
+                    public void checkServerTrusted(X509Certificate[] certificate, String str) {
+                    }
+                }
+        };
+        try {
+            context.init(null, trustManager, new SecureRandom());
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(context,
+                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+        CookieStore httpCookieStore = new BasicCookieStore();
+
+        this.httpСlient = HttpClientBuilder
+                .create()
+                .setSSLSocketFactory(socketFactory)
+                .setDefaultCookieStore(httpCookieStore)
+                .setRedirectStrategy(new LaxRedirectStrategy())
+                .build();
+
+        HttpGet httpGetRequest = new HttpGet(urlBase + "/site/login");
         try {
 
-            BotData botData = new BotData();
+            HttpResponse httpResponse = this.httpСlient.execute(httpGetRequest);
 
-            RestAssured.baseURI = botData.getBonusBaseURI();
-
-            Response tokenResponse = RestAssured.given().get("/login");
-            String tokenResponseBodyString = tokenResponse.getBody().asString();
-
-            Document document = Jsoup.parse(tokenResponseBodyString);
+            String httpResponseString = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()))
+                    .lines().collect(Collectors.joining("\n"));
+            Document document = Jsoup.parse(httpResponseString);
             Elements elements = document.select("input");
 
-            String tokinValue = null;
-            for (Element element : elements){
-                if (element.attr("name").equals("YII_CSRF_TOKEN")) {
-                    tokinValue = element.attr("value");
+            this.tokenKey = "YII_CSRF_TOKEN";
+            this.tokenValue = null;
+            for (Element element : elements) {
+                if (element.attr("name").equals(tokenKey)) {
+                    this.tokenValue = element.attr("value");
                 }
             }
-            System.out.println(tokinValue);
+//            System.out.println(this.tokenValue);//Получили Токен
 
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("YII_CSRF_TOKEN", tokinValue);
-            requestBody.put("LoginForm[username]", botData.getBonusLogin());
-            requestBody.put("LoginForm[password]", botData.getBonusPassword());
-            requestBody.put("LoginForm[rememberMe]", 0);
+            HttpPost httpPostRequest = new HttpPost(urlBase + "/site/login");
+            StringEntity body = new StringEntity(this.tokenKey + "=" + this.tokenValue
+                    + "&LoginForm[username]=" + botData.getBonusUserName()
+                    + "&LoginForm[password]=" + botData.getBonusPassword());
+            httpPostRequest.setEntity(body);
+            httpPostRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            this.httpСlient.execute(httpPostRequest);
 
-            Response indexResponse = given()
-                    .body(requestBody)
-                    .redirects()
-                    .follow(true)
-                    .post("/index");
-
-//            Map<String, String> headersMap = new HashMap<>();
-//            List<Header> headersList = new ArrayList<>(indexResponse.getHeaders().asList());
-//            for (Header header: headersList){
-//                headersMap.put(header.getName(), header.getValue());
-//            }
-//            Response indexResponse = null;
-//            if (indexResponse.getStatusCode() == 302)
-//                indexResponse = findBody(indexResponse);
-
-
-
-            System.out.println(indexResponse.body().asString());
-//            System.out.println("Cookies");
-//            System.out.println(indexResponse.getCookies());
-//            System.out.println("Heders");
-//            indexResponse.getHeaders().forEach(System.out::println);
-//            System.out.println("SessionId");
-//            System.out.println(indexResponse.getSessionId());
-//            System.out.println("StatusCode");
-//            System.out.println(indexResponse.getStatusCode());
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // закончили авторизацию
 
 
-    }
+        String validPhoneNumber = "+7("
+                + messageText.substring(0, 3)
+                + ")"
+                + messageText.substring(3, 6)
+                + "-"
+                + messageText.substring(6);
 
-    private Response findBody(Response response) {
-        while (response.cookie("at") == null) {
+        String validCardNumber = messageText;
 
-            Cookies cookies = response.detailedCookies();
-            String urlString = "https://www.rightway.omnichannel.ru/samsung/site/index";
-            if (urlString == null) {
-                throw new IllegalStateException("Url for parse is null.");
+
+        if (messageText.startsWith("9")) {
+
+            this.httpСlient = HttpClientBuilder
+                    .create()
+                    .setSSLSocketFactory(socketFactory)
+                    .setDefaultCookieStore(httpCookieStore)
+                    .setRedirectStrategy(new LaxRedirectStrategy())
+                    .build();
+
+            try {
+                HttpPost httpPostRequest = new HttpPost(urlBase + "/card/search");
+                httpPostRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                StringEntity body = new StringEntity(this.tokenKey + "=" + this.tokenValue
+                        + "&CardSearchFormModel[phone]=" + validPhoneNumber + "&yt0=Найти");
+                httpPostRequest.setEntity(body);
+                HttpResponse httpResponse = this.httpСlient.execute(httpPostRequest);
+                String httpResponseString = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()))
+                        .lines().collect(Collectors.joining("\n"));
+
+                Document document = Jsoup.parse(httpResponseString);
+                Elements elements = document.select("form");
+
+                for (Element element : elements) {
+                    if (element.attr("target").equals("_blank")) {
+                        validCardNumber = element.attr("id");
+                    }
+                }
+                validCardNumber = validCardNumber.replace("cardForm_", "");
+//                System.out.println(validCardNumber);//Получили номер карты
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            Map<String, String> params = new HashMap<>();
-            Map<String, String> headersMap = new HashMap<>();
-            List<Header> headersList = new ArrayList<>(response.getHeaders().asList());
-            for (Header header: headersList){
-                headersMap.put(header.getName(), header.getValue());
-            }
 
-
-            response = with().spec(new RequestSpecBuilder()
-                    .setBaseUri(urlString)
-                    .addParams(params)
-                    .setConfig(RestAssuredConfig.newConfig().redirect(RedirectConfig.redirectConfig().followRedirects(true)))
-                    .addCookies(cookies)
-                    .addHeaders(headersMap)
-                    .build())
-                    .get();
         }
-        return response;
-    }
 
+        this.httpСlient = HttpClientBuilder
+                    .create()
+                    .setSSLSocketFactory(socketFactory)
+                    .setDefaultCookieStore(httpCookieStore)
+                    .setRedirectStrategy(new LaxRedirectStrategy())
+                    .build();
+
+        StringBuilder bonusInfo = new StringBuilder();
+
+            try {
+                HttpPost httpPostRequest = new HttpPost(urlBase + "/card/info");
+                httpPostRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                StringEntity body = new StringEntity(this.tokenKey + "=" + this.tokenValue
+                        + "&CardInfoFormModel[search]=" + validCardNumber);
+                httpPostRequest.setEntity(body);
+                HttpResponse httpResponse = this.httpСlient.execute(httpPostRequest);
+                String httpResponseString = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()))
+                        .lines().collect(Collectors.joining("\n"));
+                Document document = Jsoup.parse(httpResponseString);
+                Elements elements = document.select("label");
+
+                int counterLine = 0;
+                for (Element element : elements) {
+
+                    Pattern pattern = Pattern.compile(">(.+)</");
+                    Matcher matcher = pattern.matcher(element.toString());
+                    while (matcher.find()){
+                        String matcherBuffer = matcher.group(1).trim();
+
+                        if (matcherBuffer.startsWith("<")
+                                || matcherBuffer.startsWith("Поиск")
+                                || matcherBuffer.startsWith("Программа"))
+                            continue;
+                        bonusInfo.append(matcher.group(1).trim() + " ");
+                        counterLine++;
+                        if (counterLine % 2 == 0)
+                            bonusInfo.append("\n");
+                    }
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        return bonusInfo.toString();
+    }
 }

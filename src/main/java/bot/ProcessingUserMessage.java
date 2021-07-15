@@ -17,9 +17,7 @@ public class ProcessingUserMessage {
 
         String messageText = message.getText();
 
-        //При запросе Акции Мобайл ТВ
-
-        //формируется клавиатура с перечнем акций
+//////////////////////////// Запрос акций по Мобильной технике и ТВ
 
         if (messageText.equals("Акции Мобайл ТВ")
                 || messageText.equals("Promo Mobile TV")
@@ -32,7 +30,7 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
-        //Поиск акций мобайл и тв
+        //Поиск подробной информации по запрашиваемой акции
 
         Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
 
@@ -58,9 +56,7 @@ public class ProcessingUserMessage {
             }
         }
 
-        //При запросе Акции БТ
-
-        //формируется клавиатура с перечнем акций
+//////////////////////////// Запрос акций по Бытовой технике
 
         if (messageText.equals("Акции БТ")
                 || messageText.equals("Promo Appliances")
@@ -73,7 +69,7 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
-        //поиск акций БТ
+        //Поиск подробной информации по запрашиваемой акции
 
         Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
 
@@ -89,9 +85,7 @@ public class ProcessingUserMessage {
             }
         }
 
-        //При запросе Характеристики устройств
-
-        //отправляется запрос модели
+//////////////////////////// Поиск подробной информации об устройстве
 
         if (messageText.equals("Характеристики устройств")
                 || messageText.equals("Device info")
@@ -107,7 +101,7 @@ public class ProcessingUserMessage {
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
         for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-            String messageTextDevice = message.getText()
+            String deviceMessageText = message.getText()
                     .toLowerCase(Locale.ROOT)
                     .replaceAll(" ", "")
                     .replaceAll("galaxy", "")
@@ -117,9 +111,9 @@ public class ProcessingUserMessage {
                     .replaceAll("plus", "\\+")
                     .replace("+", "\\+");
 
-            if (messageTextDevice.startsWith(bufferCategoryDeviceList.get(i))){ //перевели всю строку запроса в нижний регистр
+            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))){ //перевели всю строку запроса в нижний регистр
 
-                if (messageTextDevice.length() == 1){
+                if (deviceMessageText.length() == 1){
                     SendMessage replyMessage = Response.createTextMessage(message
                             , "Уточните модель:");
 
@@ -159,6 +153,8 @@ public class ProcessingUserMessage {
 
             return replyMessage;
         }
+
+//////////////////////////// Запрос списка устройств для поиска
 
         if (messageText.equals("Инфо Мобайл")
                 || messageText.equals("Mobile info")
@@ -211,6 +207,8 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
+//////////////////////////// Запрос информации о Сервисе
+
         if (messageText.equals("Сервис")
                 || messageText.equals("Service")
                 || messageText.equals("/service")) {
@@ -222,32 +220,69 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
+//////////////////////////// Поиск Бонусной карты
+
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
 
-//            new Bonus().getCard(message);
-            new BonusHttpClient().getCard(message);
-
             SendMessage replyMessage = Response.createTextMessage(message,
-                    "Введите номер бонусной карты\n\n" +
-                            "Пример: 2000872486\n\n" +
-                            "или\n\n" +
-                            "Номер телефона Клиента\n\n" +
-                            "Пример: 9167303030");
+                    "Введите номер телефона или бонусной карты:\n\n");
 
             return replyMessage;
         }
 
-        if (messageText.startsWith("9")
-                || messageText.startsWith("20")) {
+        //Убираем из номера телефона все лишние символы и цифры
+        String bonusMessageText = messageText.replaceAll(" ", "")
+                .replaceAll("\\+", "")
+                .replaceAll("-", "")
+                .replaceAll("\\(", "")
+                .replaceAll("\\)", "");
+        if (bonusMessageText.startsWith("8"))
+            bonusMessageText = bonusMessageText.replaceFirst("8", "");
+        if (bonusMessageText.startsWith("7"))
+            bonusMessageText = bonusMessageText.replaceFirst("7", "");
 
-            SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , "Поиск пока в разработке..." + "\n\n" + "/start_menu"
-                    ,Response.TypeKeyboard.START);
+        //Если ввели номер телефона
+        if (bonusMessageText.startsWith("9") && bonusMessageText.length() == 10) {
+
+            SendMessage replyMessage = null;
+
+            String findBonusInfo = new Bonus().getInfo(bonusMessageText);
+
+            if (!findBonusInfo.isEmpty()) {
+                replyMessage = Response.createTextMessageWithKeyboard(message
+                        , new Bonus().getInfo(bonusMessageText) + "\n\n" + "/start_menu"
+                        , Response.TypeKeyboard.START);
+            } else {
+                replyMessage = Response.createTextMessageWithKeyboard(message
+                        , "Номера телефона нет в базе данных." + "\n\n" + "/start_menu"
+                        , Response.TypeKeyboard.START);
+            }
 
             return replyMessage;
         }
 
+        //Если ввели номер карты
+        if (bonusMessageText.startsWith("20") && bonusMessageText.length() == 10){
+
+            SendMessage replyMessage = null;
+
+            String findBonusInfo = new Bonus().getInfo(bonusMessageText);
+
+            if (!findBonusInfo.isEmpty()) {
+                replyMessage = Response.createTextMessageWithKeyboard(message
+                        , new Bonus().getInfo(bonusMessageText) + "\n\n" + "/start_menu"
+                        , Response.TypeKeyboard.START);
+            } else {
+                replyMessage = Response.createTextMessageWithKeyboard(message
+                        , "Карты лояльности нет в базе данных." + "\n\n" + "/start_menu"
+                        , Response.TypeKeyboard.START);
+            }
+
+            return replyMessage;
+        }
+
+        //если не найдено ни одного совпадения
         //Стартовое меню
         SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
                 ,"Команда не найдена!" + "\n\n" + "/start_menu"
