@@ -247,11 +247,11 @@ public class ProcessingUserMessage {
 
             SendMessage replyMessage = null;
 
-            String findBonusInfo = new Bonus().getInfo(bonusMessageText);
+            String findBonusInfo = new Bonus().getInfoPhoneNumber(bonusMessageText);
 
             if (!findBonusInfo.isEmpty()) {
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , new Bonus().getInfo(bonusMessageText) + "\n\n" + "/start_menu"
+                        , findBonusInfo + "\n\n" + "/start_menu"
                         , Response.TypeKeyboard.START);
             } else {
                 replyMessage = Response.createTextMessageWithKeyboard(message
@@ -267,11 +267,11 @@ public class ProcessingUserMessage {
 
             SendMessage replyMessage = null;
 
-            String findBonusInfo = new Bonus().getInfo(bonusMessageText);
+            String findBonusInfo = new Bonus().getInfoCardNumber(bonusMessageText);
 
             if (!findBonusInfo.isEmpty()) {
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , new Bonus().getInfo(bonusMessageText) + "\n\n" + "/start_menu"
+                        , findBonusInfo + "\n\n" + "/start_menu"
                         , Response.TypeKeyboard.START);
             } else {
                 replyMessage = Response.createTextMessageWithKeyboard(message
