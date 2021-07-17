@@ -5,16 +5,10 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.glassfish.jersey.server.Uri;
-
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
 
@@ -33,8 +27,19 @@ public class PromoInfo {
         promoMobileTVMap = new HashMap<>();
         promoAppliancesMap = new HashMap<>();
 
-        String separator = File.separator;
-        Path PromoFilePath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "Samsung_Календарь акций.xlsx");
+        Path PromoFilePath = Paths.get(".")
+                .toAbsolutePath()
+                .normalize()
+                .getParent()
+                .resolve("resources")
+                .resolve("Samsung_Календарь акций.xlsx");
+
+        if (!Files.exists(PromoFilePath)) {
+            String separator = File.separator;
+            PromoFilePath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "Samsung_Календарь акций.xlsx");
+        }
+
+
         workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
             workBook = new XSSFWorkbook(fIS);//получили книгу exel
@@ -43,28 +48,6 @@ public class PromoInfo {
         } catch (IOException e) {
             System.out.println("Файл не читается.");
         }
-
-//        Path tmpFile = null;
-//        try {
-//            URL downloadPromoFileUrl = new URL(new BotData().getDownloadPromoInfoFileUrl());
-//            URLConnection urlConnection = downloadPromoFileUrl.openConnection();
-//            urlConnection.setRequestProperty("User-Agent", "Mozilla 5.0 (Windows; U; "
-//                    + "Windows NT 5.1; en-US; rv:1.8.0.11) ");
-//            Path tmpFIle = Files.createTempFile("temp", null);
-//            InputStream inputStream = urlConnection.getInputStream();
-//            Files.copy(inputStream, tmpFIle, StandardCopyOption.REPLACE_EXISTING);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        workBook = null;
-//        try (FileInputStream fIS = new FileInputStream(tmpFile.toFile())) {
-//            workBook = new XSSFWorkbook(fIS);//получили книгу exel
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Файл не найден.");
-//        } catch (IOException e) {
-//            System.out.println("Файл не читается.");
-//        }
     }
 
     //Singleton
@@ -151,12 +134,6 @@ public class PromoInfo {
         return map;
     }
 
-
-
-
-
-
-
     //Singleton
     public static Map<String, String> getDiscountsOnThePriceDropPromoMap(){
         Map<String, String> onePromoMap = new TreeMap<>();
@@ -201,7 +178,6 @@ public class PromoInfo {
 
         return finalMap;
     }
-
 
     private static List<List<String>> addTableStringsFromPromoFile(XSSFWorkbook workBook, int sheetNumber){
 

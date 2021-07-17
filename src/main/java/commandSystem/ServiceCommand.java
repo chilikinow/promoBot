@@ -13,8 +13,18 @@ public class ServiceCommand {
 
     public String create() {
 
-        String separator = File.separator;
-        Path phonesInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "phonesInfo.properties");
+        Path phonesInfoPropertiesFile = Paths.get(".")
+                .toAbsolutePath()
+                .normalize()
+                .getParent()
+                .resolve("resources")
+                .resolve("phonesInfo.properties");
+
+        if (!Files.exists(phonesInfoPropertiesFile)) {
+            String separator = File.separator;
+            phonesInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "phonesInfo.properties");
+        }
+
         Properties phonesInfoProperties = new Properties();
         try {
             phonesInfoProperties.load(new FileReader(phonesInfoPropertiesFile.toFile()));
@@ -28,7 +38,19 @@ public class ServiceCommand {
         }
 
         List<String> seviceInfoStringList =  new ArrayList<>();
-        Path serviceInfoFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "serviceInfo.txt");
+
+        Path serviceInfoFile = Paths.get(".")
+                .toAbsolutePath()
+                .normalize()
+                .getParent()
+                .resolve("resources")
+                .resolve("serviceInfo.txt");
+
+        if (!Files.exists(serviceInfoFile)) {
+            String separator = File.separator;
+            serviceInfoFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "serviceInfo.txt");
+        }
+
         try {
             seviceInfoStringList = new ArrayList<>(Files.readAllLines(serviceInfoFile));
         } catch (IOException e) {

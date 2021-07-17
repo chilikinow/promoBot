@@ -8,7 +8,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ProcessingUserMessage {
@@ -16,6 +18,13 @@ public class ProcessingUserMessage {
     public Object searchAnswer(Message message) {
 
         String messageText = message.getText();
+
+        // Вывод списка пользователей, делавших запрос
+
+//        System.out.println(message.getFrom().getFirstName()
+//                + " "
+//                + message.getFrom().getUserName()
+//                + ": " +messageText);
 
 //////////////////////////// Запрос акций по Мобильной технике и ТВ
 
@@ -120,10 +129,22 @@ public class ProcessingUserMessage {
                     return replyMessage;
                 }
 
-                String separator = File.separator;
                 Set<Path> resultDeviceInfoList;
-                resultDeviceInfoList = new Device().findInfo(message,
-                        "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts");
+
+                String directory = Paths.get(".")
+                        .toAbsolutePath()
+                        .normalize()
+                        .getParent()
+                        .resolve("resources")
+                        .resolve("dataBaseProducts")
+                        .toString();
+
+                if (!Files.exists(Paths.get(directory))) {
+                    String separator = File.separator;
+                    directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts";
+                }
+
+                resultDeviceInfoList = new Device().findInfo(message, directory.toString());
 
                 if (!resultDeviceInfoList.isEmpty()) {
                     List<SendPhoto> replyPhotoList = new ArrayList<>();
@@ -161,8 +182,21 @@ public class ProcessingUserMessage {
                 || messageText.equals("/mobile_info")) {
 
             String heading = "Список доступных для поиска устройств:\n\nМобильная электроника:\n\n";
-            String separator = File.separator;
-            String directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile";
+
+            String directory = Paths.get(".")
+                    .toAbsolutePath()
+                    .normalize()
+                    .getParent()
+                    .resolve("resources")
+                    .resolve("dataBaseProducts")
+                    .resolve("mobile")
+                    .toString();
+
+            if (!Files.exists(Paths.get(directory))) {
+                String separator = File.separator;
+                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile";
+            }
+
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
@@ -178,8 +212,21 @@ public class ProcessingUserMessage {
                 || messageText.equals("/tv_info")) {
 
             String heading = "Список доступных для поиска устройств:\n\nТелевизоры:\n\n";
-            String separator = File.separator;
-            String directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "tv";
+
+            String directory = Paths.get(".")
+                    .toAbsolutePath()
+                    .normalize()
+                    .getParent()
+                    .resolve("resources")
+                    .resolve("dataBaseProducts")
+                    .resolve("tv")
+                    .toString();
+
+            if (!Files.exists(Paths.get(directory))) {
+                String separator = File.separator;
+                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "tv";
+            }
+
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
@@ -195,8 +242,22 @@ public class ProcessingUserMessage {
                 || messageText.equals("/appliances_info")) {
 
             String heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
-            String separator = File.separator;
-            String directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "appliances";
+
+            String directory = Paths.get(".")
+                    .toAbsolutePath()
+                    .normalize()
+                    .getParent()
+                    .resolve("resources")
+                    .resolve("dataBaseProducts")
+                    .resolve("appliances")
+                    .toString();
+
+            if (!Files.exists(Paths.get(directory))) {
+                String separator = File.separator;
+                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "appliances";
+            }
+
+
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 

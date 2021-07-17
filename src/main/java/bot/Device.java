@@ -19,8 +19,18 @@ public class Device {
 
     public Set<String> getCategoryDeviceList(){
 
-        String separator = File.separator;
-        String directory = "src" + separator + "main" + separator + "resources" + separator + "categoryDeviceForFind.txt";
+        String directory = Paths.get(".")
+                .toAbsolutePath()
+                .normalize()
+                .getParent()
+                .resolve("resources")
+                .resolve("categoryDeviceForFind.txt").toString();
+
+        if (!Files.exists(Paths.get(directory))) {
+            String separator = File.separator;
+            directory = "src" + separator + "main" + separator + "resources" + separator + "categoryDeviceForFind.txt";
+        }
+
         List<String> tempCategoryList = new ArrayList<>();
         try {
             tempCategoryList = new ArrayList<>(Files.readAllLines(Paths.get(directory)));

@@ -3,6 +3,7 @@ package bot;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -23,9 +24,19 @@ public class BotData {
     }
 
     private void init(){
-        String separator = File.separator;
-        Path botInfoPropertiesFile = Paths.get
-                ("src" + separator + "main" + separator + "resources" + separator + "botData.properties");
+
+        Path botInfoPropertiesFile = Paths.get(".")
+                .toAbsolutePath()
+                .normalize()
+                .getParent()
+                .resolve("resources")
+                .resolve("botData.properties");
+
+        if (!Files.exists(botInfoPropertiesFile)) {
+            String separator = File.separator;
+            botInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.properties");
+        }
+
         Properties botDataProperties = new Properties();
         try {
             botDataProperties.load(new FileReader(botInfoPropertiesFile.toFile()));
