@@ -1,4 +1,4 @@
-package bot;
+package nosimo.promobot.bot;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;

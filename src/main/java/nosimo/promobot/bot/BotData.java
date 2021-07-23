@@ -1,4 +1,4 @@
-package bot;
+package nosimo.promobot.bot;
 
 import java.io.File;
 import java.io.FileReader;
@@ -29,7 +29,7 @@ public class BotData {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("botData.properties");
 
         if (!Files.exists(botInfoPropertiesFile)) {

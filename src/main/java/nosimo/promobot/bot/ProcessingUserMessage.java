@@ -1,7 +1,7 @@
-package bot;
+package nosimo.promobot.bot;
 
-import commandSystem.InfoCommand;
-import commandSystem.ServiceCommand;
+import nosimo.promobot.commandSystem.InfoCommand;
+import nosimo.promobot.commandSystem.ServiceCommand;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -135,7 +135,7 @@ public class ProcessingUserMessage {
                         .toAbsolutePath()
                         .normalize()
                         .getParent()
-                        .resolve("resources")
+                        .resolve("outResources")
                         .resolve("dataBaseProducts")
                         .toString();
 
@@ -187,7 +187,7 @@ public class ProcessingUserMessage {
                     .toAbsolutePath()
                     .normalize()
                     .getParent()
-                    .resolve("resources")
+                    .resolve("outResources")
                     .resolve("dataBaseProducts")
                     .resolve("mobile")
                     .toString();
@@ -217,7 +217,7 @@ public class ProcessingUserMessage {
                     .toAbsolutePath()
                     .normalize()
                     .getParent()
-                    .resolve("resources")
+                    .resolve("outResources")
                     .resolve("dataBaseProducts")
                     .resolve("tv")
                     .toString();
@@ -247,7 +247,7 @@ public class ProcessingUserMessage {
                     .toAbsolutePath()
                     .normalize()
                     .getParent()
-                    .resolve("resources")
+                    .resolve("outResources")
                     .resolve("dataBaseProducts")
                     .resolve("appliances")
                     .toString();

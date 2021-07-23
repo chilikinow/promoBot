@@ -1,4 +1,4 @@
-package bot;
+package nosimo.promobot.bot;
 
 import java.util.ArrayList;
 import java.util.List;

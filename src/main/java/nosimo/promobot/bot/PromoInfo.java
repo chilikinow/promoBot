@@ -1,4 +1,4 @@
-package bot;
+package nosimo.promobot.bot;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -31,7 +31,7 @@ public class PromoInfo {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("Samsung_Календарь акций.xlsx");
 
         if (!Files.exists(PromoFilePath)) {

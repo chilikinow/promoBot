@@ -1,6 +1,6 @@
-package commandSystem;
+package nosimo.promobot.commandSystem;
 
-import bot.Device;
+import nosimo.promobot.bot.Device;
 import java.util.Set;
 
 public class InfoCommand{

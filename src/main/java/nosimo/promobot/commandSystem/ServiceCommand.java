@@ -1,4 +1,4 @@
-package commandSystem;
+package nosimo.promobot.commandSystem;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,7 +17,7 @@ public class ServiceCommand {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("phonesInfo.properties");
 
         if (!Files.exists(phonesInfoPropertiesFile)) {
@@ -43,7 +43,7 @@ public class ServiceCommand {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("serviceInfo.txt");
 
         if (!Files.exists(serviceInfoFile)) {

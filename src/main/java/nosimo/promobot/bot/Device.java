@@ -1,4 +1,4 @@
-package bot;
+package nosimo.promobot.bot;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -23,7 +23,7 @@ public class Device {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("categoryDeviceForFind.txt").toString();
 
         if (!Files.exists(Paths.get(directory))) {

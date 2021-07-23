@@ -1,6 +1,6 @@
-package bot;
+package nosimo.promobot.bot;
 
-import commandSystem.StartCommand;
+import nosimo.promobot.commandSystem.StartCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;

@@ -1,4 +1,4 @@
-package commandSystem;
+package nosimo.promobot.commandSystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class StartCommand {
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("resources")
+                .resolve("outResources")
                 .resolve("startInfo.txt");
 
         if (!Files.exists(serviceInfoFile)) {
