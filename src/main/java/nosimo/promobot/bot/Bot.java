@@ -103,8 +103,7 @@ public class Bot extends TelegramLongPollingBot {
 
             this.messageCounter++;
 
-            PromoInfo.getInstancePromoMobileTV();
-            PromoInfo.getInstancePromoAppliances();
+            PromoInfo.updateWorkbook();
 
             return;
         }

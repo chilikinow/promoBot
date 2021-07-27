@@ -24,6 +24,16 @@ public class PromoInfo {
 
     static {
         date = Calendar.getInstance();
+    }
+
+    public static void updateWorkbook(){
+        addWorkbook();
+        promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
+        promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
+    }
+
+    private static void addWorkbook(){
+
         promoMobileTVMap = new HashMap<>();
         promoAppliancesMap = new HashMap<>();
 
@@ -53,9 +63,10 @@ public class PromoInfo {
     //Singleton
     public static Map<String, String> getInstancePromoMobileTV(){
         Calendar currentDate = Calendar.getInstance();
-        if (promoMobileTVMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
-            promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
+        if (date.get(Calendar.HOUR_OF_DAY) != currentDate.get(Calendar.HOUR_OF_DAY)) {
+            updateWorkbook();
             date = currentDate;
+//            promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
         }
 
         return promoMobileTVMap;
@@ -64,9 +75,10 @@ public class PromoInfo {
     //Singleton
     public static Map<String, String> getInstancePromoAppliances(){
         Calendar currentDate = Calendar.getInstance();
-        if (promoAppliancesMap.isEmpty() || date.get(Calendar.DATE) != currentDate.get(Calendar.DATE)) {
-            promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
+        if (date.get(Calendar.HOUR_OF_DAY) != currentDate.get(Calendar.HOUR_OF_DAY)) {
+            updateWorkbook();
             date = currentDate;
+//            promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
         }
 
         return promoAppliancesMap;

@@ -343,6 +343,17 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
+        if (messageText.equals("/promo_update")) {
+
+            PromoInfo.updateWorkbook();
+
+            SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
+                    , "База Акций обновлена!" + "\n\n" + "/start_menu"
+                    ,Response.TypeKeyboard.START);
+
+            return replyMessage;
+        }
+
         //если не найдено ни одного совпадения
         //Стартовое меню
         SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
