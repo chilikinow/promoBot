@@ -21,78 +21,10 @@ public class ProcessingUserMessage {
 
         // Вывод списка пользователей, делавших запрос
 
-//        System.out.println(message.getFrom().getFirstName()
-//                + " "
-//                + message.getFrom().getUserName()
-//                + ": " +messageText);
-
-//////////////////////////// Запрос акций по Мобильной технике и ТВ
-
-        if (messageText.equals("Акции Мобайл ТВ")
-                || messageText.equals("Promo Mobile TV")
-                || messageText.equals("/promo_mobile_tv")) {
-
-            SendMessage replyMessage = Response.createTextMessageWithKeyboard
-                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
-                            Response.TypeKeyboard.PROMO_MOBILE_TV);
-
-            return replyMessage;
-        }
-
-        //Поиск подробной информации по запрашиваемой акции
-
-        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
-
-        if (promoMobileTVInfoMap.containsKey(messageText)) {
-            for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
-                if (messageText.equals(entry.getKey())) {
-                    StringBuilder replyText = new StringBuilder();
-                    replyText.append(entry.getKey() + "\n\n" + entry.getValue());
-
-                    //При запросе данной акции добавляется ссылка на таблицу с уточнением условий по каждой модели
-
-                    if ("Скидки по акции ценопад".equals(messageText)) {
-                        replyText.append("\n\nПодробности:\n\n");
-                        replyText.append(new BotData().getReadPromoInfoFileUrl());
-                    }
-
-                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                            ,replyText.append("\n\n" + "/start_menu").toString()
-                            ,Response.TypeKeyboard.START);
-
-                    return replyMessage;
-                }
-            }
-        }
-
-//////////////////////////// Запрос акций по Бытовой технике
-
-        if (messageText.equals("Акции БТ")
-                || messageText.equals("Promo Appliances")
-                || messageText.equals("/promo_appliances")) {
-
-            SendMessage replyMessage = Response.createTextMessageWithKeyboard
-                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
-                            Response.TypeKeyboard.PROMO_APPLIANCES);
-
-            return replyMessage;
-        }
-
-        //Поиск подробной информации по запрашиваемой акции
-
-        Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
-
-        if (promoAppliancesInfoMap.containsKey(messageText)) {
-            for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
-                if (messageText.equals(entry.getKey())) {
-                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                            , entry.getKey() + "\n\n" + entry.getValue() + "\n\n" + "/start_menu"
-                            , Response.TypeKeyboard.START);
-
-                    return replyMessage;
-                }
-            }
-        }
+        System.out.println(message.getFrom().getFirstName()
+                + " "
+                + message.getFrom().getUserName()
+                + ": " +messageText);
 
 //////////////////////////// Поиск подробной информации об устройстве
 
@@ -346,12 +278,82 @@ public class ProcessingUserMessage {
         if (messageText.equals("/promo_update")) {
 
             PromoInfo.updateWorkbook();
+            PromoInfo.getInstancePromoMobileTV();
+            PromoInfo.getInstancePromoAppliances();
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
                     , "База Акций обновлена!" + "\n\n" + "/start_menu"
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
+        }
+
+        //////////////////////////// Запрос акций по Мобильной технике и ТВ
+
+        if (messageText.equals("Акции Мобайл ТВ")
+                || messageText.equals("Promo Mobile TV")
+                || messageText.equals("/promo_mobile_tv")) {
+
+            SendMessage replyMessage = Response.createTextMessageWithKeyboard
+                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                            Response.TypeKeyboard.PROMO_MOBILE_TV);
+
+            return replyMessage;
+        }
+
+        //Поиск подробной информации по запрашиваемой акции
+
+        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
+
+        if (promoMobileTVInfoMap.containsKey(messageText)) {
+            for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
+                if (messageText.equals(entry.getKey())) {
+                    StringBuilder replyText = new StringBuilder();
+                    replyText.append(entry.getKey() + "\n\n" + entry.getValue());
+
+                    //При запросе данной акции добавляется ссылка на таблицу с уточнением условий по каждой модели
+
+                    if ("Скидки по акции ценопад".equals(messageText)) {
+                        replyText.append("\n\nПодробности:\n\n");
+                        replyText.append(new BotData().getReadPromoInfoFileUrl());
+                    }
+
+                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
+                            ,replyText.append("\n\n" + "/start_menu").toString()
+                            ,Response.TypeKeyboard.START);
+
+                    return replyMessage;
+                }
+            }
+        }
+
+        //////////////////////////// Запрос акций по Бытовой технике
+
+        if (messageText.equals("Акции БТ")
+                || messageText.equals("Promo Appliances")
+                || messageText.equals("/promo_appliances")) {
+
+            SendMessage replyMessage = Response.createTextMessageWithKeyboard
+                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                            Response.TypeKeyboard.PROMO_APPLIANCES);
+
+            return replyMessage;
+        }
+
+        //Поиск подробной информации по запрашиваемой акции
+
+        Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
+
+        if (promoAppliancesInfoMap.containsKey(messageText)) {
+            for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
+                if (messageText.equals(entry.getKey())) {
+                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
+                            , entry.getKey() + "\n\n" + entry.getValue() + "\n\n" + "/start_menu"
+                            , Response.TypeKeyboard.START);
+
+                    return replyMessage;
+                }
+            }
         }
 
         //если не найдено ни одного совпадения

@@ -14,7 +14,6 @@ import java.util.List;
 
 public class PromoInfo {
 
-    private static Calendar date;
     private static Map <String, String> promoMobileTVMap;
     private static Map <String, String> promoAppliancesMap;
     private static XSSFWorkbook workBook;
@@ -23,13 +22,25 @@ public class PromoInfo {
     }
 
     static {
-        date = Calendar.getInstance();
+//        updateWorkbook();
     }
 
     public static void updateWorkbook(){
         addWorkbook();
         promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
         promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
+    }
+
+    //Singleton
+    public static Map<String, String> getInstancePromoMobileTV(){
+
+        updateWorkbook();
+        return promoMobileTVMap;
+    }
+
+    //Singleton
+    public static Map<String, String> getInstancePromoAppliances(){
+        return promoAppliancesMap;
     }
 
     private static void addWorkbook(){
@@ -58,30 +69,6 @@ public class PromoInfo {
         } catch (IOException e) {
             System.out.println("Файл не читается.");
         }
-    }
-
-    //Singleton
-    public static Map<String, String> getInstancePromoMobileTV(){
-        Calendar currentDate = Calendar.getInstance();
-        if (date.get(Calendar.HOUR_OF_DAY) != currentDate.get(Calendar.HOUR_OF_DAY)) {
-            updateWorkbook();
-            date = currentDate;
-//            promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
-        }
-
-        return promoMobileTVMap;
-    }
-
-    //Singleton
-    public static Map<String, String> getInstancePromoAppliances(){
-        Calendar currentDate = Calendar.getInstance();
-        if (date.get(Calendar.HOUR_OF_DAY) != currentDate.get(Calendar.HOUR_OF_DAY)) {
-            updateWorkbook();
-            date = currentDate;
-//            promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
-        }
-
-        return promoAppliancesMap;
     }
 
     private static Map<String, String> addSpecialMap(XSSFWorkbook workBook, int sheetNumber) {

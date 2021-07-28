@@ -45,12 +45,15 @@ public class Response {
 
         if (typeKeyboard == TypeKeyboard.START) {
             sendMessage.setReplyMarkup(new MenuKeyboard().getStartMenu());
+            return sendMessage;
         }
         if (typeKeyboard == TypeKeyboard.PROMO_MOBILE_TV){
             sendMessage.setReplyMarkup(new MenuKeyboard().getMobileTVPromoMenu());
+            return sendMessage;
         }
         if (typeKeyboard == TypeKeyboard.PROMO_APPLIANCES){
             sendMessage.setReplyMarkup(new MenuKeyboard().getAppliancesMenu());
+            return sendMessage;
         }
 
         return sendMessage;
