@@ -26,6 +26,15 @@ public class ProcessingUserMessage {
                 + message.getFrom().getUserName()
                 + ": " +messageText);
 
+        if (messageText.equals(new BotData().getBotPassword()) || messageText.equals("/start_menu")) {
+
+            //Стартовое меню
+            SendMessage replyMessage = Response.createTextMessageWithKeyboard(message,
+                    "/start_menu", Response.TypeKeyboard.START);
+
+            return replyMessage;
+        }
+
 //////////////////////////// Поиск подробной информации об устройстве
 
         if (messageText.equals("Характеристики устройств")
@@ -96,15 +105,6 @@ public class ProcessingUserMessage {
                     return replyMessage;
                 }
             }
-        }
-
-        if (messageText.equals(new BotData().getBotPassword()) || messageText.equals("/start_menu")) {
-
-            //Стартовое меню
-            SendMessage replyMessage = Response.createTextMessageWithKeyboard(message,
-                    "/start_menu", Response.TypeKeyboard.START);
-
-            return replyMessage;
         }
 
 //////////////////////////// Запрос списка устройств для поиска
