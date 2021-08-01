@@ -49,15 +49,15 @@ public class Bot extends TelegramLongPollingBot {
         if (this.message == null)
             return;
 
-        if (this.message.getText().equals("/start") || !this.pass) {
-            authorizationUser();
-        }
+//        if (this.message.getText().equals("/start") || !this.pass) {
+//            authorizationUser();
+//        }
 
-        if (this.pass) {
+//        if (this.pass) {
 
             Object replyMessage =  new ProcessingUserMessage().searchAnswer(this.message);
             sendReply(replyMessage);
-        }
+//        }
     }
 
     public void sendReply(Object reply){

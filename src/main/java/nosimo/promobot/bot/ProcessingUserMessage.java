@@ -2,6 +2,7 @@ package nosimo.promobot.bot;
 
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
+import nosimo.promobot.commandSystem.StartCommand;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -219,7 +220,13 @@ public class ProcessingUserMessage {
                 || messageText.equals("/bonus_card")) {
 
             SendMessage replyMessage = Response.createTextMessage(message,
-                    "Введите номер телефона или бонусной карты:\n\n");
+                    "Активация бонусной карты:"
+                    + "\n\n"
+                    + "https://galaxystore.ru/about/bonus/?utm_source=shop&utm_medium=qr&utm_campaign=activate#card-activate"
+                    + "\n\n"
+                    + "Поиск бонусной карты."
+                    + "\n\n"
+                    + "Введите номер телефона или номер карты:");
 
             return replyMessage;
         }
@@ -275,14 +282,25 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
+        /////////////////////////// Обновление файла с акциями
+
         if (messageText.equals("/promo_update")) {
 
             PromoInfo.updateWorkbook();
-            PromoInfo.getInstancePromoMobileTV();
-            PromoInfo.getInstancePromoAppliances();
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
                     , "База Акций обновлена!" + "\n\n" + "/start_menu"
+                    ,Response.TypeKeyboard.START);
+
+            return replyMessage;
+        }
+
+        /////////////////////////// Первый запуск
+
+        if (messageText.equals("/start")){
+
+            SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
+                    ,new StartCommand().create() + "\n\n/start_menu"
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
