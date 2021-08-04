@@ -50,19 +50,26 @@ public class Bot extends TelegramLongPollingBot {
             return;
 
 //        if (this.message.getText().equals("/start") || !this.pass) {
-//            authorizationUser();
+//            authorizationUserWithPass();
 //        }
 
-//        if (this.pass) {
+        this.pass = new Authorization().pass(this.message);
 
+        if (this.pass) {
             Object replyMessage =  new ProcessingUserMessage().searchAnswer(this.message);
             sendReply(replyMessage);
-//        }
+        } else {
+            var replyMessage = Response.createTextMessage(this.message
+                    ,"У Васэ нет доступа к данной системе."
+            + "\n\n"
+            + "Для получения доступа просим отправить Ваше Имя Пользователя (@UserName), Вашему КД.");
+            sendReply(replyMessage);
+        }
     }
 
     public void sendReply(Object reply){
 
-        if(reply instanceof List){
+        if (reply instanceof List){
            List<SendPhoto> replyPhotoList = new ArrayList<>();
            replyPhotoList = (List<SendPhoto>) reply;
            for (SendPhoto replyPhoto: replyPhotoList){
@@ -88,7 +95,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void authorizationUser(){
+    public void authorizationUserWithPass(){
 
         if (this.message.getText().equals("/start")){
             this.messageCounter = 1;

@@ -22,10 +22,10 @@ public class ProcessingUserMessage {
 
         // Вывод списка пользователей, делавших запрос
 
-        System.out.println(message.getFrom().getFirstName()
-                + " "
-                + message.getFrom().getUserName()
-                + ": " +messageText);
+//        System.out.println(message.getFrom().getFirstName()
+//                + " "
+//                + message.getFrom().getUserName()
+//                + ": " +messageText);
 
         if (messageText.equals(new BotData().getBotPassword()) || messageText.equals("/start_menu")) {
 
@@ -249,7 +249,7 @@ public class ProcessingUserMessage {
 
             String findBonusInfo = new Bonus().getInfoPhoneNumber(bonusMessageText);
 
-            if (!findBonusInfo.isEmpty()) {
+            if (!findBonusInfo.isEmpty()){
                 replyMessage = Response.createTextMessageWithKeyboard(message
                         , findBonusInfo + "\n\n" + "/start_menu"
                         , Response.TypeKeyboard.START);
