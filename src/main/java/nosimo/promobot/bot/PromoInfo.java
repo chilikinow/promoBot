@@ -31,14 +31,12 @@ public class PromoInfo {
         promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
     }
 
-    //Singleton
     public static Map<String, String> getInstancePromoMobileTV(){
 
         updateWorkbook();
         return promoMobileTVMap;
     }
 
-    //Singleton
     public static Map<String, String> getInstancePromoAppliances(){
         return promoAppliancesMap;
     }

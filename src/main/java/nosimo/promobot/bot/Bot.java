@@ -60,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
             sendReply(replyMessage);
         } else {
             var replyMessage = Response.createTextMessage(this.message
-                    ,"У Васэ нет доступа к данной системе."
+                    ,"У Вас нет доступа к данной системе."
             + "\n\n"
             + "Для получения доступа просим отправить Ваше Имя Пользователя (@UserName), Вашему КД.");
             sendReply(replyMessage);

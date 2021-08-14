@@ -16,6 +16,8 @@ import java.util.*;
 
 public class ProcessingUserMessage {
 
+    public String startButtonInfo = "Стартовое меню: /start_menu";
+
     public Object searchAnswer(Message message) {
 
         String messageText = message.getText();
@@ -27,11 +29,11 @@ public class ProcessingUserMessage {
 //                + message.getFrom().getUserName()
 //                + ": " +messageText);
 
-        if (messageText.equals(new BotData().getBotPassword()) || messageText.equals("/start_menu")) {
+        if (messageText.equals("/start_menu")) {
 
             //Стартовое меню
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message,
-                    "/start_menu", Response.TypeKeyboard.START);
+                    startButtonInfo, Response.TypeKeyboard.START);
 
             return replyMessage;
         }
@@ -86,7 +88,7 @@ public class ProcessingUserMessage {
                     directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts";
                 }
 
-                resultDeviceInfoList = new Device().findInfo(message, directory.toString());
+                resultDeviceInfoList = new Device().findInfo(message, directory);
 
                 if (!resultDeviceInfoList.isEmpty()) {
                     List<SendPhoto> replyPhotoList = new ArrayList<>();
@@ -101,7 +103,7 @@ public class ProcessingUserMessage {
                 } else {
                     SendMessage replyMessage = Response.createTextMessageWithKeyboard(message,
                             "Устройство не найдено!\n\nСписок доступных для поиска устройств\n" +
-                                    "находится в разделе ИНФО стартового меню." + "\n\n" + "/start_menu"
+                                    "находится в разделе ИНФО стартового меню." + "\n\n" + startButtonInfo
                             , Response.TypeKeyboard.START);
                     return replyMessage;
                 }
@@ -134,7 +136,7 @@ public class ProcessingUserMessage {
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , replyTextMessage + "\n\n" + "/start_menu"
+                    , replyTextMessage + "\n\n" + startButtonInfo
                     , Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -164,7 +166,7 @@ public class ProcessingUserMessage {
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , replyTextMessage + "\n\n" + "/start_menu"
+                    , replyTextMessage + "\n\n" + startButtonInfo
                     , Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -195,7 +197,7 @@ public class ProcessingUserMessage {
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , replyTextMessage + "\n\n" + "/start_menu"
+                    , replyTextMessage + "\n\n" + startButtonInfo
                     , Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -208,7 +210,7 @@ public class ProcessingUserMessage {
                 || messageText.equals("/service")) {
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , new ServiceCommand().create()+ "\n\n" + "/start_menu"
+                    , new ServiceCommand().create()+ "\n\n" + startButtonInfo
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -251,11 +253,11 @@ public class ProcessingUserMessage {
 
             if (!findBonusInfo.isEmpty()){
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , findBonusInfo + "\n\n" + "/start_menu"
+                        , findBonusInfo + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             } else {
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , "Номера телефона нет в базе данных." + "\n\n" + "/start_menu"
+                        , "Номера телефона нет в базе данных." + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             }
 
@@ -271,11 +273,11 @@ public class ProcessingUserMessage {
 
             if (!findBonusInfo.isEmpty()) {
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , findBonusInfo + "\n\n" + "/start_menu"
+                        , findBonusInfo + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             } else {
                 replyMessage = Response.createTextMessageWithKeyboard(message
-                        , "Карты лояльности нет в базе данных." + "\n\n" + "/start_menu"
+                        , "Карты лояльности нет в базе данных." + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             }
 
@@ -289,7 +291,7 @@ public class ProcessingUserMessage {
             PromoInfo.updateWorkbook();
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    , "База Акций обновлена!" + "\n\n" + "/start_menu"
+                    , "База Акций обновлена!" + "\n\n" + startButtonInfo
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -300,7 +302,7 @@ public class ProcessingUserMessage {
         if (messageText.equals("/start")){
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                    ,new StartCommand().create() + "\n\n/start_menu"
+                    ,new StartCommand().create() + "\n\n" + startButtonInfo
                     ,Response.TypeKeyboard.START);
 
             return replyMessage;
@@ -313,7 +315,8 @@ public class ProcessingUserMessage {
                 || messageText.equals("/promo_mobile_tv")) {
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard
-                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                    (message, "Список акций интернет магазина:\n" +
+                                    "https://galaxystore.ru/promo/",
                             Response.TypeKeyboard.PROMO_MOBILE_TV);
 
             return replyMessage;
@@ -329,15 +332,11 @@ public class ProcessingUserMessage {
                     StringBuilder replyText = new StringBuilder();
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
 
-                    //При запросе данной акции добавляется ссылка на таблицу с уточнением условий по каждой модели
-
-                    if ("Скидки по акции ценопад".equals(messageText)) {
-                        replyText.append("\n\nПодробности:\n\n");
-                        replyText.append(new BotData().getReadPromoInfoFileUrl());
-                    }
+                    replyText.append("\n\nПодробности:\n\n");
+                    replyText.append(new BotData().getReadPromoInfoFileUrl());
 
                     SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                            ,replyText.append("\n\n" + "/start_menu").toString()
+                            ,replyText.append("\n\n" + startButtonInfo).toString()
                             ,Response.TypeKeyboard.START);
 
                     return replyMessage;
@@ -352,7 +351,8 @@ public class ProcessingUserMessage {
                 || messageText.equals("/promo_appliances")) {
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboard
-                    (message, "Список акций интернет магазина:\nhttps://galaxystore.ru/promo/",
+                    (message, "Список акций интернет магазина:\n" +
+                                    "https://galaxystore.ru/promo/",
                             Response.TypeKeyboard.PROMO_APPLIANCES);
 
             return replyMessage;
@@ -366,7 +366,15 @@ public class ProcessingUserMessage {
             for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
                 if (messageText.equals(entry.getKey())) {
                     SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                            , entry.getKey() + "\n\n" + entry.getValue() + "\n\n" + "/start_menu"
+                            , entry.getKey()
+                                    + "\n\n"
+                                    + entry.getValue()
+                                    + "\n\n"
+                                    + "Подробности:"
+                                    + "\n\n"
+                                    + new BotData().getReadPromoInfoFileUrl()
+                                    + "\n\n"
+                                    + startButtonInfo
                             , Response.TypeKeyboard.START);
 
                     return replyMessage;
@@ -377,7 +385,7 @@ public class ProcessingUserMessage {
         //если не найдено ни одного совпадения
         //Стартовое меню
         SendMessage replyMessage = Response.createTextMessageWithKeyboard(message
-                ,"Команда не найдена!" + "\n\n" + "/start_menu"
+                ,"Команда не найдена!" + "\n\n" + startButtonInfo
                 ,Response.TypeKeyboard.START);
 
         return replyMessage;
