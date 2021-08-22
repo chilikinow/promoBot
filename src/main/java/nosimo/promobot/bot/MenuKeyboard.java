@@ -20,14 +20,14 @@ public class MenuKeyboard {
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
 
-        return createPromoMenu(set);
+        return createPromoMenuRKM(set);
     }
 
     public ReplyKeyboardMarkup getAppliancesMenu(){
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
 
-        return createPromoMenu(set);
+        return createPromoMenuRKM(set);
     }
 
     private InlineKeyboardMarkup createStartMenuWithIKM(){
@@ -87,13 +87,37 @@ public class MenuKeyboard {
 
         keyboardRow = new ArrayList<>();
         keyboardRow.add(button1);
+        rowList.add(keyboardRow);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
 
         return inlineKeyboardMarkup;
     }
 
-    private ReplyKeyboardMarkup createPromoMenu(Set mapKeySet){
+    private InlineKeyboardMarkup createPromoMenuIKM(Set mapKeySet){
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+        List<String> buttonList = new ArrayList<>(mapKeySet);
+
+        for (int i = 0; i < buttonList.size(); i++) {
+
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(buttonList.get(i));
+            button.setCallbackData(buttonList.get(i));
+
+            List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+            keyboardRow.add(button);
+            rowList.add(keyboardRow);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    private ReplyKeyboardMarkup createPromoMenuRKM(Set mapKeySet){
 
         List<KeyboardRow> keyboard = new ArrayList<>();
 
