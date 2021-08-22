@@ -9,11 +9,11 @@ import java.io.File;
 
 public class Response {
 
-    public static SendMessage createTextMessage(Message message, String text){
+    public static SendMessage createTextMessage(Long chatId, String text){
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setChatId(chatId.toString());
 //        sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.enableMarkdown(false);
         sendMessage.setText(text);
@@ -21,27 +21,27 @@ public class Response {
         return sendMessage;
     }
 
-    public static SendPhoto createPhotoMessage(Message message, String path){
+    public static SendPhoto createPhotoMessage(Long chatId, String path){
 
         SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId().toString());
+        sendPhoto.setChatId(chatId.toString());
 //        sendPhoto.setReplyToMessageId(message.getMessageId());
         sendPhoto.setPhoto(new InputFile(new File(path)));
 
         return sendPhoto;
     }
 
-    public static SendPhoto createPhotoMessage(Message message, String text, String path){
+    public static SendPhoto createPhotoMessage(Long chatId, String text, String path){
 
-        SendPhoto sendPhoto = createPhotoMessage(message, path);
+        SendPhoto sendPhoto = createPhotoMessage(chatId, path);
         sendPhoto.setCaption(text);
 
         return sendPhoto;
     }
 
-    public static SendMessage createTextMessageWithKeyboard(Message message, String text, TypeKeyboard typeKeyboard){
+    public static SendMessage createTextMessageWithKeyboard(Long chatId, String text, TypeKeyboard typeKeyboard){
 
-        SendMessage sendMessage = createTextMessage(message, text);
+        SendMessage sendMessage = createTextMessage(chatId, text);
 
         if (typeKeyboard == TypeKeyboard.START) {
             sendMessage.setReplyMarkup(new MenuKeyboard().getStartMenu());

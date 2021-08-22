@@ -4,6 +4,7 @@ import nosimo.promobot.commandSystem.StartCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -17,7 +18,9 @@ public class Bot extends TelegramLongPollingBot {
     private String botPassword;
 
     private Message message;
-    private int messageCounter;
+    private String userName;
+    private Long chatId;
+    private String messageText;
     private boolean pass;
 
     {
@@ -27,7 +30,6 @@ public class Bot extends TelegramLongPollingBot {
         botToken = botData.getBotToken();
         botPassword = botData.getBotPassword();
 
-        this.messageCounter = 1;
         this.pass = false;
     }
 
@@ -44,22 +46,26 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        this.message = update.getMessage();
 
-        if (this.message == null)
-            return;
+        if (update.hasCallbackQuery()){
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            this.userName = callbackQuery.getFrom().getUserName();
+            this.chatId = callbackQuery.getFrom().getId();
+            this.messageText = callbackQuery.getData();
+        }else {
+            this.message = update.getMessage();
+            this.userName = this.message.getFrom().getUserName();
+            this.chatId = this.message.getFrom().getId();
+            this.messageText = this.message.getText();
+        }
 
-//        if (this.message.getText().equals("/start") || !this.pass) {
-//            authorizationUserWithPass();
-//        }
-
-        this.pass = new Authorization().pass(this.message);
+        this.pass = new Authorization().pass(this.userName);
 
         if (this.pass) {
-            Object replyMessage =  new ProcessingUserMessage().searchAnswer(this.message);
+            Object replyMessage =  new ProcessingUserMessage().searchAnswer(chatId, messageText);
             sendReply(replyMessage);
         } else {
-            var replyMessage = Response.createTextMessage(this.message
+            var replyMessage = Response.createTextMessage(chatId
                     ,"У Вас нет доступа к данной системе."
             + "\n\n"
             + "Для получения доступа просим отправить Ваше Имя Пользователя (@UserName), Вашему КД.");
@@ -75,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
            for (SendPhoto replyPhoto: replyPhotoList){
                sendReply(replyPhoto);
            }
-            var replyMessage = Response.createTextMessageWithKeyboard(message
+            var replyMessage = Response.createTextMessageWithKeyboard(chatId
                     ,"/start_menu"
                     , Response.TypeKeyboard.START);
             sendReply(replyMessage);
@@ -95,42 +101,42 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void authorizationUserWithPass(){
-
-        if (this.message.getText().equals("/start")){
-            this.messageCounter = 1;
-            this.pass = false;
-        }
-
-        if (this.messageCounter == 1) {
-
-            var replyMessage = Response.createTextMessage(this.message
-                    ,new StartCommand().create() + "\n\n\nВведите пароль:");
-            sendReply(replyMessage);
-
-            this.messageCounter++;
-
-            PromoInfo.updateWorkbook();
-
-            return;
-        }
-
-        //Финальная часть авторизации
-        if (this.messageCounter == 2) {
-            if (botPassword.equals(this.message.getText())) {
-                this.pass = true;
-                var replyMessage = Response.createTextMessage(this.message,
-                        "Доступ Разрешен...\n\n");
-                sendReply(replyMessage);
-                this.messageCounter++;
-            }
-            else {
-                var replyMessage = Response.createTextMessage(this.message,
-                        "Пароль не от этого Бота, попробуйте другой...:\n");
-                sendReply(replyMessage);
-                this.messageCounter = 2;
-            }
-            return;
-        }
-    }
+//    public void authorizationUserWithPass(){
+//
+//        if (this.message.getText().equals("/start")){
+//            this.messageCounter = 1;
+//            this.pass = false;
+//        }
+//
+//        if (this.messageCounter == 1) {
+//
+//            var replyMessage = Response.createTextMessage(this.message
+//                    ,new StartCommand().create() + "\n\n\nВведите пароль:");
+//            sendReply(replyMessage);
+//
+//            this.messageCounter++;
+//
+//            PromoInfo.updateWorkbook();
+//
+//            return;
+//        }
+//
+//        //Финальная часть авторизации
+//        if (this.messageCounter == 2) {
+//            if (botPassword.equals(this.message.getText())) {
+//                this.pass = true;
+//                var replyMessage = Response.createTextMessage(this.message,
+//                        "Доступ Разрешен...\n\n");
+//                sendReply(replyMessage);
+//                this.messageCounter++;
+//            }
+//            else {
+//                var replyMessage = Response.createTextMessage(this.message,
+//                        "Пароль не от этого Бота, попробуйте другой...:\n");
+//                sendReply(replyMessage);
+//                this.messageCounter = 2;
+//            }
+//            return;
+//        }
+//    }
 }

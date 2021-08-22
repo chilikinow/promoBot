@@ -50,11 +50,11 @@ public class Device {
         return categoryDeviceList;
     }
 
-    public Set<Path> findInfo(Message message, String directory){
+    public Set<Path> findInfo(String messageText, String directory){
 
         Path directoryPath = Paths.get(directory);
 
-        String messageText = message.getText()
+        messageText = messageText
                 .toLowerCase(Locale.ROOT)
                 .replaceAll(" ", "")
                 .replaceAll("galaxy", "")

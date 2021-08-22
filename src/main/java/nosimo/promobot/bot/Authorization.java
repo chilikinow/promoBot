@@ -11,9 +11,7 @@ import java.util.List;
 
 public class Authorization {
 
-    public boolean pass(Message message){
-
-        String enterUserName = message.getFrom().getUserName();
+    public boolean pass(String enterUserName){
 
         Path userNameFile = Paths.get(".")
                 .toAbsolutePath()

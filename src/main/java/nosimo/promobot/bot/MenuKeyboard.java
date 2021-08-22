@@ -1,13 +1,123 @@
 package nosimo.promobot.bot;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.*;
 
 public class MenuKeyboard {
 
-    public ReplyKeyboardMarkup getStartMenu(){
+
+
+    public InlineKeyboardMarkup getStartMenu(){
+        //        return createStartMenuWithRKM();
+        return createStartMenuWithIKM();
+    }
+
+    public ReplyKeyboardMarkup getMobileTVPromoMenu(){
+
+        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
+
+        return createPromoMenu(set);
+    }
+
+    public ReplyKeyboardMarkup getAppliancesMenu(){
+
+        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
+
+        return createPromoMenu(set);
+    }
+
+    private InlineKeyboardMarkup createStartMenuWithIKM(){
+
+        List<String> buttonList = new ArrayList<>(new StartMenu().getList());
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText(buttonList.get(0));
+        button1.setCallbackData(buttonList.get(0));
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText(buttonList.get(1));
+        button2.setCallbackData(buttonList.get(1));
+
+        List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+        keyboardRow.add(button1);
+        keyboardRow.add(button2);
+        rowList.add(keyboardRow);
+
+        button1 = new InlineKeyboardButton();
+        button1.setText(buttonList.get(2));
+        button1.setCallbackData(buttonList.get(2));
+
+        keyboardRow = new ArrayList<>();
+        keyboardRow.add(button1);
+        rowList.add(keyboardRow);
+
+        button1 = new InlineKeyboardButton();
+        button1.setText(buttonList.get(3));
+        button1.setCallbackData(buttonList.get(3));
+        button2 = new InlineKeyboardButton();
+        button2.setText(buttonList.get(4));
+        button2.setCallbackData(buttonList.get(4));
+        InlineKeyboardButton button3 = new InlineKeyboardButton();
+        button3.setText(buttonList.get(5));
+        button3.setCallbackData(buttonList.get(5));
+
+        keyboardRow = new ArrayList<>();
+        keyboardRow.add(button1);
+        keyboardRow.add(button2);
+        keyboardRow.add(button3);
+        rowList.add(keyboardRow);
+
+        button1 = new InlineKeyboardButton();
+        button1.setText(buttonList.get(6));
+        button1.setCallbackData(buttonList.get(6));
+
+        keyboardRow = new ArrayList<>();
+        keyboardRow.add(button1);
+        rowList.add(keyboardRow);
+
+        button1 = new InlineKeyboardButton();
+        button1.setText(buttonList.get(7));
+        button1.setCallbackData(buttonList.get(7));
+
+        keyboardRow = new ArrayList<>();
+        keyboardRow.add(button1);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    private ReplyKeyboardMarkup createPromoMenu(Set mapKeySet){
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setResizeKeyboard(true);//размер клавиатуры адаптируется под количество клавиш
+        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
+        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
+
+        List<String> buttonList = new ArrayList<>(mapKeySet);
+
+        keyboard.clear();
+
+        for (int i = 0; i < buttonList.size(); i++) {
+            KeyboardRow keyboardRowBuffer = new KeyboardRow();
+            keyboardRowBuffer.add(buttonList.get(i));
+            keyboard.add(keyboardRowBuffer);
+        }
+
+        replyKeyboardMarkup.setKeyboard(keyboard);
+
+        return replyKeyboardMarkup;
+    }
+
+    private ReplyKeyboardMarkup createStartMenuWithRKM(){
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
@@ -48,44 +158,6 @@ public class MenuKeyboard {
             keyboardRowBuffer.add(buttonList.get(i));
         }
         keyboard.add(keyboardRowBuffer);
-
-        replyKeyboardMarkup.setKeyboard(keyboard);
-
-        return replyKeyboardMarkup;
-    }
-
-    public ReplyKeyboardMarkup getMobileTVPromoMenu(){
-
-        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
-
-        return createPromoMenu(set);
-    }
-
-    public ReplyKeyboardMarkup getAppliancesMenu(){
-
-        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
-
-        return createPromoMenu(set);
-    }
-
-    private ReplyKeyboardMarkup createPromoMenu(Set mapKeySet){
-
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);//размер клавиатуры адаптируется под количество клавиш
-        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
-        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
-
-        List<String> buttonList = new ArrayList<>(mapKeySet);
-
-        keyboard.clear();
-
-        for (int i = 0; i < buttonList.size(); i++) {
-            KeyboardRow keyboardRowBuffer = new KeyboardRow();
-            keyboardRowBuffer.add(buttonList.get(i));
-            keyboard.add(keyboardRowBuffer);
-        }
 
         replyKeyboardMarkup.setKeyboard(keyboard);
 
