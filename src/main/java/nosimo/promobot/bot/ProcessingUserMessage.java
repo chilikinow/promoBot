@@ -99,15 +99,17 @@ public class ProcessingUserMessage {
 
                 if (!resultDeviceInfoList.isEmpty()) {
                     List<Object> replyList = new ArrayList<>();
+
                     for (Path resultDeviseInfo : resultDeviceInfoList) {
                         SendPhoto replyPhoto = Response.createPhotoMessage(chatId,
                                 FilenameUtils.removeExtension(resultDeviseInfo.getFileName().toString()),
                                 resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
                         replyList.add(replyPhoto);
                     }
-                    replyList.add(Response.createTextMessage(chatId,
-                            "\n\nТехнические характеристики и USP:\nhttp://uspmobile.ru/"));
+                    replyList.add(Response.createTextMessageWithKeyboardRMK(chatId,
+                            startButtonInfo, Response.TypeKeyboard.START));
                     return replyList;
+
                 } else {
                     SendMessage replyMessage = Response.createTextMessageWithKeyboardRMK(chatId,
                             "Устройство не найдено!\n\nСписок доступных для поиска устройств\n" +
@@ -144,7 +146,11 @@ public class ProcessingUserMessage {
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
             SendMessage replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
-                    , replyTextMessage + "\n\n" + startButtonInfo
+                    , replyTextMessage
+                            + "\n\n"
+                            + "Технические характеристики и USP:\nhttp://uspmobile.ru/"
+                            + "\n\n"
+                            + startButtonInfo
                     , Response.TypeKeyboard.START);
 
             return replyMessage;
