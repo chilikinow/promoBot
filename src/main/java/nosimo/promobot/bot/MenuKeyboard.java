@@ -107,7 +107,11 @@ public class MenuKeyboard {
 
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(buttonList.get(i));
-            button.setCallbackData("-");
+            if (buttonList.get(i).length() > 30) {
+                button.setCallbackData(buttonList.get(i).substring(0, 30));
+            } else {
+                button.setCallbackData(buttonList.get(i));
+            }
 
             List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
             keyboardRow.add(button);

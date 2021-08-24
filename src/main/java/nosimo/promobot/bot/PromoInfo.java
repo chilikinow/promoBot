@@ -32,12 +32,12 @@ public class PromoInfo {
     }
 
     public static Map<String, String> getInstancePromoMobileTV(){
-
         updateWorkbook();
         return promoMobileTVMap;
     }
 
     public static Map<String, String> getInstancePromoAppliances(){
+        updateWorkbook();
         return promoAppliancesMap;
     }
 

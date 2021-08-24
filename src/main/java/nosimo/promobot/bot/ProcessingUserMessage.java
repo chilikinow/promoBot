@@ -345,30 +345,6 @@ public class ProcessingUserMessage {
             return replyMessage;
         }
 
-        //Поиск подробной информации по запрашиваемой акции
-
-        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
-
-        if (promoMobileTVInfoMap.containsKey(messageText)) {
-            for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
-                if (messageText.equals(entry.getKey())) {
-                    StringBuilder replyText = new StringBuilder();
-                    replyText.append(entry.getKey() + "\n\n" + entry.getValue());
-
-                    replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(new BotData().getReadPromoInfoFileUrl());
-
-                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(chatId
-                            ,replyText.append("\n\n" + startButtonInfo).toString()
-                            ,Response.TypeKeyboard.START);
-
-                    return replyMessage;
-                }
-            }
-        }
-
-        //////////////////////////// Запрос акций по Бытовой технике
-
         if (messageText.equals("Акции БТ")
                 || messageText.equals("Promo Appliances")
                 || messageText.equals("/promo_appliances")) {
@@ -383,11 +359,35 @@ public class ProcessingUserMessage {
 
         //Поиск подробной информации по запрашиваемой акции
 
+        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
+
+//        if (promoMobileTVInfoMap.containsKey(messageText)) {
+            for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
+                if (entry.getKey().startsWith(messageText)) {
+                    StringBuilder replyText = new StringBuilder();
+                    replyText.append(entry.getKey() + "\n\n" + entry.getValue());
+
+                    replyText.append("\n\nПодробности:\n\n");
+                    replyText.append(new BotData().getReadPromoInfoFileUrl());
+
+                    SendMessage replyMessage = Response.createTextMessageWithKeyboard(chatId
+                            ,replyText.append("\n\n" + startButtonInfo).toString()
+                            ,Response.TypeKeyboard.START);
+
+                    return replyMessage;
+                }
+            }
+//        }
+
+        //////////////////////////// Запрос акций по Бытовой технике
+
+        //Поиск подробной информации по запрашиваемой акции
+
         Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
 
-        if (promoAppliancesInfoMap.containsKey(messageText)) {
+//        if (promoAppliancesInfoMap.containsKey(messageText)) {
             for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
-                if (messageText.equals(entry.getKey())) {
+                if (entry.getKey().startsWith(messageText)) {
                     SendMessage replyMessage = Response.createTextMessageWithKeyboard(chatId
                             , entry.getKey()
                                     + "\n\n"
@@ -403,7 +403,7 @@ public class ProcessingUserMessage {
                     return replyMessage;
                 }
             }
-        }
+//        }
 
         //если не найдено ни одного совпадения
         //Стартовое меню
