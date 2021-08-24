@@ -39,7 +39,15 @@ public class Response {
         return sendPhoto;
     }
 
-    public static SendMessage createTextMessageWithKeyboard(Long chatId, String text, TypeKeyboard typeKeyboard){
+    public static SendMessage createTextMessageWithKeyboardIKM(Long chatId, String text, String buttonName, String callbackData){
+
+        SendMessage sendMessage = createTextMessage(chatId, text);
+        sendMessage.setReplyMarkup(new MenuKeyboard().getMenuIKM(buttonName, callbackData));
+
+        return sendMessage;
+    }
+
+    public static SendMessage createTextMessageWithKeyboardRMK(Long chatId, String text, TypeKeyboard typeKeyboard){
 
         SendMessage sendMessage = createTextMessage(chatId, text);
 

@@ -1,6 +1,5 @@
 package nosimo.promobot.bot;
 
-import nosimo.promobot.commandSystem.StartCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -8,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
@@ -76,13 +75,12 @@ public class Bot extends TelegramLongPollingBot {
     public void sendReply(Object reply){
 
         if (reply instanceof List){
-           List<SendPhoto> replyPhotoList = new ArrayList<>();
-           replyPhotoList = (List<SendPhoto>) reply;
-           for (SendPhoto replyPhoto: replyPhotoList){
-               sendReply(replyPhoto);
+
+           for (Object replyObject: (List)reply){
+               sendReply(replyObject);
            }
-            var replyMessage = Response.createTextMessageWithKeyboard(chatId
-                    ,"/start_menu"
+            var replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                    ,"Стартовое меню: /start_menu"
                     , Response.TypeKeyboard.START);
             sendReply(replyMessage);
 

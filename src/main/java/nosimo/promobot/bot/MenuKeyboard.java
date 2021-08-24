@@ -10,26 +10,56 @@ import java.util.*;
 public class MenuKeyboard {
 
 
-
-    public InlineKeyboardMarkup getStartMenu(){
-        //        return createStartMenuWithRKM();
-        return createStartMenuWithIKM();
+    public InlineKeyboardMarkup getMenuIKM(String buttonName, String callbackData){
+        Map <String,String> map = new HashMap<>();
+        map.put(buttonName, callbackData);
+        return createMenuIKM(map);
     }
 
-    public InlineKeyboardMarkup getMobileTVPromoMenu(){
+    public InlineKeyboardMarkup getMenuIKM(Map<String,String> map){
+        return createMenuIKM(map);
+    }
+
+    public ReplyKeyboardMarkup getStartMenu(){
+        return createStartMenuWithRKM();
+//        return createStartMenuWithIKM();
+    }
+
+    public ReplyKeyboardMarkup getMobileTVPromoMenu(){
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
 
-//        return createPromoMenuRKM(set);
-        return createPromoMenuIKM(set);
+        return createPromoMenuRKM(set);
+//        return createPromoMenuIKM(set);
     }
 
-    public InlineKeyboardMarkup getAppliancesMenu(){
+    public ReplyKeyboardMarkup getAppliancesMenu(){
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
 
-//        return createPromoMenuRKM(set);
-        return createPromoMenuIKM(set);
+        return createPromoMenuRKM(set);
+//        return createPromoMenuIKM(set);
+    }
+
+    private InlineKeyboardMarkup createMenuIKM(Map<String,String> map){
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+        for (Map.Entry<String,String> entry : map.entrySet()) {
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(entry.getKey());
+            button.setCallbackData(entry.getValue());
+
+
+            List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+            keyboardRow.add(button);
+            rowList.add(keyboardRow);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
     }
 
     private InlineKeyboardMarkup createStartMenuWithIKM(){
