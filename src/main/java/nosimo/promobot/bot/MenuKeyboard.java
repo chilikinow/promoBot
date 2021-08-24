@@ -16,18 +16,20 @@ public class MenuKeyboard {
         return createStartMenuWithIKM();
     }
 
-    public ReplyKeyboardMarkup getMobileTVPromoMenu(){
+    public InlineKeyboardMarkup getMobileTVPromoMenu(){
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
 
-        return createPromoMenuRKM(set);
+//        return createPromoMenuRKM(set);
+        return createPromoMenuIKM(set);
     }
 
-    public ReplyKeyboardMarkup getAppliancesMenu(){
+    public InlineKeyboardMarkup getAppliancesMenu(){
 
         Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
 
-        return createPromoMenuRKM(set);
+//        return createPromoMenuRKM(set);
+        return createPromoMenuIKM(set);
     }
 
     private InlineKeyboardMarkup createStartMenuWithIKM(){
@@ -105,7 +107,7 @@ public class MenuKeyboard {
 
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(buttonList.get(i));
-            button.setCallbackData(buttonList.get(i));
+            button.setCallbackData("-");
 
             List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
             keyboardRow.add(button);

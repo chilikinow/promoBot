@@ -59,10 +59,10 @@ public class Bot extends TelegramLongPollingBot {
             this.messageText = this.message.getText();
         }
 
-        this.pass = new Authorization().pass(this.userName);
+        this.pass = true; //new Authorization().pass(this.userName);
 
         if (this.pass) {
-            Object replyMessage =  new ProcessingUserMessage().searchAnswer(chatId, messageText);
+            Object replyMessage =  new ProcessingUserMessage().searchAnswer(this.chatId, this.userName, this.messageText);
             sendReply(replyMessage);
         } else {
             var replyMessage = Response.createTextMessage(chatId

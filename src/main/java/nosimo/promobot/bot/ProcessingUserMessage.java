@@ -18,9 +18,20 @@ import java.util.*;
 
 public class ProcessingUserMessage {
 
+    private boolean pass;
     public String startButtonInfo = "Стартовое меню: /start_menu";
+    private SendMessage notPassReplyMessage;
 
-    public Object searchAnswer(Long chatId, String messageText) {
+    public Object searchAnswer(Long chatId, String userName, String messageText) {
+
+        pass = false;
+        notPassReplyMessage = Response.createTextMessageWithKeyboard(chatId
+                ,"У Вас нет доступа к данной системе."
+                        + "\n\n"
+                        + "Для получения доступа необходимо обратится к Управляющему Вашего магазина.",
+                Response.TypeKeyboard.START);
+
+        pass = new Authorization().pass(userName);
 
         // Вывод списка пользователей, делавших запрос
 
@@ -51,7 +62,6 @@ public class ProcessingUserMessage {
         }
 
         //поиск устройства
-
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
         for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
@@ -222,6 +232,10 @@ public class ProcessingUserMessage {
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
 
+            if (!pass){
+                return notPassReplyMessage;
+            }
+
             SendMessage replyMessage = Response.createTextMessage(chatId,
                     "Активация бонусной карты:"
                     + "\n\n"
@@ -248,6 +262,10 @@ public class ProcessingUserMessage {
         //Если ввели номер телефона
         if (bonusMessageText.startsWith("9") && bonusMessageText.length() == 10) {
 
+            if (!pass){
+                return notPassReplyMessage;
+            }
+
             SendMessage replyMessage = null;
 
             String findBonusInfo = new Bonus().getInfoPhoneNumber(bonusMessageText);
@@ -266,7 +284,11 @@ public class ProcessingUserMessage {
         }
 
         //Если ввели номер карты
-        if (bonusMessageText.startsWith("20") && bonusMessageText.length() == 10){
+        if ((bonusMessageText.startsWith("20") || bonusMessageText.startsWith("10")) && bonusMessageText.length() == 10){
+
+            if (!pass){
+                return notPassReplyMessage;
+            }
 
             SendMessage replyMessage = null;
 
