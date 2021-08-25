@@ -239,14 +239,15 @@ public class ProcessingUserMessage {
                 return notPassReplyMessage;
             }
 
-            SendMessage replyMessage = Response.createTextMessage(chatId,
+            List<SendMessage> listOfMessages = new ArrayList<>();
+
+            listOfMessages.add(Response.createTextMessage(chatId,
                     "Активация бонусной карты:"
                     + "\n\n"
-                    + "https://galaxystore.ru/about/bonus/?utm_source=shop&utm_medium=qr&utm_campaign=activate#card-activate"
-                    + "\n\n"
-                    + "Введите номер телефона или бонусной карты:");
+                    + "https://galaxystore.ru/about/bonus/?utm_source=shop&utm_medium=qr&utm_campaign=activate#card-activate"));
+            listOfMessages.add(Response.createTextMessage(chatId, "Введите номер телефона или бонусной карты:"));
 
-            return replyMessage;
+            return listOfMessages;
         }
 
         //Убираем из номера телефона все лишние символы и цифры
