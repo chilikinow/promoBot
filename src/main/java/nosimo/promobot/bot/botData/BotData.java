@@ -1,4 +1,6 @@
-package nosimo.promobot.bot;
+package nosimo.promobot.bot.botData;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileReader;
@@ -25,35 +27,35 @@ public class BotData {
 
     private void init(){
 
-        Path botInfoPropertiesFile = Paths.get(".")
+        Path botInfoPath = Paths.get(".")
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
                 .resolve("outResources")
-                .resolve("botData.properties");
+                .resolve("botData.json");
 
-        if (!Files.exists(botInfoPropertiesFile)) {
+        if (!Files.exists(botInfoPath)) {
             String separator = File.separator;
-            botInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.properties");
+            botInfoPath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.json");
         }
 
-        Properties botDataProperties = new Properties();
+        BotInfo botInfo = new BotInfo();
         try {
-            botDataProperties.load(new FileReader(botInfoPropertiesFile.toFile()));
+            botInfo = new ObjectMapper().readValue(botInfoPath.toFile(), BotInfo.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.botName = botDataProperties.getProperty("botUsername");
-        this.botToken = botDataProperties.getProperty("botToken");
-        this.botPassword = botDataProperties.getProperty("botPassword");
+        this.botName = botInfo.getAuthorizationBot().getUserName();
+        this.botToken = botInfo.getAuthorizationBot().getToken();
+        this.botPassword = botInfo.getAuthorizationBot().getPassword();
 
-        this.bonusBaseURI = botDataProperties.getProperty("bonusBaseURI");
-        this.bonusUserName = botDataProperties.getProperty("bonusUserName");
-        this.bonusPassword = botDataProperties.getProperty("bonusPassword");
+        this.bonusBaseURI = botInfo.getBonusCardSystem().getUri();
+        this.bonusUserName = botInfo.getBonusCardSystem().getUserName();
+        this.bonusPassword = botInfo.getBonusCardSystem().getPassword();
 
-        this.readPromoInfoFileUrl = botDataProperties.getProperty("readPromoInfoFileUrl");
-        this.downloadPromoInfoFileUrl = botDataProperties.getProperty("downloadPromoInfoFileUrl");
+        this.readPromoInfoFileUrl = botInfo.getPromoInfoFile().getReadUri();
+        this.downloadPromoInfoFileUrl = botInfo.getPromoInfoFile().getDownloadFileUri();
     }
 
     public String getReadPromoInfoFileUrl() {

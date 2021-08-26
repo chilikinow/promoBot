@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
 import nosimo.promobot.commandSystem.StartCommand;

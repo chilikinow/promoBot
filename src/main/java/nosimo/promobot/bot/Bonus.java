@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
