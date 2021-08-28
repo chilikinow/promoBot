@@ -2,12 +2,12 @@ package nosimo.promobot.bot.botData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect
-public class BotInfo {
+public class BotInfoForJackson {
     private AuthorizationBot authorizationBot;
     private BonusCardSystem bonusCardSystem;
     private PromoInfoFile promoInfoFile;
 
-    public BotInfo() {
+    public BotInfoForJackson() {
     }
 
     public AuthorizationBot getAuthorizationBot() {

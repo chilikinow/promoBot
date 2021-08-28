@@ -1,6 +1,10 @@
 package nosimo.promobot.bot.botData;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -8,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
 
 public class BotData {
 
@@ -39,9 +42,11 @@ public class BotData {
             botInfoPath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.json");
         }
 
-        BotInfo botInfo = new BotInfo();
+        //Jackson
+
+        BotInfoForJackson botInfo = new BotInfoForJackson();
         try {
-            botInfo = new ObjectMapper().readValue(botInfoPath.toFile(), BotInfo.class);
+            botInfo = new ObjectMapper().readValue(botInfoPath.toFile(), BotInfoForJackson.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,12 +55,31 @@ public class BotData {
         this.botToken = botInfo.getAuthorizationBot().getToken();
         this.botPassword = botInfo.getAuthorizationBot().getPassword();
 
-        this.bonusBaseURI = botInfo.getBonusCardSystem().getUri();
-        this.bonusUserName = botInfo.getBonusCardSystem().getUserName();
-        this.bonusPassword = botInfo.getBonusCardSystem().getPassword();
+        //Json Simple
 
-        this.readPromoInfoFileUrl = botInfo.getPromoInfoFile().getReadUri();
-        this.downloadPromoInfoFileUrl = botInfo.getPromoInfoFile().getDownloadFileUri();
+        JSONObject objectRoot = new JSONObject();
+        try {
+            objectRoot = (JSONObject) new JSONParser().parse(new FileReader(botInfoPath.toFile()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        JSONObject objectBonusCardSystem = (JSONObject) objectRoot.get("bonusCardSystem");
+        this.bonusBaseURI = (String) objectBonusCardSystem.get("uri");
+        this.bonusUserName = (String) objectBonusCardSystem.get("userName");
+        this.bonusPassword = (String) objectBonusCardSystem.get("password");
+
+        //JsonPath
+
+        try {
+            this.readPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.readUri");
+            this.downloadPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.downloadFileUri");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getReadPromoInfoFileUrl() {
