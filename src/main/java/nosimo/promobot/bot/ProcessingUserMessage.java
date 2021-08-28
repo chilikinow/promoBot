@@ -374,11 +374,25 @@ public class ProcessingUserMessage {
                     replyText.append("\n\nПодробности:\n\n");
                     replyText.append(new BotData().getReadPromoInfoFileUrl());
 
-                    SendMessage replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
-                            ,replyText.append("\n\n" + startButtonInfo).toString()
-                            ,Response.TypeKeyboard.START);
+                    List<SendMessage> messageList = new ArrayList<>();
 
-                    return replyMessage;
+                    if (replyText.length() > 3500){
+                       while (replyText.length() > 3500){
+                           messageList.add(Response.createTextMessage(chatId, replyText.substring(0, 3500)));
+                           replyText = new StringBuilder(replyText.substring(3500));
+                       }
+
+                        messageList.add(Response.createTextMessageWithKeyboardRMK(chatId
+                                ,replyText.append("\n\n" + startButtonInfo).toString()
+                                ,Response.TypeKeyboard.START));
+
+                    }else{
+                        messageList.add(Response.createTextMessageWithKeyboardRMK(chatId
+                                ,replyText.append("\n\n" + startButtonInfo).toString()
+                                ,Response.TypeKeyboard.START));
+                    }
+
+                    return messageList;
                 }
             }
         }
