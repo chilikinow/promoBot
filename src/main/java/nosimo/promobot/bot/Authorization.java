@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 
 public class Authorization {
 
-    public boolean pass(String enterUserName){
+    public static boolean pass(String enterUserName){
 
         enterUserName = "@" + enterUserName;
+
+        List<String> userNameList = new ArrayList<>();
 
         Path userNameFile = Paths.get(".")
                 .toAbsolutePath()
@@ -26,29 +28,28 @@ public class Authorization {
                 .resolve("outResources")
                 .resolve("users.txt");
 
-        if (!Files.exists(userNameFile)) {
-            return true;
-        }
-
-        List<String> userNameList = new ArrayList<>();
         try {
             userNameList = new ArrayList<>(Files.readAllLines(userNameFile));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File users.txt not found...");
+//            e.printStackTrace();
         }
 
         userNameList = userNameList.stream()
-                .filter(u -> !u.equals("")
-                        && !u.isEmpty()
-                        && !u.startsWith("+")
-                        && !u.startsWith("\"")
-                        && !Pattern.matches(".*\\p{InCyrillic}.*", u))
-                .map(u -> {
-                    if (!u.startsWith("@"))
-                        u = "@" + u;
-                    return u;
-                })
-                .collect(Collectors.toList());
+                        .filter(u -> !u.equals("")
+                                && !u.startsWith("+")
+                                && !u.startsWith("\"")
+                                && !Pattern.matches(".*\\p{InCyrillic}.*", u))
+                        .map(u -> {
+                            if (!u.startsWith("@"))
+                                u = "@" + u;
+                            return u;
+                        })
+                        .collect(Collectors.toList());
+
+        if (userNameList.isEmpty()) {
+            return true;
+        }
 
         if (userNameList.contains(enterUserName)) {
             return true;

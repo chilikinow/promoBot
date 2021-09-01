@@ -16,14 +16,12 @@ import java.util.*;
 
 public class ProcessingUserMessage {
 
-    private boolean pass;
     public String startButtonInfo;
     private SendMessage notPassReplyMessage;
     private List<Object> replyMessageList;
     private SendMessage replyMessage;
 
     {
-        pass = false;
         startButtonInfo = "Стартовое меню: /start_menu";
         replyMessageList = new ArrayList<>();
     }
@@ -35,8 +33,6 @@ public class ProcessingUserMessage {
                         + "\n\n"
                         + "Для получения доступа необходимо обратится к Управляющему Вашего магазина.",
                 Response.TypeKeyboard.START);
-
-        pass = new Authorization().pass(userName);
 
         // Вывод списка пользователей, делавших запрос
 
@@ -242,7 +238,7 @@ public class ProcessingUserMessage {
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
 
-            if (!pass){
+            if (!Authorization.pass(userName)){
                 return notPassReplyMessage;
             }
 
@@ -269,7 +265,7 @@ public class ProcessingUserMessage {
         //Если ввели номер телефона
         if (bonusMessageText.startsWith("9") && bonusMessageText.length() == 10) {
 
-            if (!pass){
+            if (!Authorization.pass(userName)){
                 return notPassReplyMessage;
             }
 
@@ -292,7 +288,7 @@ public class ProcessingUserMessage {
         if ((bonusMessageText.startsWith("20") || bonusMessageText.startsWith("10"))
                 && (bonusMessageText.length() == 10) || (bonusMessageText.length() == 11)){
 
-            if (!pass){
+            if (!Authorization.pass(userName)){
                 return notPassReplyMessage;
             }
 
