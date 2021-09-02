@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ProcessingUserMessage {
@@ -36,10 +37,13 @@ public class ProcessingUserMessage {
 
         // Вывод списка пользователей, делавших запрос
 
-//        System.out.println(message.getFrom().getFirstName()
-//                + " "
-//                + message.getFrom().getUserName()
-//                + ": " +messageText);
+        System.out.println(
+                new SimpleDateFormat("dd.MM.yyyy hh:mm")
+                        .format(Calendar.getInstance().getTime())
+                        + " "
+                        + "@" + userName
+                        + ": "
+                        + messageText);
 
         if (messageText.equals("/start_menu")) {
 
@@ -239,6 +243,7 @@ public class ProcessingUserMessage {
                 || messageText.equals("/bonus_card")) {
 
             if (!Authorization.pass(userName)){
+                System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
 
@@ -266,6 +271,7 @@ public class ProcessingUserMessage {
         if (bonusMessageText.startsWith("9") && bonusMessageText.length() == 10) {
 
             if (!Authorization.pass(userName)){
+                System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
 
@@ -289,6 +295,7 @@ public class ProcessingUserMessage {
                 && (bonusMessageText.length() == 10) || (bonusMessageText.length() == 11)){
 
             if (!Authorization.pass(userName)){
+                System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
 
