@@ -1,5 +1,7 @@
 package nosimo.promobot.bot.botData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 public class BotInfoForJackson {
