@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ProcessingUserMessage {
 
@@ -79,7 +80,7 @@ public class ProcessingUserMessage {
                     .replaceAll("plus", "\\+")
                     .replace("+", "\\+");
 
-            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))){ //перевели всю строку запроса в нижний регистр
+            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i)) && !Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText)){
 
                 if (deviceMessageText.length() == 1){
                     SendMessage replyMessage = Response.createTextMessage(chatId
