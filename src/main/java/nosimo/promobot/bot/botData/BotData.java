@@ -34,7 +34,7 @@ public class BotData {
                 .resolve("outResources");
 
         if (!Files.exists(outResourcesCheck)) {
-            outResourcesCheck = Paths.get("/Users/OlegChilikin/IdeaProjects/outResources");
+            outResourcesCheck = Paths.get("C:\\promoBot\\outResources");
         }
 
         outResources = outResourcesCheck;
