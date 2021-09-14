@@ -77,31 +77,17 @@ public class Bonus {
 
     public String getInfoPhoneNumber(String phoneNumber){
 
-        //Time Test
-        long startTime = System.currentTimeMillis();
-
         authorization();
         String cardNumber = searchCard(phoneNumber);
         String info = getInfo(cardNumber);
-
-        //Time Test
-        long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
 
         return info;
     }
 
     public String getInfoCardNumber(String cardNumber){
 
-        //Time Test
-        long startTime = System.currentTimeMillis();
-
         authorization();
         String info = getInfo(cardNumber);
-
-        //Time Test
-        long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
 
         return info;
     }

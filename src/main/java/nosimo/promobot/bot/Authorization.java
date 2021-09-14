@@ -1,7 +1,6 @@
 package nosimo.promobot.bot;
 
 import nosimo.promobot.bot.botData.BotData;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
