@@ -80,11 +80,6 @@ public class Bot extends TelegramLongPollingBot {
            for (Object replyObject: (List)reply){
                sendReply(replyObject);
            }
-//            var replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
-//                    ,"Стартовое меню: /start_menu"
-//                    , Response.TypeKeyboard.START);
-//            sendReply(replyMessage);
-
             return;
         }
 
