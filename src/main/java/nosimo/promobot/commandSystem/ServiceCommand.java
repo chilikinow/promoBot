@@ -1,5 +1,7 @@
 package nosimo.promobot.commandSystem;
 
+import nosimo.promobot.bot.botData.BotData;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,22 +12,11 @@ import java.util.*;
 
 public class ServiceCommand {
 
-
     public String create() {
 
-        Path phonesInfoPropertiesFile = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("phonesInfo.properties");
+        Path phonesInfoPropertiesFile = BotData.outResources.resolve("phonesInfo.properties");
 
-        if (!Files.exists(phonesInfoPropertiesFile)) {
-            String separator = File.separator;
-            phonesInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "phonesInfo.properties");
-        }
-
-        Properties phonesInfoProperties = new Properties();
+        var phonesInfoProperties = new Properties();
         try {
             phonesInfoProperties.load(new FileReader(phonesInfoPropertiesFile.toFile()));
         } catch (IOException e) {
@@ -39,17 +30,7 @@ public class ServiceCommand {
 
         List<String> seviceInfoStringList =  new ArrayList<>();
 
-        Path serviceInfoFile = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("serviceInfo.txt");
-
-        if (!Files.exists(serviceInfoFile)) {
-            String separator = File.separator;
-            serviceInfoFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "serviceInfo.txt");
-        }
+        Path serviceInfoFile = BotData.outResources.resolve("serviceInfo.txt");
 
         try {
             seviceInfoStringList = new ArrayList<>(Files.readAllLines(serviceInfoFile));
@@ -57,7 +38,7 @@ public class ServiceCommand {
             e.printStackTrace();
         }
 
-        StringBuilder response = new StringBuilder();
+        var response = new StringBuilder();
 
         for (String serviceInfoLine: seviceInfoStringList) {
             response.append(serviceInfoLine + "\n");

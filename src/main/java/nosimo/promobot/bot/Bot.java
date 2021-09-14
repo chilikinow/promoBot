@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
@@ -24,11 +23,9 @@ public class Bot extends TelegramLongPollingBot {
     private boolean pass;
 
     {
-        BotData botData = new BotData();
-
-        botName = botData.getBotName();
-        botToken = botData.getBotToken();
-        botPassword = botData.getBotPassword();
+        botName = BotData.botName;
+        botToken = BotData.botToken;
+        botPassword = BotData.botPassword;
 
         this.pass = false;
     }
@@ -94,43 +91,4 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
-//    public void authorizationUserWithPass(){
-//
-//        if (this.message.getText().equals("/start")){
-//            this.messageCounter = 1;
-//            this.pass = false;
-//        }
-//
-//        if (this.messageCounter == 1) {
-//
-//            var replyMessage = Response.createTextMessage(this.message
-//                    ,new StartCommand().create() + "\n\n\nВведите пароль:");
-//            sendReply(replyMessage);
-//
-//            this.messageCounter++;
-//
-//            PromoInfo.updateWorkbook();
-//
-//            return;
-//        }
-//
-//        //Финальная часть авторизации
-//        if (this.messageCounter == 2) {
-//            if (botPassword.equals(this.message.getText())) {
-//                this.pass = true;
-//                var replyMessage = Response.createTextMessage(this.message,
-//                        "Доступ Разрешен...\n\n");
-//                sendReply(replyMessage);
-//                this.messageCounter++;
-//            }
-//            else {
-//                var replyMessage = Response.createTextMessage(this.message,
-//                        "Пароль не от этого Бота, попробуйте другой...:\n");
-//                sendReply(replyMessage);
-//                this.messageCounter = 2;
-//            }
-//            return;
-//        }
-//    }
 }

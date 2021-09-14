@@ -1,7 +1,5 @@
 package nosimo.promobot.bot;
 
-import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +9,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.commons.io.FilenameUtils;
 
 public class Device {
@@ -19,21 +18,11 @@ public class Device {
 
     public Set<String> getCategoryDeviceList(){
 
-        String directory = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("categoryDeviceForFind.txt").toString();
-
-        if (!Files.exists(Paths.get(directory))) {
-            String separator = File.separator;
-            directory = "src" + separator + "main" + separator + "resources" + separator + "categoryDeviceForFind.txt";
-        }
+        Path directory = BotData.outResources.resolve("categoryDeviceForFind.txt");
 
         List<String> tempCategoryList = new ArrayList<>();
         try {
-            tempCategoryList = new ArrayList<>(Files.readAllLines(Paths.get(directory)));
+            tempCategoryList = new ArrayList<>(Files.readAllLines(directory));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,9 +39,7 @@ public class Device {
         return categoryDeviceList;
     }
 
-    public Set<Path> findInfo(String messageText, String directory){
-
-        Path directoryPath = Paths.get(directory);
+    public Set<Path> findInfo(String messageText, Path directory){
 
         messageText = messageText
                 .toLowerCase(Locale.ROOT)
@@ -67,7 +54,7 @@ public class Device {
         Set<Path> deviceInfoFilesList = new TreeSet<>();
 
         try {
-            deviceInfoFilesList =  Files.walk(directoryPath)
+            deviceInfoFilesList = Files.walk(directory)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toSet());
         } catch (IOException e) {
@@ -92,14 +79,12 @@ public class Device {
         return resultDeviceInfoList;
     }
 
-    public Set<String> getFilesName(String directory){
-
-        Path directoryPath = Paths.get(directory);
+    public Set<String> getFilesName(Path directory){
 
         Set<Path> filesList = new TreeSet<>();
 
         try {
-            filesList =  Files.walk(directoryPath)
+            filesList =  Files.walk(directory)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toSet());
 

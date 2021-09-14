@@ -3,11 +3,7 @@ package nosimo.promobot.bot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Response {
 

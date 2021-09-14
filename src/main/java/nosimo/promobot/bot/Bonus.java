@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import lombok.Data;
 import nosimo.promobot.bot.botData.BotData;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
@@ -26,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-
 public class Bonus {
 
     private String urlBase;
@@ -40,11 +40,9 @@ public class Bonus {
     private CookieStore httpCookieStore;
 
     {
-
-        BotData botData = new BotData();
-        this.urlBase = botData.getBonusBaseURI();
-        this.bonusUserName = botData.getBonusUserName();
-        this.bonusPassword = botData.getBonusPassword();
+        this.urlBase = BotData.bonusBaseURI;
+        this.bonusUserName = BotData.bonusUserName;
+        this.bonusPassword = BotData.bonusPassword;
 
 
         SSLContext context = null;
@@ -53,15 +51,14 @@ public class Bonus {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        TrustManager[] trustManager = new TrustManager[]{
+
+        var trustManager = new TrustManager[]{
                 new X509TrustManager() {
                     public X509Certificate[] getAcceptedIssuers() {
                         return new X509Certificate[0];
                     }
-
                     public void checkClientTrusted(X509Certificate[] certificate, String str) {
                     }
-
                     public void checkServerTrusted(X509Certificate[] certificate, String str) {
                     }
                 }
@@ -241,7 +238,6 @@ public class Bonus {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return info.toString();
     }

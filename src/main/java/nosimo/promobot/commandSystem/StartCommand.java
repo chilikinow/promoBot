@@ -1,5 +1,7 @@
 package nosimo.promobot.commandSystem;
 
+import nosimo.promobot.bot.botData.BotData;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,17 +15,7 @@ public class StartCommand {
 
         List<String> seviceInfoStringList =  new ArrayList<>();
 
-        Path serviceInfoFile = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("startInfo.txt");
-
-        if (!Files.exists(serviceInfoFile)) {
-            String separator = File.separator;
-            serviceInfoFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "startInfo.txt");
-        }
+        Path serviceInfoFile = BotData.outResources.resolve("startInfo.txt");
 
         try {
             seviceInfoStringList = new ArrayList<>(Files.readAllLines(serviceInfoFile));

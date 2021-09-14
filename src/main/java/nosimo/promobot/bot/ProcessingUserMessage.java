@@ -7,7 +7,6 @@ import nosimo.promobot.commandSystem.StartCommand;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,18 +68,22 @@ public class ProcessingUserMessage {
         //поиск устройства
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
-        for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-            String deviceMessageText = messageText
-                    .toLowerCase(Locale.ROOT)
-                    .replaceAll(" ", "")
-                    .replaceAll("galaxy", "")
-                    .replaceAll("samsung", "")
-                    .replaceAll("-", "")
-                    .replaceAll("_", "")
-                    .replaceAll("plus", "\\+")
-                    .replace("+", "\\+");
+        String deviceMessageText = messageText
+                .toLowerCase(Locale.ROOT)
+                .replaceAll(" ", "")
+                .replaceAll("galaxy", "")
+                .replaceAll("samsung", "")
+                .replaceAll("-", "")
+                .replaceAll("_", "")
+                .replaceAll("plus", "\\+")
+                .replaceAll("\\(", "")
+                .replaceAll("\\)", "")
+                .replace("+", "\\+");
 
-            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i)) && !Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText)){
+        if (!Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText))
+        for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
+
+            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))){
 
                 if (deviceMessageText.length() == 1){
                     SendMessage replyMessage = Response.createTextMessage(chatId
@@ -91,18 +94,7 @@ public class ProcessingUserMessage {
 
                 Set<Path> resultDeviceInfoList;
 
-                String directory = Paths.get(".")
-                        .toAbsolutePath()
-                        .normalize()
-                        .getParent()
-                        .resolve("outResources")
-                        .resolve("dataBaseProducts")
-                        .toString();
-
-                if (!Files.exists(Paths.get(directory))) {
-                    String separator = File.separator;
-                    directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts";
-                }
+                Path directory = BotData.outResources.resolve("dataBaseProducts");
 
                 resultDeviceInfoList = new Device().findInfo(messageText, directory);
 
@@ -136,19 +128,7 @@ public class ProcessingUserMessage {
 
             String heading = "Список доступных для поиска устройств:\n\nМобильная электроника:\n\n";
 
-            String directory = Paths.get(".")
-                    .toAbsolutePath()
-                    .normalize()
-                    .getParent()
-                    .resolve("outResources")
-                    .resolve("dataBaseProducts")
-                    .resolve("mobile")
-                    .toString();
-
-            if (!Files.exists(Paths.get(directory))) {
-                String separator = File.separator;
-                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile";
-            }
+            Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("mobile");
 
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
@@ -170,19 +150,7 @@ public class ProcessingUserMessage {
 
             String heading = "Список доступных для поиска устройств:\n\nТелевизоры:\n\n";
 
-            String directory = Paths.get(".")
-                    .toAbsolutePath()
-                    .normalize()
-                    .getParent()
-                    .resolve("outResources")
-                    .resolve("dataBaseProducts")
-                    .resolve("tv")
-                    .toString();
-
-            if (!Files.exists(Paths.get(directory))) {
-                String separator = File.separator;
-                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "tv";
-            }
+            Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("tv");
 
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
@@ -200,20 +168,7 @@ public class ProcessingUserMessage {
 
             String heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
 
-            String directory = Paths.get(".")
-                    .toAbsolutePath()
-                    .normalize()
-                    .getParent()
-                    .resolve("outResources")
-                    .resolve("dataBaseProducts")
-                    .resolve("appliances")
-                    .toString();
-
-            if (!Files.exists(Paths.get(directory))) {
-                String separator = File.separator;
-                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "appliances";
-            }
-
+            Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("appliances");
 
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
@@ -376,7 +331,7 @@ public class ProcessingUserMessage {
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
 
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(new BotData().getReadPromoInfoFileUrl());
+                    replyText.append(BotData.readPromoInfoFileUrl);
 
                     if (replyText.length() > 3500){
                        while (replyText.length() > 3500){
@@ -415,7 +370,7 @@ public class ProcessingUserMessage {
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
 
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(new BotData().getReadPromoInfoFileUrl());
+                    replyText.append(BotData.readPromoInfoFileUrl);
 
                     if (replyText.length() > 3500){
                         while (replyText.length() > 3500){
