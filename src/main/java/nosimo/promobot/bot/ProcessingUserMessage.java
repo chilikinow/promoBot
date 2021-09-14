@@ -68,18 +68,22 @@ public class ProcessingUserMessage {
         //поиск устройства
         var categoryDeviceList = new Device().getCategoryDeviceList();
         List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
-        for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-            String deviceMessageText = messageText
-                    .toLowerCase(Locale.ROOT)
-                    .replaceAll(" ", "")
-                    .replaceAll("galaxy", "")
-                    .replaceAll("samsung", "")
-                    .replaceAll("-", "")
-                    .replaceAll("_", "")
-                    .replaceAll("plus", "\\+")
-                    .replace("+", "\\+");
+        String deviceMessageText = messageText
+                .toLowerCase(Locale.ROOT)
+                .replaceAll(" ", "")
+                .replaceAll("galaxy", "")
+                .replaceAll("samsung", "")
+                .replaceAll("-", "")
+                .replaceAll("_", "")
+                .replaceAll("plus", "\\+")
+                .replaceAll("\\(", "")
+                .replaceAll("\\)", "")
+                .replace("+", "\\+");
 
-            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i)) && !Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText)){
+        if (!Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText))
+        for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
+
+            if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))){
 
                 if (deviceMessageText.length() == 1){
                     SendMessage replyMessage = Response.createTextMessage(chatId
