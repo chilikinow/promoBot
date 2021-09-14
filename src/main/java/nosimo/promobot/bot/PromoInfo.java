@@ -45,18 +45,6 @@ public class PromoInfo {
 
         Path PromoFilePath = BotData.outResources.resolve("Samsung_Календарь акций.xlsx");
 
-//        Path PromoFilePath = Paths.get(".")
-//                .toAbsolutePath()
-//                .normalize()
-//                .getParent()
-//                .resolve("outResources")
-//                .resolve("Samsung_Календарь акций.xlsx");
-//
-//        if (!Files.exists(PromoFilePath)) {
-//            String separator = File.separator;
-//            PromoFilePath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "Samsung_Календарь акций.xlsx");
-//        }
-
         workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
             workBook = new XSSFWorkbook(fIS);//получили книгу exel

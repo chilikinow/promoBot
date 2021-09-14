@@ -92,19 +92,6 @@ public class ProcessingUserMessage {
 
                 Path directory = BotData.outResources.resolve("dataBaseProducts");
 
-//                String directory = Paths.get(".")
-//                        .toAbsolutePath()
-//                        .normalize()
-//                        .getParent()
-//                        .resolve("outResources")
-//                        .resolve("dataBaseProducts")
-//                        .toString();
-//
-//                if (!Files.exists(Paths.get(directory))) {
-//                    String separator = File.separator;
-//                    directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts";
-//                }
-
                 resultDeviceInfoList = new Device().findInfo(messageText, directory);
 
                 if (!resultDeviceInfoList.isEmpty()) {
@@ -139,20 +126,6 @@ public class ProcessingUserMessage {
 
             Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("mobile");
 
-//            String directory = Paths.get(".")
-//                    .toAbsolutePath()
-//                    .normalize()
-//                    .getParent()
-//                    .resolve("outResources")
-//                    .resolve("dataBaseProducts")
-//                    .resolve("mobile")
-//                    .toString();
-//
-//            if (!Files.exists(Paths.get(directory))) {
-//                String separator = File.separator;
-//                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "mobile";
-//            }
-
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
@@ -175,20 +148,6 @@ public class ProcessingUserMessage {
 
             Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("tv");
 
-//            String directory = Paths.get(".")
-//                    .toAbsolutePath()
-//                    .normalize()
-//                    .getParent()
-//                    .resolve("outResources")
-//                    .resolve("dataBaseProducts")
-//                    .resolve("tv")
-//                    .toString();
-//
-//            if (!Files.exists(Paths.get(directory))) {
-//                String separator = File.separator;
-//                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "tv";
-//            }
-
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);
 
@@ -206,21 +165,6 @@ public class ProcessingUserMessage {
             String heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
 
             Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("appliances");
-
-//            String directory = Paths.get(".")
-//                    .toAbsolutePath()
-//                    .normalize()
-//                    .getParent()
-//                    .resolve("outResources")
-//                    .resolve("dataBaseProducts")
-//                    .resolve("appliances")
-//                    .toString();
-//
-//            if (!Files.exists(Paths.get(directory))) {
-//                String separator = File.separator;
-//                directory = "src" + separator + "main" + separator + "resources" + separator + "dataBaseProducts" + separator + "appliances";
-//            }
-
 
             String ending = "\nСписок устройств в процессе пополнения...";
             String replyTextMessage = new InfoCommand().create(heading, directory, ending);

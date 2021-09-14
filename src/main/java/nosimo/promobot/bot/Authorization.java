@@ -21,13 +21,6 @@ public class Authorization {
 
         Path userNameFile = BotData.outResources.resolve("users.txt");
 
-//        Path userNameFile = Paths.get(".")
-//                .toAbsolutePath()
-//                .normalize()
-//                .getParent()
-//                .resolve("outResources")
-//                .resolve("users.txt");
-
         try {
             userNameList = new ArrayList<>(Files.readAllLines(userNameFile));
         } catch (IOException e) {

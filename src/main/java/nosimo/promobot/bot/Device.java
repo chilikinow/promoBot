@@ -20,18 +20,6 @@ public class Device {
 
         Path directory = BotData.outResources.resolve("categoryDeviceForFind.txt");
 
-//        String directory = Paths.get(".")
-//                .toAbsolutePath()
-//                .normalize()
-//                .getParent()
-//                .resolve("outResources")
-//                .resolve("categoryDeviceForFind.txt").toString();
-//
-//        if (!Files.exists(Paths.get(directory))) {
-//            String separator = File.separator;
-//            directory = "src" + separator + "main" + separator + "resources" + separator + "categoryDeviceForFind.txt";
-//        }
-
         List<String> tempCategoryList = new ArrayList<>();
         try {
             tempCategoryList = new ArrayList<>(Files.readAllLines(directory));

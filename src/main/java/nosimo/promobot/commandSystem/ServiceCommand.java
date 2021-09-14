@@ -16,18 +16,6 @@ public class ServiceCommand {
 
         Path phonesInfoPropertiesFile = BotData.outResources.resolve("phonesInfo.properties");
 
-//        Path phonesInfoPropertiesFile = Paths.get(".")
-//                .toAbsolutePath()
-//                .normalize()
-//                .getParent()
-//                .resolve("outResources")
-//                .resolve("phonesInfo.properties");
-//
-//        if (!Files.exists(phonesInfoPropertiesFile)) {
-//            String separator = File.separator;
-//            phonesInfoPropertiesFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "phonesInfo.properties");
-//        }
-
         var phonesInfoProperties = new Properties();
         try {
             phonesInfoProperties.load(new FileReader(phonesInfoPropertiesFile.toFile()));
@@ -43,18 +31,6 @@ public class ServiceCommand {
         List<String> seviceInfoStringList =  new ArrayList<>();
 
         Path serviceInfoFile = BotData.outResources.resolve("serviceInfo.txt");
-
-//        Path serviceInfoFile = Paths.get(".")
-//                .toAbsolutePath()
-//                .normalize()
-//                .getParent()
-//                .resolve("outResources")
-//                .resolve("serviceInfo.txt");
-//
-//        if (!Files.exists(serviceInfoFile)) {
-//            String separator = File.separator;
-//            serviceInfoFile = Paths.get("src" + separator + "main" + separator + "resources" + separator + "serviceInfo.txt");
-//        }
 
         try {
             seviceInfoStringList = new ArrayList<>(Files.readAllLines(serviceInfoFile));
