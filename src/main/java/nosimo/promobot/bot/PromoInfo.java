@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,14 +22,10 @@ public class PromoInfo {
     private PromoInfo(){
     }
 
-    static {
-//        updateWorkbook();
-    }
-
     public static void updateWorkbook(){
         addWorkbook();
-        promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,0));
-        promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,1));
+        promoMobileTVMap = new HashMap<>(addSpecialMap(workBook,"Календарь"));
+        promoAppliancesMap = new HashMap<>(addSpecialMap(workBook,"Акции_БТ"));
     }
 
     public static Map<String, String> getInstancePromoMobileTV(){
@@ -46,18 +43,19 @@ public class PromoInfo {
         promoMobileTVMap = new HashMap<>();
         promoAppliancesMap = new HashMap<>();
 
-        Path PromoFilePath = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("Samsung_Календарь акций.xlsx");
+        Path PromoFilePath = BotData.outResources.resolve("Samsung_Календарь акций.xlsx");
 
-        if (!Files.exists(PromoFilePath)) {
-            String separator = File.separator;
-            PromoFilePath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "Samsung_Календарь акций.xlsx");
-        }
-
+//        Path PromoFilePath = Paths.get(".")
+//                .toAbsolutePath()
+//                .normalize()
+//                .getParent()
+//                .resolve("outResources")
+//                .resolve("Samsung_Календарь акций.xlsx");
+//
+//        if (!Files.exists(PromoFilePath)) {
+//            String separator = File.separator;
+//            PromoFilePath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "Samsung_Календарь акций.xlsx");
+//        }
 
         workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {
@@ -69,10 +67,12 @@ public class PromoInfo {
         }
     }
 
-    private static Map<String, String> addSpecialMap(XSSFWorkbook workBook, int sheetNumber) {
+    private static Map<String, String> addSpecialMap(XSSFWorkbook workBook, String sheetName) {
 
         //создание map, key 0я ячейка строки (За исключением 0й строки), value конкатинация содержимого всех
         //не пустых ячеек тойже строки
+
+        int sheetNumber = workBook.getSheetIndex(sheetName);
 
         //получили страницу книги
         XSSFSheet sheet = workBook.getSheetAt(sheetNumber);
@@ -116,7 +116,6 @@ public class PromoInfo {
             map.put(cellList.get(0).getStringCellValue().trim(), valueForMap.toString());
         }
 
-
 //            блок для проверки вывода Map в консоль
 //            for (Map.Entry<String, String> entry: map.entrySet()){
 //                StringBuilder mapToString = new StringBuilder();
@@ -131,7 +130,6 @@ public class PromoInfo {
         return map;
     }
 
-    //Singleton
     public static Map<String, String> getDiscountsOnThePriceDropPromoMap(){
         Map<String, String> onePromoMap = new TreeMap<>();
         onePromoMap = addDiscountsOnThePriceDropPromoMap(workBook, 5);

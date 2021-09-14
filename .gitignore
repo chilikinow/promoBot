@@ -1,8 +1,8 @@
 /.idea/
-/src/main/resources/botData.properties
-/src/main/resources/phonesInfo.properties
-/src/main/resources/Samsung_Календарь акций.xlsx
-/src/main/resources/
+/src/main/resources2/botData.properties
+/src/main/resources2/phonesInfo.properties
+/src/main/resources2/Samsung_Календарь акций.xlsx
+/src/main/resources2/
 /out/
 /target/
 /src/test/java/nosimo/promobot/bot/

@@ -1,11 +1,13 @@
 package nosimo.promobot.commandSystem;
 
 import nosimo.promobot.bot.Device;
+
+import java.nio.file.Path;
 import java.util.Set;
 
 public class InfoCommand{
 
-    public String create(String heading, String directory, String ending) {
+    public String create(String heading, Path directory, String ending) {
 
         StringBuilder response = new StringBuilder();
         response.append(heading);

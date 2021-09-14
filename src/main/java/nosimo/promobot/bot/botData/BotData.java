@@ -5,7 +5,6 @@ import com.jayway.jsonpath.JsonPath;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,49 +14,61 @@ import java.nio.file.Paths;
 
 public class BotData {
 
-    private String botName;
-    private String botToken;
-    private String botPassword;
-    private String bonusBaseURI;
-    private String bonusUserName;
-    private String bonusPassword;
-    private String readPromoInfoFileUrl;
-    private String downloadPromoInfoFileUrl;
+    public final static Path outResources;
+    public final static String botName;
+    public final static String botToken;
+    public final static String botPassword;
+    public final static String bonusBaseURI;
+    public final static String bonusUserName;
+    public final static String bonusPassword;
+    public static String readPromoInfoFileUrl;
+    public static String downloadPromoInfoFileUrl;
 
-    public BotData(){
-        init();
-    }
+    static {
+        Path outResourcesCheck;
 
-    private void init(){
-
-        Path botInfoPath = Paths.get(".")
+        outResourcesCheck = Paths.get(".")
                 .toAbsolutePath()
                 .normalize()
                 .getParent()
-                .resolve("outResources")
-                .resolve("botData.json");
+                .resolve("outResources");
 
-        if (!Files.exists(botInfoPath)) {
-            String separator = File.separator;
-            botInfoPath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.json");
+        if (!Files.exists(outResourcesCheck)) {
+            outResourcesCheck = Paths.get("/Users/OlegChilikin/IdeaProjects/outResources");
         }
+
+        outResources = outResourcesCheck;
+
+        Path botInfoPath = outResources.resolve("botData.json");
+
+//        Path botInfoPath = Paths.get(".")
+//                .toAbsolutePath()
+//                .normalize()
+//                .getParent()
+//                .resolve("outResources")
+//                .resolve("botData.json");
+//
+//        if (!Files.exists(botInfoPath)) {
+//            String separator = File.separator;
+//            botInfoPath = Paths.get("src" + separator + "main" + separator + "resources" + separator + "botData.json");
+//        }
 
         //Jackson
 
-        BotInfoForJackson botInfo = new BotInfoForJackson();
+        var botInfo = new BotInfoForJackson();
         try {
             botInfo = new ObjectMapper().readValue(botInfoPath.toFile(), BotInfoForJackson.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.botName = botInfo.getAuthorizationBot().getUserName();
-        this.botToken = botInfo.getAuthorizationBot().getToken();
-        this.botPassword = botInfo.getAuthorizationBot().getPassword();
+        botName = botInfo.getAuthorizationBot().getUserName();
+        botToken = botInfo.getAuthorizationBot().getToken();
+        botPassword = botInfo.getAuthorizationBot().getPassword();
 
         //Json Simple
 
-        JSONObject objectRoot = new JSONObject();
+        var objectRoot = new JSONObject();
         try {
             objectRoot = (JSONObject) new JSONParser().parse(new FileReader(botInfoPath.toFile()));
         } catch (IOException e) {
@@ -66,52 +77,18 @@ public class BotData {
             ex.printStackTrace();
         }
 
-        JSONObject objectBonusCardSystem = (JSONObject) objectRoot.get("bonusCardSystem");
-        this.bonusBaseURI = (String) objectBonusCardSystem.get("uri");
-        this.bonusUserName = (String) objectBonusCardSystem.get("userName");
-        this.bonusPassword = (String) objectBonusCardSystem.get("password");
+        var objectBonusCardSystem = (JSONObject) objectRoot.get("bonusCardSystem");
+        bonusBaseURI = (String) objectBonusCardSystem.get("uri");
+        bonusUserName = (String) objectBonusCardSystem.get("userName");
+        bonusPassword = (String) objectBonusCardSystem.get("password");
 
         //JsonPath
 
         try {
-            this.readPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.readUri");
-            this.downloadPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.downloadFileUri");
+            readPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.readUri");
+            downloadPromoInfoFileUrl = JsonPath.read(botInfoPath.toFile(), "$.promoInfoFile.downloadFileUri");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
-    public String getReadPromoInfoFileUrl() {
-        return readPromoInfoFileUrl;
-    }
-
-    public String getDownloadPromoInfoFileUrl() {
-        return downloadPromoInfoFileUrl;
-    }
-
-    public String getBotName() {
-        return botName;
-    }
-
-    public String getBotToken() {
-        return botToken;
-    }
-
-    public String getBotPassword() {
-        return botPassword;
-    }
-
-    public String getBonusBaseURI() {
-        return bonusBaseURI;
-    }
-
-    public String getBonusUserName() {
-        return bonusUserName;
-    }
-
-    public String getBonusPassword() {
-        return bonusPassword;
-    }
-
 }

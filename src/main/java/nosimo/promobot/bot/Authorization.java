@@ -1,9 +1,7 @@
 package nosimo.promobot.bot;
 
-import org.telegram.telegrambots.meta.api.objects.Message;
+import nosimo.promobot.bot.botData.BotData;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,12 +19,14 @@ public class Authorization {
 
         List<String> userNameList = new ArrayList<>();
 
-        Path userNameFile = Paths.get(".")
-                .toAbsolutePath()
-                .normalize()
-                .getParent()
-                .resolve("outResources")
-                .resolve("users.txt");
+        Path userNameFile = BotData.outResources.resolve("users.txt");
+
+//        Path userNameFile = Paths.get(".")
+//                .toAbsolutePath()
+//                .normalize()
+//                .getParent()
+//                .resolve("outResources")
+//                .resolve("users.txt");
 
         try {
             userNameList = new ArrayList<>(Files.readAllLines(userNameFile));
@@ -57,4 +57,44 @@ public class Authorization {
 
         return false;
     }
+
+    //    public void authorizationUserWithPass(){
+//
+//        if (this.message.getText().equals("/start")){
+//            this.messageCounter = 1;
+//            this.pass = false;
+//        }
+//
+//        if (this.messageCounter == 1) {
+//
+//            var replyMessage = Response.createTextMessage(this.message
+//                    ,new StartCommand().create() + "\n\n\nВведите пароль:");
+//            sendReply(replyMessage);
+//
+//            this.messageCounter++;
+//
+//            PromoInfo.updateWorkbook();
+//
+//            return;
+//        }
+//
+//        //Финальная часть авторизации
+//        if (this.messageCounter == 2) {
+//            if (botPassword.equals(this.message.getText())) {
+//                this.pass = true;
+//                var replyMessage = Response.createTextMessage(this.message,
+//                        "Доступ Разрешен...\n\n");
+//                sendReply(replyMessage);
+//                this.messageCounter++;
+//            }
+//            else {
+//                var replyMessage = Response.createTextMessage(this.message,
+//                        "Пароль не от этого Бота, попробуйте другой...:\n");
+//                sendReply(replyMessage);
+//                this.messageCounter = 2;
+//            }
+//            return;
+//        }
+//    }
+
 }
