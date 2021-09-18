@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import nosimo.promobot.bot.authorization.AuthorizationWithUsername;
 import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
@@ -7,10 +8,8 @@ import nosimo.promobot.commandSystem.StartCommand;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import java.io.File;
-import java.nio.file.Files;
+
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -75,12 +74,12 @@ public class ProcessingUserMessage {
                 .replaceAll("samsung", "")
                 .replaceAll("-", "")
                 .replaceAll("_", "")
+                .replaceAll("wifi", "")
+                .replaceAll("lte", "")
                 .replaceAll("plus", "\\+")
-                .replaceAll("\\(", "")
-                .replaceAll("\\)", "")
                 .replace("+", "\\+");
 
-        if (!Pattern.matches(".*\\p{InCyrillic}.*", deviceMessageText))
+        if (deviceMessageText.length() < 20)
         for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
 
             if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))){
@@ -198,7 +197,7 @@ public class ProcessingUserMessage {
         if (messageText.equals("Программа Лояльности")
                 || messageText.equals("/bonus_card")) {
 
-            if (!Authorization.pass(userName)){
+            if (!AuthorizationWithUsername.pass(userName)){
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
@@ -226,7 +225,7 @@ public class ProcessingUserMessage {
         //Если ввели номер телефона
         if (bonusMessageText.startsWith("9") && bonusMessageText.length() == 10) {
 
-            if (!Authorization.pass(userName)){
+            if (!AuthorizationWithUsername.pass(userName)){
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
@@ -250,7 +249,7 @@ public class ProcessingUserMessage {
         if ((bonusMessageText.startsWith("20") || bonusMessageText.startsWith("10"))
                 && (bonusMessageText.length() == 10) || (bonusMessageText.length() == 11)){
 
-            if (!Authorization.pass(userName)){
+            if (!AuthorizationWithUsername.pass(userName)){
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }

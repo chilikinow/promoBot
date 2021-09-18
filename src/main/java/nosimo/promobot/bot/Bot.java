@@ -60,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
             this.userName = "UNKNOWN_User";
         }
 
-        this.pass = true; //new Authorization().pass(this.userName);
+        this.pass = true; //new AuthorizationWithUsername().pass(this.userName);
 
         if (this.pass) {
             Object replyMessage =  new ProcessingUserMessage().searchAnswer(this.chatId, this.userName, this.messageText);
