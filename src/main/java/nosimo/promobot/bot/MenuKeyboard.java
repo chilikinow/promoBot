@@ -63,7 +63,7 @@ public class MenuKeyboard {
 
         keyboard.clear();
 
-        List<String> buttonList = new ArrayList<>(new StartMenu().getList());
+        List<String> buttonList = new ArrayList<>(StartMenu.menuList);
 
         KeyboardRow keyboardRowBuffer = new KeyboardRow();
         for (int i = 0; i < 2; i++) {
@@ -139,7 +139,7 @@ public class MenuKeyboard {
 
     private InlineKeyboardMarkup createStartMenuWithIKM(){
 
-        List<String> buttonList = new ArrayList<>(new StartMenu().getList());
+        List<String> buttonList = new ArrayList<>(StartMenu.menuList);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();

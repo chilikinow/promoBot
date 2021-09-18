@@ -1,27 +1,19 @@
 package nosimo.promobot.bot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StartMenu {
 
-    private List<String> startMenuList;
+    public static List<String> menuList;
 
-    {
-        this.startMenuList = new ArrayList<>();
-
-        this.startMenuList.add("Акции БТ");
-        this.startMenuList.add("Акции Мобайл ТВ");
-        this.startMenuList.add("Характеристики устройств");
-        this.startMenuList.add("Инфо БТ");
-        this.startMenuList.add("Инфо Мобайл");
-        this.startMenuList.add("Инфо ТВ");
-        this.startMenuList.add("Программа Лояльности");
-        this.startMenuList.add("Сервис");
+    static {
+        menuList = List.of("Акции БТ"
+                , "Акции Мобайл ТВ"
+                , "Характеристики устройств"
+                , "Инфо БТ"
+                , "Инфо Мобайл"
+                , "Инфо ТВ"
+                , "Программа Лояльности"
+                , "Сервис");
     }
-
-    public List<String> getList(){
-        return startMenuList;
-    }
-
 }
