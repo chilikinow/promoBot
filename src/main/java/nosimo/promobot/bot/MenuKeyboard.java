@@ -39,6 +39,7 @@ public class MenuKeyboard {
         replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
 
         List<String> buttonList = new ArrayList<>(mapKeySet);
+        buttonList.add("Назад");
 
         keyboard.clear();
 
