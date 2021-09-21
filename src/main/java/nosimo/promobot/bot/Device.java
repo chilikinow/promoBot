@@ -1,10 +1,8 @@
 package nosimo.promobot.bot;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,32 +13,24 @@ import org.apache.commons.io.FilenameUtils;
 public class Device {
 
     private Set<String> categoryDeviceList;
-
     public Set<String> getCategoryDeviceList(){
-
         Path directory = BotData.outResources.resolve("categoryDeviceForFind.txt");
-
         List<String> tempCategoryList = new ArrayList<>();
         try {
             tempCategoryList = new ArrayList<>(Files.readAllLines(directory));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         this.categoryDeviceList = new TreeSet<>();
-
         for (String tempCategoryName: tempCategoryList){
             if (!tempCategoryName.equals("")) {
                 this.categoryDeviceList.add(tempCategoryName.toLowerCase(Locale.ROOT));
             }
         }
-
         return categoryDeviceList;
     }
 
     public Set<Path> findInfo(String messageText, Path directory){
-
         messageText = messageText
                 .toLowerCase(Locale.ROOT)
                 .replaceAll(" ", "")
@@ -50,9 +40,7 @@ public class Device {
                 .replaceAll("_", "")
                 .replaceAll("plus", "\\+")
                 .replace("+", "\\+");
-
         Set<Path> deviceInfoFilesList = new TreeSet<>();
-
         try {
             deviceInfoFilesList = Files.walk(directory)
                     .filter(Files::isRegularFile)
@@ -60,7 +48,6 @@ public class Device {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Set<Path> resultDeviceInfoList = new TreeSet<>();
         for (Path deviceInfoFile : deviceInfoFilesList){
             String tempDeviceInfoFile = deviceInfoFile.getFileName().toString();
@@ -75,25 +62,19 @@ public class Device {
                 resultDeviceInfoList.add(deviceInfoFile);
             }
         }
-
         return resultDeviceInfoList;
     }
 
     public Set<String> getFilesName(Path directory){
-
         Set<Path> filesList = new TreeSet<>();
-
         try {
             filesList =  Files.walk(directory)
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toSet());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Set<String> filesNamesList = new TreeSet<>();
-
         for(Path deviceInfo : filesList){
             String bufferFileName = deviceInfo.getFileName().toString();
 //            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");
@@ -101,7 +82,6 @@ public class Device {
             if (!bufferFileName.equals(""))
                 filesNamesList.add(bufferFileName);
         }
-
         return filesNamesList;
     }
 }
