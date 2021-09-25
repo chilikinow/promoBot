@@ -1,14 +1,10 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.function.Executable;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 import java.time.Duration;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
