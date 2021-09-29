@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.time.Duration;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,48 +27,9 @@ class ProcessingUserMessageTest {
     @Test
     void searchAnswerShouldReturnStartInfoText() {
         messageText = "/start";
-        expectedText = "Приветствую!\n" +
-                "\n" +
-                "Бот позволяет оперативно узнать актуальную информацию о проходящих в компании маркетинговых акциях, а так же узнать подробные характеристики запрашиваемой техники\n" +
-                "\n" +
-                "[ Акции Мобайл ТВ ]\n" +
-                "\n" +
-                "перечень актуальных акций\n" +
-                "\n" +
-                "- Смартфоны\n" +
-                "- Планшеты\n" +
-                "- Носимые устройства\n" +
-                "\n" +
-                "[ Акции Бытовая техника ]\n" +
-                "\n" +
-                "перечень актуальных акций\n" +
-                "\n" +
-                "- Стиральные машины\n" +
-                "- Холодильники\n" +
-                "- Пылесосы\n" +
-                "- Микроволновки\n" +
-                "- Духовые шкафы\n" +
-                "- Варочные панели\n" +
-                "\n" +
-                "[ Характеристики устройств ]\n" +
-                "\n" +
-                "поиск технических характеристик и USP\n" +
-                "\n" +
-                "[ Инфо БТ ] [ Инфо Мобайл ] [ Инфо ТВ ]\n" +
-                "\n" +
-                "список устройств, доступных для быстрого поиска (постоянно пополняется)\n" +
-                "\n" +
-                "[ Программа Лояльности ]\n" +
-                "\n" +
-                "запрос информации по бонусной карте Клиента\n" +
-                "\n" +
-                "[ Сервис ]\n" +
-                "\n" +
-                "справочная информация Сервисных служб Samsung\n" +
-                "\n" +
-                "Стартовое меню: /start_menu";
+        expectedText = "Приветствую!";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertEquals(expectedText, result.getText());
+        assertThat(result.getText()).as(expectedText);
     }
 
     @Test
@@ -74,7 +37,7 @@ class ProcessingUserMessageTest {
         messageText = "/start_menu";
         expectedText = "Стартовое меню: /start_menu";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertThat(result.getText()).isEqualTo(expectedText);
+        assertThat(result.getText()).as(expectedText);
     }
 
     @Test
@@ -82,7 +45,7 @@ class ProcessingUserMessageTest {
         messageText = "Назад";
         expectedText = "Стартовое меню: /start_menu";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertThat(result.getText()).isEqualTo(expectedText);
+        assertThat(result.getText()).as(expectedText);
     }
 
     @Test
@@ -91,7 +54,7 @@ class ProcessingUserMessageTest {
         expectedText = "Список акций интернет магазина:\n" +
                 "https://galaxystore.ru/promo/";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertThat(result.getText()).isEqualTo(expectedText);
+        assertThat(result.getText()).as(expectedText);
     }
 
     @Test
@@ -138,41 +101,95 @@ class ProcessingUserMessageTest {
     }
 
     @Test
-    void searchAnswerShouldReturnInfoBT() {
+    void searchAnswerShouldReturnAppliancesInfo() {
         messageText = "Инфо БТ";
         expectedText = "Список доступных для поиска устройств:\n" +
                 "\n" +
-                "Бытовая техника:\n" +
-                "\n" +
-                "RB3000 RB33J\n" +
-                "RB5000 RB37J\n" +
-                "RB6000 RB34K:RB37K\n" +
-                "RB:RF:RH:RS:RT:RR:RZ:RQ:BRB\n" +
-                "\n" +
-                "Список устройств в процессе пополнения...\n" +
-                "\n" +
-                "Стартовое меню: /start_menu";
+                "Бытовая техника:";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertThat(result.getText()).isEqualTo(expectedText);
+        assertThat(result.getText()).as(expectedText);
     }
 
     @Test
-    void whenCommandsearchAnswerShouldReturnInfoBT() {
+    void whenCommandsearchAnswerShouldReturnAppliancesInfo() {
         messageText = "/appliances_info";
         expectedText = "Список доступных для поиска устройств:\n" +
                 "\n" +
-                "Бытовая техника:\n" +
-                "\n" +
-                "RB3000 RB33J\n" +
-                "RB5000 RB37J\n" +
-                "RB6000 RB34K:RB37K\n" +
-                "RB:RF:RH:RS:RT:RR:RZ:RQ:BRB\n" +
-                "\n" +
-                "Список устройств в процессе пополнения...\n" +
-                "\n" +
-                "Стартовое меню: /start_menu";
+                "Бытовая техника:";
         result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-        assertThat(result.getText()).isEqualTo(expectedText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void searchAnswerShouldReturnMobileInfo() {
+        messageText = "Инфо Мобайл";
+        expectedText = "Список доступных для поиска устройств:\n" +
+                "\n" +
+                "Мобильная электроника:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void whenCommandsearchAnswerShouldReturnMobileInfo() {
+        messageText = "/mobile_info";
+        expectedText = "Список доступных для поиска устройств:\n" +
+                "\n" +
+                "Мобильная электроника:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void searchAnswerShouldReturnTVInfo() {
+        messageText = "Инфо ТВ";
+        expectedText = "Список доступных для поиска устройств:\n" +
+                "\n" +
+                "Мобильная электроника:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void whenCommandsearchAnswerShouldReturnTVInfo() {
+        messageText = "/tv_info";
+        expectedText = "Список доступных для поиска устройств:\n" +
+                "\n" +
+                "Мобильная электроника:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void searchAnswerShouldReturnBonusQuestion() {
+        messageText = "Программа Лояльности";
+        expectedText = "Введите номер телефона или бонусной карты:";
+        var listResult = (List<SendMessage>) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(listResult.get(listResult.size()-1).getText()).contains(expectedText);
+    }
+
+    @Test
+    void whenCommandsearchAnswerShouldReturnBonusQuestion() {
+        messageText = "/bonus_card";
+        expectedText = "Введите номер телефона или бонусной карты:";
+        var listResult = (List<SendMessage>) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(listResult.get(listResult.size()-1).getText()).contains(expectedText);
+    }
+
+    @Test
+    void searchAnswerShouldReturnServiceInfo() {
+        messageText = "Сервис";
+        expectedText = "При обращении в ремонт – направьте клиента:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
+    }
+
+    @Test
+    void whenCommandsearchAnswerShouldReturnServiceInfo() {
+        messageText = "/service";
+        expectedText = "При обращении в ремонт – направьте клиента:";
+        result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+        assertThat(result.getText()).as(expectedText);
     }
 
 //    @Test
