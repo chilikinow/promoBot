@@ -25,7 +25,7 @@ class ProcessingUserMessageTest {
     }
 
 
-    @Tag("functionality")
+    @Tag("functional")
     @Nested
     @DisplayName("functional test")
     class functionalTest{
