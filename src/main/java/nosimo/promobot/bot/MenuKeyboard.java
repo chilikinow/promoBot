@@ -13,23 +13,27 @@ public class MenuKeyboard {
 //        return createStartMenuWithIKM();
     }
 
+    public ReplyKeyboardMarkup getInfoMenu(){
+        return createInfoMenuWithRKM();
+    }
+
     public ReplyKeyboardMarkup getMobileTVPromoMenu(){
 
-        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoMobileTV().keySet());
+        List<String> list = new ArrayList<>(PromoInfo.getInstancePromoMobileTV().keySet());
 
-        return createPromoMenuRKM(set);
+        return createPromoMenuRKM(list);
 //        return createPromoMenuIKM(set);
     }
 
     public ReplyKeyboardMarkup getAppliancesMenu(){
 
-        Set<String> set = new HashSet<>(PromoInfo.getInstancePromoAppliances().keySet());
+        List<String> list = new ArrayList<>(PromoInfo.getInstancePromoAppliances().keySet());
 
-        return createPromoMenuRKM(set);
+        return createPromoMenuRKM(list);
 //        return createPromoMenuIKM(set);
     }
 
-    private ReplyKeyboardMarkup createPromoMenuRKM(Set mapKeySet){
+    private ReplyKeyboardMarkup createPromoMenuRKM(List<String> mapKeyList){
 
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -38,7 +42,7 @@ public class MenuKeyboard {
         replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
         replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
 
-        List<String> buttonList = new ArrayList<>(mapKeySet);
+        List<String> buttonList = new ArrayList<>(mapKeyList);
         buttonList.add("Назад");
 
         keyboard.clear();
@@ -72,32 +76,40 @@ public class MenuKeyboard {
         }
         keyboard.add(keyboardRowBuffer);
 
-        keyboardRowBuffer = new KeyboardRow();
-        for (int i = 2; i <= 2; i++) {
+        for (int i = 2; i < buttonList.size(); i++) {
+            keyboardRowBuffer = new KeyboardRow();
             keyboardRowBuffer.add(buttonList.get(i));
+            keyboard.add(keyboardRowBuffer);
         }
-        keyboard.add(keyboardRowBuffer);
-
-        keyboardRowBuffer = new KeyboardRow();
-        for (int i = 3; i <= 5; i++) {
-            keyboardRowBuffer.add(buttonList.get(i));
-        }
-        keyboard.add(keyboardRowBuffer);
-
-        keyboardRowBuffer = new KeyboardRow();
-        for (int i = 6; i <= 6; i++) {
-            keyboardRowBuffer.add(buttonList.get(i));
-        }
-        keyboard.add(keyboardRowBuffer);
-
-        keyboardRowBuffer = new KeyboardRow();
-        for (int i = 7; i <= 7; i++) {
-            keyboardRowBuffer.add(buttonList.get(i));
-        }
-        keyboard.add(keyboardRowBuffer);
-
         replyKeyboardMarkup.setKeyboard(keyboard);
+        return replyKeyboardMarkup;
+    }
 
+    private ReplyKeyboardMarkup createInfoMenuWithRKM(){
+
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        replyKeyboardMarkup.setResizeKeyboard(false);//размер клавиатуры адаптируется под количество клавиш
+        replyKeyboardMarkup.setOneTimeKeyboard(true);//скрыть клавиатуру после использования
+        replyKeyboardMarkup.setSelective(false);//персонолизация клавиатуры
+
+        keyboard.clear();
+
+        List<String> buttonList = new ArrayList<>(InfoMenu.menuList);
+
+        KeyboardRow keyboardRowBuffer = new KeyboardRow();
+
+//        for (int i = 0; i < 2; i++) {
+//            keyboardRowBuffer.add(buttonList.get(i));
+//        }
+//        keyboard.add(keyboardRowBuffer);
+
+        for (int i = 0; i < buttonList.size(); i++) {
+            keyboardRowBuffer = new KeyboardRow();
+            keyboardRowBuffer.add(buttonList.get(i));
+            keyboard.add(keyboardRowBuffer);
+        }
+        replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
 

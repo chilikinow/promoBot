@@ -1,5 +1,6 @@
 package nosimo.promobot.bot;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -12,7 +13,6 @@ public class Response {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId.toString());
-//        sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.enableMarkdown(false);
         sendMessage.setText(text);
 
@@ -23,7 +23,6 @@ public class Response {
 
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId.toString());
-//        sendPhoto.setReplyToMessageId(message.getMessageId());
         sendPhoto.setPhoto(new InputFile(new File(path)));
 
         return sendPhoto;
@@ -35,6 +34,22 @@ public class Response {
         sendPhoto.setCaption(text);
 
         return sendPhoto;
+    }
+
+    public static SendDocument createDocumentMessage(Long chatId, String path){
+
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setChatId(chatId.toString());
+        sendDocument.setDocument(new InputFile(new File(path)));
+        return sendDocument;
+    }
+
+    public static SendDocument createDocumentMessage(Long chatId, String text, String path){
+
+        SendDocument sendDocument = createDocumentMessage(chatId, path);
+        sendDocument.setCaption(text);
+
+        return sendDocument;
     }
 
     public static SendMessage createTextMessageWithKeyboardIKM(Long chatId, String text, String buttonName, String callbackData){
@@ -53,6 +68,10 @@ public class Response {
             sendMessage.setReplyMarkup(new MenuKeyboard().getStartMenu());
             return sendMessage;
         }
+        if (typeKeyboard == TypeKeyboard.INFO) {
+            sendMessage.setReplyMarkup(new MenuKeyboard().getInfoMenu());
+            return sendMessage;
+        }
         if (typeKeyboard == TypeKeyboard.PROMO_MOBILE_TV){
             sendMessage.setReplyMarkup(new MenuKeyboard().getMobileTVPromoMenu());
             return sendMessage;
@@ -67,8 +86,8 @@ public class Response {
 
     public enum TypeKeyboard{
         START,
+        INFO,
         PROMO_APPLIANCES,
         PROMO_MOBILE_TV
-
     }
 }

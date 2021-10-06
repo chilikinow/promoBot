@@ -34,7 +34,7 @@ public class DetailedProcessingUserMessage {
 
         //поиск устройства
 
-        String deviceMessageText = messageText
+        String infoCardName = messageText
                 .toLowerCase(Locale.ROOT)
                 .replaceAll(" ", "")
                 .replaceAll("galaxy", "")
@@ -46,12 +46,12 @@ public class DetailedProcessingUserMessage {
                 .replaceAll("plus", "\\+")
                 .replace("+", "\\+");
 
-        if (deviceMessageText.length() < 15){
+        if (infoCardName.length() < 15){
             var categoryDeviceList = new Device().getCategoryDeviceList();
             List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
             for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
-                if (deviceMessageText.startsWith(bufferCategoryDeviceList.get(i))) {
-                    if (deviceMessageText.length() == 1) {
+                if (infoCardName.startsWith(bufferCategoryDeviceList.get(i))) {
+                    if (infoCardName.length() == 1) {
                         SendMessage replyMessage = Response.createTextMessage(chatId
                                 , "Уточните модель:");
                         return replyMessage;
@@ -60,7 +60,7 @@ public class DetailedProcessingUserMessage {
                     Path directory = BotData.outResources.resolve("dataBaseProducts");
                     resultDeviceInfoList = new Device().findInfo(messageText, directory);
                     if (!resultDeviceInfoList.isEmpty()) {
-                        for (Path resultDeviseInfo : resultDeviceInfoList) {
+                        for (Path resultDeviseInfo : resultDeviceInfoList){
                             SendPhoto replyPhoto = Response.createPhotoMessage(chatId,
                                     FilenameUtils.removeExtension(resultDeviseInfo.getFileName().toString()),
                                     resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());

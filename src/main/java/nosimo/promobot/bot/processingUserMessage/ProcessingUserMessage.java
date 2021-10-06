@@ -6,8 +6,11 @@ import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
 import nosimo.promobot.commandSystem.StartCommand;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,6 +20,7 @@ public class ProcessingUserMessage {
     public static String startButtonInfo;
     private List<Object> replyMessageList;
     private SendMessage replyMessage;
+    private SendDocument replyDocument;
 
     {
         startButtonInfo = "Стартовое меню: /start_menu";
@@ -56,14 +60,21 @@ public class ProcessingUserMessage {
                 return replyMessage;
 
             case "Характеристики устройств": // Поиск подробной информации об устройстве
-            case "/device_info":
+            case "/devices":
 
                 SendMessage replyMessage = Response.createTextMessage(chatId,
                         "Введите название устройства:");
                 return replyMessage;
 
-            case "Инфо Мобайл": // Запрос списка устройств для поиска
-            case "/mobile_info":
+            case "Что можно быстро найти?":
+            case "/info":
+                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                        , "Доступные для поиска категории:"
+                        , Response.TypeKeyboard.INFO);
+                return replyMessage;
+
+            case "Мобильная техника": // Запрос списка устройств для поиска
+            case "/mobile":
 
                 String heading = "Список доступных для поиска устройств:\n\nМобильная электроника:\n\n";
                 Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("mobile");
@@ -78,8 +89,8 @@ public class ProcessingUserMessage {
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
-            case "Инфо ТВ":
-            case "/tv_info":
+            case "Телевизоры":
+            case "/tv":
 
                 heading = "Список доступных для поиска устройств:\n\nТелевизоры:\n\n";
                 directory = BotData.outResources.resolve("dataBaseProducts").resolve("tv");
@@ -90,8 +101,8 @@ public class ProcessingUserMessage {
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
-            case "Инфо БТ": // Запрос акций по Бытовой технике
-            case "/appliances_info":
+            case "Бытовая техника": // Запрос акций по Бытовой технике
+            case "/appliances":
 
                 heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
                 directory = BotData.outResources.resolve("dataBaseProducts").resolve("appliances");
@@ -153,5 +164,12 @@ public class ProcessingUserMessage {
                 ,"Команда не найдена!" + "\n\n" + startButtonInfo
                 ,Response.TypeKeyboard.START);
         return replyMessage;
+
+//      для отправки pdf документов
+
+//        replyDocument = Response.createDocumentMessage(chatId
+//                , "test"
+//                , BotData.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
+//        return replyDocument;
     }
 }

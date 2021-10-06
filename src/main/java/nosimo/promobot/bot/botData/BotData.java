@@ -2,6 +2,7 @@ package nosimo.promobot.bot.botData;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import nosimo.promobot.Main;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -34,7 +35,7 @@ public class BotData {
                 .resolve("outResources");
 
         if (!Files.exists(outResourcesCheck)) {
-            outResourcesCheck = Paths.get("C:\\promoBot\\outResources");
+            outResourcesCheck = Paths.get(Main.resourcesRoad);
         }
 
         outResources = outResourcesCheck;

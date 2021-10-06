@@ -6,7 +6,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
+    public static String resourcesRoad;
     public static void main(String[] args) {
+
+        if (args.length != 0)
+            resourcesRoad = args[0];
+        else
+            resourcesRoad = "";
+
         Bot bot = new Bot();
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);

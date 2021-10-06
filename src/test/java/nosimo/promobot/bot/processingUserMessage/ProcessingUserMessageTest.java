@@ -1,7 +1,5 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import lombok.Data;
-import org.apache.batik.gvt.event.AWTEventDispatcher;
 import org.junit.jupiter.api.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.time.Duration;
@@ -23,6 +21,11 @@ class ProcessingUserMessageTest {
         chatId = new Long(123456789);
         username = "test_pass_username";
     }
+
+//    @Test
+//    void failerTest(){
+//        assertTrue(false);
+//    }
 
 
     @Tag("functional")
@@ -199,6 +202,7 @@ class ProcessingUserMessageTest {
             assertThat(listResult.get(listResult.size() - 1).getText()).contains(expectedText);
         }
 
+
         @Test
         @DisplayName("search answer should return service info")
         void searchAnswerShouldReturnServiceInfo() {
@@ -216,14 +220,6 @@ class ProcessingUserMessageTest {
             result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
             assertThat(result.getText()).as(expectedText);
         }
-
-//    @Test
-//    void searchAnswerShouldReturn() {
-//        String messageText = "";
-//        String expectedText = "";
-//        SendMessage result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
-//        assertThat(result.getText()).isEqualTo(expectedText);
-//    }
     }
 
     @Tag("speed")

@@ -3,6 +3,7 @@ package nosimo.promobot.bot;
 import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.bot.processingUserMessage.ProcessingUserMessage;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -86,7 +87,8 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         try {
-
+            if (reply instanceof SendDocument)
+                execute((SendDocument) reply);
             if (reply instanceof SendMessage)
                 execute((SendMessage) reply);
             if (reply instanceof SendPhoto)
