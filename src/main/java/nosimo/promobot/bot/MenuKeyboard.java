@@ -98,17 +98,16 @@ public class MenuKeyboard {
         List<String> buttonList = new ArrayList<>(InfoMenu.menuList);
 
         KeyboardRow keyboardRowBuffer = new KeyboardRow();
-
-//        for (int i = 0; i < 2; i++) {
-//            keyboardRowBuffer.add(buttonList.get(i));
-//        }
-//        keyboard.add(keyboardRowBuffer);
-
-        for (int i = 0; i < buttonList.size(); i++) {
-            keyboardRowBuffer = new KeyboardRow();
-            keyboardRowBuffer.add(buttonList.get(i));
-            keyboard.add(keyboardRowBuffer);
-        }
+        keyboardRowBuffer.add(buttonList.get(0));
+        keyboardRowBuffer.add(buttonList.get(1));
+        keyboard.add(keyboardRowBuffer);
+        keyboardRowBuffer = new KeyboardRow();
+        keyboardRowBuffer.add(buttonList.get(2));
+        keyboardRowBuffer.add(buttonList.get(3));
+        keyboard.add(keyboardRowBuffer);
+        keyboardRowBuffer = new KeyboardRow();
+        keyboardRowBuffer.add(buttonList.get(4));
+        keyboard.add(keyboardRowBuffer);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
