@@ -151,6 +151,13 @@ public class ProcessingUserMessage {
                         , new StartCommand().create() + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
                 return replyMessage;
+
+            case "/pdf":
+
+                replyDocument = Response.createDocumentMessage(chatId
+                        , "test"
+                        , BotData.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
+                return replyDocument;
         }
 
         Object detailedReplyMessage = new DetailedProcessingUserMessage().searchAnswer(chatId, userName, messageText);
@@ -165,11 +172,5 @@ public class ProcessingUserMessage {
                 ,Response.TypeKeyboard.START);
         return replyMessage;
 
-//      для отправки pdf документов
-
-//        replyDocument = Response.createDocumentMessage(chatId
-//                , "test"
-//                , BotData.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
-//        return replyDocument;
     }
 }
