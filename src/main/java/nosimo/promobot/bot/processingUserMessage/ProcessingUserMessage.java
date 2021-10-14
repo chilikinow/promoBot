@@ -113,7 +113,7 @@ public class ProcessingUserMessage {
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
-            case "Программа Лояльности": // Поиск Бонусной карты
+            case "Программа лояльности": // Поиск Бонусной карты
             case "/bonus_card":
 //            replyMessageList.add(Response.createTextMessage(chatId,
 //                    "Активация бонусной карты:"
