@@ -1,20 +1,23 @@
 package nosimo.promobot.bot.authorization;
 
+import org.apache.pdfbox.contentstream.operator.state.SetRenderingIntent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorizationWithUsernameTest {
 
-    @BeforeAll
-    static void initTestArtefacts(){
-        AuthorizationWithUsername.setUsernameToList(
-                "test_pass_username",
+    private static String[] artefacts;
+
+    static {
+        artefacts = new String[]{"test_pass_username",
                 "testPassUsername",
                 "Test.pass.username1",
                 "@test_pass_username",
@@ -26,8 +29,12 @@ class AuthorizationWithUsernameTest {
                 "\"",
                 "\\",
                 "уборщица",
-                "уволен"
-                );
+                "уволен"};
+    }
+
+    @BeforeAll
+    static void initTestArtefacts(){
+        AuthorizationWithUsername.setUsernameToList(artefacts);
     }
 
     @DisplayName("Username should be pass")
@@ -50,6 +57,7 @@ class AuthorizationWithUsernameTest {
 
     @DisplayName("Username should be not pass")
     @ParameterizedTest
+    @NullAndEmptySource
     @MethodSource("nosimo.promobot.bot.authorization.AuthorizationWithUsernameTest" +
             "#getGetArgumentsForNotPassAuthorizationWithUsernameTest")
     void usernameShouldBeNotPass(String username){
@@ -72,20 +80,6 @@ class AuthorizationWithUsernameTest {
 
     @AfterAll
     static void removeTestArtefacts(){
-        AuthorizationWithUsername.removeUsernameToList(
-                "test_pass_username",
-                "testPassUsername",
-                "Test.pass.username1",
-                "@test_pass_username",
-                "@testPassUsername",
-                "@Test.pass.username1",
-                "",
-                " ",
-                "+79999999999",
-                "\"",
-                "\\",
-                "уборщица",
-                "уволен"
-        );
+        AuthorizationWithUsername.removeUsernameToList(artefacts);
     }
 }
