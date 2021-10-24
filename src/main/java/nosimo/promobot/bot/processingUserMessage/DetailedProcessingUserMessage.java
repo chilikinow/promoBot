@@ -1,11 +1,11 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import nosimo.promobot.bot.Bonus;
-import nosimo.promobot.bot.Device;
-import nosimo.promobot.bot.PromoInfo;
+import nosimo.promobot.bot.BonusInfoDAO;
+import nosimo.promobot.bot.DeviceInfoDAO;
+import nosimo.promobot.bot.PromoInfoDAO;
 import nosimo.promobot.bot.Response;
 import nosimo.promobot.bot.authorization.AuthorizationWithUsername;
-import nosimo.promobot.bot.botData.BotData;
+import nosimo.promobot.bot.botData.BotDataDAO;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -47,7 +47,7 @@ public class DetailedProcessingUserMessage {
                 .replace("+", "\\+");
 
         if (infoCardName.length() < 15){
-            var categoryDeviceList = new Device().getCategoryDeviceList();
+            var categoryDeviceList = new DeviceInfoDAO().getCategoryDeviceList();
             List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
             for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
                 if (infoCardName.startsWith(bufferCategoryDeviceList.get(i))) {
@@ -57,8 +57,8 @@ public class DetailedProcessingUserMessage {
                         return replyMessage;
                     }
                     Set<Path> resultDeviceInfoList;
-                    Path directory = BotData.outResources.resolve("dataBaseProducts");
-                    resultDeviceInfoList = new Device().findInfo(messageText, directory);
+                    Path directory = BotDataDAO.outResources.resolve("dataBaseProducts");
+                    resultDeviceInfoList = new DeviceInfoDAO().findInfo(messageText, directory);
                     if (!resultDeviceInfoList.isEmpty()) {
                         for (Path resultDeviseInfo : resultDeviceInfoList){
                             SendPhoto replyPhoto = Response.createPhotoMessage(chatId,
@@ -97,7 +97,7 @@ public class DetailedProcessingUserMessage {
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
-            String findBonusInfo = new Bonus().getInfoPhoneNumber(bonusMessageText);
+            String findBonusInfo = new BonusInfoDAO().getInfoPhoneNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()){
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
@@ -116,7 +116,7 @@ public class DetailedProcessingUserMessage {
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
-            String findBonusInfo = new Bonus().getInfoCardNumber(bonusMessageText);
+            String findBonusInfo = new BonusInfoDAO().getInfoCardNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()) {
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
@@ -131,14 +131,14 @@ public class DetailedProcessingUserMessage {
 
         //Поиск подробной информации по запрашиваемой акции
 
-        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
+        Map<String, String> promoMobileTVInfoMap = PromoInfoDAO.getInstancePromoMobileTV();
         if (promoMobileTVInfoMap.containsKey(messageText)) {
             for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
                     StringBuilder replyText = new StringBuilder();
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(BotData.readPromoInfoFileUrl);
+                    replyText.append(BotDataDAO.readPromoInfoFileUrl);
                     if (replyText.length() > 3500){
                        while (replyText.length() > 3500){
                            replyMessageList.add(Response.createTextMessage(chatId, replyText.substring(0, 3500)));
@@ -160,14 +160,14 @@ public class DetailedProcessingUserMessage {
 
         //Поиск подробной информации по запрашиваемой акции
 
-        Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
+        Map<String, String> promoAppliancesInfoMap = PromoInfoDAO.getInstancePromoAppliances();
         if (promoAppliancesInfoMap.containsKey(messageText)) {
             for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
                     StringBuilder replyText = new StringBuilder();
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(BotData.readPromoInfoFileUrl);
+                    replyText.append(BotDataDAO.readPromoInfoFileUrl);
                     if (replyText.length() > 3500){
                         while (replyText.length() > 3500){
                             replyMessageList.add(Response.createTextMessage(chatId, replyText.substring(0, 3500)));

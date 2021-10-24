@@ -7,14 +7,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import nosimo.promobot.bot.botData.BotData;
+import nosimo.promobot.bot.botData.BotDataDAO;
 import org.apache.commons.io.FilenameUtils;
 
-public class Device {
+public class DeviceInfoDAO {
 
     private Set<String> categoryDeviceList;
     public Set<String> getCategoryDeviceList(){
-        Path directory = BotData.outResources.resolve("categoryDeviceForFind.txt");
+        Path directory = BotDataDAO.outResources.resolve("categoryDeviceForFind.txt");
         List<String> tempCategoryList = new ArrayList<>();
         try {
             tempCategoryList = new ArrayList<>(Files.readAllLines(directory));

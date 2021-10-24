@@ -4,6 +4,7 @@ import org.apache.pdfbox.contentstream.operator.state.SetRenderingIntent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -33,7 +34,7 @@ class AuthorizationWithUsernameTest {
     }
 
     @DisplayName("Arguments for pass authorization with username")
-    static Stream<Arguments> getGetArgumentsForPassAuthorizationWithUsernameTest(){
+    static Stream<Arguments> getArgumentsForPassAuthorizationWithUsernameTest(){
         return Stream.of(
                 Arguments.of("test_pass_username"),
                 Arguments.of("testPassUsername"),
@@ -49,14 +50,14 @@ class AuthorizationWithUsernameTest {
     @DisplayName("Username should be pass")
     @ParameterizedTest
     @MethodSource("nosimo.promobot.bot.authorization.AuthorizationWithUsernameTest" +
-            "#getGetArgumentsForPassAuthorizationWithUsernameTest")
+            "#getArgumentsForPassAuthorizationWithUsernameTest")
     void usernameShouldBePass(String username){
         boolean result = AuthorizationWithUsername.pass(username);
         assertTrue(result);
     }
 
     @DisplayName("Arguments for not pass authorization with username")
-    static Stream<Arguments> getGetArgumentsForNotPassAuthorizationWithUsernameTest(){
+    static Stream<Arguments> getArgumentsForNotPassAuthorizationWithUsernameTest(){
         return Stream.of(
                 Arguments.of("test_not_pass_username"),
                 Arguments.of(""),
@@ -72,7 +73,7 @@ class AuthorizationWithUsernameTest {
     @ParameterizedTest
     @NullAndEmptySource
     @MethodSource("nosimo.promobot.bot.authorization.AuthorizationWithUsernameTest" +
-            "#getGetArgumentsForNotPassAuthorizationWithUsernameTest")
+            "#getArgumentsForNotPassAuthorizationWithUsernameTest")
     void usernameShouldBeNotPass(String username){
         boolean result = AuthorizationWithUsername.pass(username);
         assertFalse(result);

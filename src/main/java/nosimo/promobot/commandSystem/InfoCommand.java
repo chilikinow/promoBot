@@ -1,6 +1,6 @@
 package nosimo.promobot.commandSystem;
 
-import nosimo.promobot.bot.Device;
+import nosimo.promobot.bot.DeviceInfoDAO;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -12,7 +12,7 @@ public class InfoCommand{
         StringBuilder response = new StringBuilder();
         response.append(heading);
         Set<String> productNamesList;
-        productNamesList = new Device().getFilesName(directory);
+        productNamesList = new DeviceInfoDAO().getFilesName(directory);
 
         for (String mobileName: productNamesList){
             response.append(mobileName + "\n");

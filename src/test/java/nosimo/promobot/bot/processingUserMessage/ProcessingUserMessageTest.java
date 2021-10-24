@@ -242,6 +242,7 @@ class ProcessingUserMessageTest {
         }
     }
 
+    @Tag("integration")
     @Tag("speed")
     @Nested
     @DisplayName("optimal time execution test")
@@ -251,7 +252,7 @@ class ProcessingUserMessageTest {
         @DisplayName("search answer should return info appliances faster than two seconds")
         void searchAnswerShouldReturnInfoAppliancesFasterThanTwoSeconds() {
             messageText = "Инфо БТ";
-            assertTimeout(Duration.ofSeconds(2), () -> {
+            assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
                 new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
             });
         }
@@ -260,7 +261,7 @@ class ProcessingUserMessageTest {
         @DisplayName("search answer should return info bonus card when we now phone number faster than six seconds")
         void searchAnswerShouldReturnInfoBonusCardWhenWeNowPhoneNumberFasterThanSixSeconds() {
             messageText = "9999999911";
-            assertTimeout(Duration.ofSeconds(9), () -> {
+            assertTimeoutPreemptively(Duration.ofSeconds(9), () -> {
                 new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
             });
         }

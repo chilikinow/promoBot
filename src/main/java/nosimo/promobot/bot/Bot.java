@@ -1,6 +1,6 @@
 package nosimo.promobot.bot;
 
-import nosimo.promobot.bot.botData.BotData;
+import nosimo.promobot.bot.botData.BotDataDAO;
 import nosimo.promobot.bot.processingUserMessage.ProcessingUserMessage;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
@@ -25,9 +25,9 @@ public class Bot extends TelegramLongPollingBot {
     private boolean pass;
 
     {
-        botName = BotData.botName;
-        botToken = BotData.botToken;
-        botPassword = BotData.botPassword;
+        botName = BotDataDAO.botName;
+        botToken = BotDataDAO.botToken;
+        botPassword = BotDataDAO.botPassword;
 
         this.pass = false;
     }

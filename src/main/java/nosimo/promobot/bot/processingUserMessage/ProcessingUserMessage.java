@@ -1,16 +1,14 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import nosimo.promobot.bot.PromoInfo;
+import nosimo.promobot.bot.PromoInfoDAO;
 import nosimo.promobot.bot.Response;
-import nosimo.promobot.bot.botData.BotData;
+import nosimo.promobot.bot.botData.BotDataDAO;
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
 import nosimo.promobot.commandSystem.StartCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -77,7 +75,7 @@ public class ProcessingUserMessage {
             case "/mobile":
 
                 String heading = "Список доступных для поиска устройств:\n\nМобильная электроника:\n\n";
-                Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("mobile");
+                Path directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("mobile");
                 String ending = "\nСписок устройств в процессе пополнения...";
                 String replyTextMessage = new InfoCommand().create(heading, directory, ending);
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
@@ -93,7 +91,7 @@ public class ProcessingUserMessage {
             case "/tv":
 
                 heading = "Список доступных для поиска устройств:\n\nТелевизоры:\n\n";
-                directory = BotData.outResources.resolve("dataBaseProducts").resolve("tv");
+                directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("tv");
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
@@ -105,7 +103,7 @@ public class ProcessingUserMessage {
             case "/appliances":
 
                 heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
-                directory = BotData.outResources.resolve("dataBaseProducts").resolve("appliances");
+                directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("appliances");
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
@@ -132,7 +130,7 @@ public class ProcessingUserMessage {
 
             case "/promo_update": // Обновление файла с акциями
 
-                PromoInfo.updateWorkbook();
+                PromoInfoDAO.updateWorkbook();
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , "База Акций обновлена!" + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
@@ -156,7 +154,7 @@ public class ProcessingUserMessage {
 
                 replyDocument = Response.createDocumentMessage(chatId
                         , "test"
-                        , BotData.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
+                        , BotDataDAO.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
                 return replyDocument;
         }
 

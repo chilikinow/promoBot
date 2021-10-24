@@ -1,7 +1,6 @@
 package nosimo.promobot.bot;
 
-import lombok.Data;
-import nosimo.promobot.bot.botData.BotData;
+import nosimo.promobot.bot.botData.BotDataDAO;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
@@ -27,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Bonus {
+public class BonusInfoDAO {
 
     private String urlBase;
     private String bonusUserName;
@@ -40,9 +39,9 @@ public class Bonus {
     private CookieStore httpCookieStore;
 
     {
-        this.urlBase = BotData.bonusBaseURI;
-        this.bonusUserName = BotData.bonusUserName;
-        this.bonusPassword = BotData.bonusPassword;
+        this.urlBase = BotDataDAO.bonusBaseURI;
+        this.bonusUserName = BotDataDAO.bonusUserName;
+        this.bonusPassword = BotDataDAO.bonusPassword;
 
 
         SSLContext context = null;
