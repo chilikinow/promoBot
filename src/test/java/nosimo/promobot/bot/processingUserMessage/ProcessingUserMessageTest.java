@@ -252,8 +252,8 @@ class ProcessingUserMessageTest {
         @DisplayName("search answer should return info appliances faster than two seconds")
         void searchAnswerShouldReturnInfoAppliancesFasterThanTwoSeconds() {
             messageText = "Инфо БТ";
-            assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
-                new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
+            assertTimeout(Duration.ofSeconds(9), () -> { //проверка соответствия времени выполнения метода
+                new ProcessingUserMessage().searchAnswer(chatId, username, messageText); // с использованием многопоточности
             });
         }
 

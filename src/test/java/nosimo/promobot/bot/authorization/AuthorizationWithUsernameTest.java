@@ -33,6 +33,11 @@ class AuthorizationWithUsernameTest {
                 "уволен"};
     }
 
+    @BeforeAll
+    static void initTestArtefacts(){
+        AuthorizationWithUsername.setUsernameToListFOrTest(artefacts);
+    }
+
     @DisplayName("Arguments for pass authorization with username")
     static Stream<Arguments> getArgumentsForPassAuthorizationWithUsernameTest(){
         return Stream.of(
@@ -40,11 +45,6 @@ class AuthorizationWithUsernameTest {
                 Arguments.of("testPassUsername"),
                 Arguments.of("Test.pass.username1")
         );
-    }
-
-    @BeforeAll
-    static void initTestArtefacts(){
-        AuthorizationWithUsername.setUsernameToList(artefacts);
     }
 
     @DisplayName("Username should be pass")

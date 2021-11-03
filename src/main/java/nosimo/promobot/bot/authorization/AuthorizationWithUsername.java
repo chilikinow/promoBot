@@ -17,7 +17,8 @@ public class AuthorizationWithUsername {
         usernamelist = new ArrayList<>();
     }
 
-    public static void setUsernameToList(String ...usernames){
+
+    public static void setUsernameToListFOrTest(String ...usernames){
         if (usernames.length > 0)
             for (String username: usernames)
                 usernamelist.add(username);
