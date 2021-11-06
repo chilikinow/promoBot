@@ -1,10 +1,8 @@
 package nosimo.promobot.bot.authorization;
 
-import org.apache.pdfbox.contentstream.operator.state.SetRenderingIntent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,6 +10,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class AuthorizationWithUsernameTest {
 
@@ -21,9 +20,9 @@ class AuthorizationWithUsernameTest {
         artefacts = new String[]{"test_pass_username",
                 "testPassUsername",
                 "Test.pass.username1",
-                "@test_pass_username",
-                "@testPassUsername",
-                "@Test.pass.username1",
+                "test_pass_username",
+                "testPassUsername",
+                "Test.pass.username1",
                 "",
                 " ",
                 "+79999999999",
@@ -53,7 +52,7 @@ class AuthorizationWithUsernameTest {
             "#getArgumentsForPassAuthorizationWithUsernameTest")
     void usernameShouldBePass(String username){
         boolean result = AuthorizationWithUsername.pass(username);
-        assertTrue(result);
+        assertThat(result).isTrue();
     }
 
     @DisplayName("Arguments for not pass authorization with username")
@@ -76,7 +75,7 @@ class AuthorizationWithUsernameTest {
             "#getArgumentsForNotPassAuthorizationWithUsernameTest")
     void usernameShouldBeNotPass(String username){
         boolean result = AuthorizationWithUsername.pass(username);
-        assertFalse(result);
+        assertThat(result).isFalse();
     }
 
     @AfterAll

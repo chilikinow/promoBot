@@ -33,7 +33,7 @@ public class AuthorizationWithUsername {
 
     public static boolean pass(String enterUserName){
 
-        enterUserName = "@" + enterUserName;
+//        enterUserName = "@" + enterUserName;
 
         Path userNameFile = BotDataDAO.outResources.resolve("users.txt");
 
@@ -44,17 +44,14 @@ public class AuthorizationWithUsername {
         }
 
         usernamelist = usernamelist.stream()
-                        .filter(u -> !u.equals("")
-                                && !u.startsWith("+")
-                                && !u.startsWith("\"")
-                                && !u.startsWith("\\")
-                                && !u.startsWith(" ")
-                                && !Pattern.matches(".*\\p{InCyrillic}.*", u))
-                        .map(u -> {
-                            if (!u.startsWith("@"))
-                                u = "@" + u;
-                            return u;
-                        })
+                        .filter(username -> !username.equals("")
+                                && !username.startsWith("+")
+                                && !username.startsWith("\"")
+                                && !username.startsWith("\\")
+                                && !username.startsWith(" ")
+                                && !Pattern.matches(".*\\p{InCyrillic}.*", username))
+                        .map(username ->
+                            username.startsWith("@") ? username.substring(1) : username)
                         .collect(Collectors.toList());
 
         if (usernamelist.isEmpty()) {
