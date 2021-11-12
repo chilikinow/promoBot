@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class BonusInfoDAO {
+public class BonusInfo {
 
     private String urlBase;
     private String bonusUserName;

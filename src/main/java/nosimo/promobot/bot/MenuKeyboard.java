@@ -19,7 +19,7 @@ public class MenuKeyboard {
 
     public ReplyKeyboardMarkup getMobileTVPromoMenu(){
 
-        List<String> list = new ArrayList<>(PromoInfoDAO.getInstancePromoMobileTV().keySet());
+        List<String> list = new ArrayList<>(PromoInfo.getInstancePromoMobileTV().keySet());
 
         return createPromoMenuRKM(list);
 //        return createPromoMenuIKM(set);
@@ -27,7 +27,7 @@ public class MenuKeyboard {
 
     public ReplyKeyboardMarkup getAppliancesMenu(){
 
-        List<String> list = new ArrayList<>(PromoInfoDAO.getInstancePromoAppliances().keySet());
+        List<String> list = new ArrayList<>(PromoInfo.getInstancePromoAppliances().keySet());
 
         return createPromoMenuRKM(list);
 //        return createPromoMenuIKM(set);

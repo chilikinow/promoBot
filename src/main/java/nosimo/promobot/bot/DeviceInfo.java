@@ -10,10 +10,11 @@ import java.util.stream.Collectors;
 import nosimo.promobot.bot.botData.BotDataDAO;
 import org.apache.commons.io.FilenameUtils;
 
-public class DeviceInfoDAO {
+public class DeviceInfo {
 
-    private Set<String> categoryDeviceList;
-    public Set<String> getCategoryDeviceList(){
+    private List<String> categoryDeviceList;
+
+    public List<String> getCategoryDeviceList(){
         Path directory = BotDataDAO.outResources.resolve("categoryDeviceForFind.txt");
         List<String> tempCategoryList = new ArrayList<>();
         try {
@@ -21,7 +22,7 @@ public class DeviceInfoDAO {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.categoryDeviceList = new TreeSet<>();
+        this.categoryDeviceList = new ArrayList<>();
         for (String tempCategoryName: tempCategoryList){
             if (!tempCategoryName.equals("")) {
                 this.categoryDeviceList.add(tempCategoryName.toLowerCase(Locale.ROOT));
@@ -30,7 +31,7 @@ public class DeviceInfoDAO {
         return categoryDeviceList;
     }
 
-    public Set<Path> findInfo(String messageText, Path directory){
+    public List<Path> findInfo(String messageText, Path directory){
         messageText = messageText
                 .toLowerCase(Locale.ROOT)
                 .replaceAll(" ", "")
@@ -40,15 +41,15 @@ public class DeviceInfoDAO {
                 .replaceAll("_", "")
                 .replaceAll("plus", "\\+")
                 .replace("+", "\\+");
-        Set<Path> deviceInfoFilesList = new TreeSet<>();
+        List<Path> deviceInfoFilesList = new ArrayList<>();
         try {
             deviceInfoFilesList = Files.walk(directory)
                     .filter(Files::isRegularFile)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Set<Path> resultDeviceInfoList = new TreeSet<>();
+        List<Path> resultDeviceInfoList = new ArrayList<>();
         for (Path deviceInfoFile : deviceInfoFilesList){
             String tempDeviceInfoFile = deviceInfoFile.getFileName().toString();
             tempDeviceInfoFile = tempDeviceInfoFile
@@ -65,16 +66,16 @@ public class DeviceInfoDAO {
         return resultDeviceInfoList;
     }
 
-    public Set<String> getFilesName(Path directory){
-        Set<Path> filesList = new TreeSet<>();
+    public List<String> getFilesName(Path directory){
+        List<Path> filesList = new ArrayList<>();
         try {
             filesList =  Files.walk(directory)
                     .filter(Files::isRegularFile)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Set<String> filesNamesList = new TreeSet<>();
+        List<String> filesNamesList = new ArrayList<>();
         for(Path deviceInfo : filesList){
             String bufferFileName = deviceInfo.getFileName().toString();
 //            bufferFileName = bufferFileName.replaceFirst("[.][^.]+$", "");

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 class BonusInfoDAOTest {
 
     @Mock
-    private BonusInfoDAO bonusInfoDAO;
+    private BonusInfo bonusInfoDAO;
 
     @Test
     @DisplayName("When send phone number should return bonus info")

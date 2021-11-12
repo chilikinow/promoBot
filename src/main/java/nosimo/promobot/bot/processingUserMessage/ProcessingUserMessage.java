@@ -1,6 +1,6 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import nosimo.promobot.bot.PromoInfoDAO;
+import nosimo.promobot.bot.PromoInfo;
 import nosimo.promobot.bot.Response;
 import nosimo.promobot.bot.botData.BotDataDAO;
 import nosimo.promobot.commandSystem.InfoCommand;
@@ -130,7 +130,7 @@ public class ProcessingUserMessage {
 
             case "/promo_update": // Обновление файла с акциями
 
-                PromoInfoDAO.updateWorkbook();
+                PromoInfo.updateWorkbook();
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , "База Акций обновлена!" + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);

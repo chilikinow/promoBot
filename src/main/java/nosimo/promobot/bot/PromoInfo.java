@@ -11,13 +11,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
 
-public class PromoInfoDAO {
+public class PromoInfo {
 
     private static Map <String, String> promoMobileTVMap;
     private static Map <String, String> promoAppliancesMap;
     private static XSSFWorkbook workBook;
 
-    private PromoInfoDAO(){
+    private PromoInfo(){
     }
 
     public static void updateWorkbook(){

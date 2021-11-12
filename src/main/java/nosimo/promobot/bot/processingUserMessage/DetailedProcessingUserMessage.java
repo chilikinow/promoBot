@@ -1,8 +1,8 @@
 package nosimo.promobot.bot.processingUserMessage;
 
-import nosimo.promobot.bot.BonusInfoDAO;
-import nosimo.promobot.bot.DeviceInfoDAO;
-import nosimo.promobot.bot.PromoInfoDAO;
+import nosimo.promobot.bot.BonusInfo;
+import nosimo.promobot.bot.DeviceInfo;
+import nosimo.promobot.bot.PromoInfo;
 import nosimo.promobot.bot.Response;
 import nosimo.promobot.bot.authorization.AuthorizationWithUsername;
 import nosimo.promobot.bot.botData.BotDataDAO;
@@ -47,7 +47,7 @@ public class DetailedProcessingUserMessage {
                 .replace("+", "\\+");
 
         if (infoCardName.length() < 15){
-            var categoryDeviceList = new DeviceInfoDAO().getCategoryDeviceList();
+            var categoryDeviceList = new DeviceInfo().getCategoryDeviceList();
             List<String> bufferCategoryDeviceList = new ArrayList<>(categoryDeviceList);
             for (int i = 0; i < bufferCategoryDeviceList.size(); i++) {
                 if (infoCardName.startsWith(bufferCategoryDeviceList.get(i))) {
@@ -56,9 +56,8 @@ public class DetailedProcessingUserMessage {
                                 , "Уточните модель:");
                         return replyMessage;
                     }
-                    Set<Path> resultDeviceInfoList;
                     Path directory = BotDataDAO.outResources.resolve("dataBaseProducts");
-                    resultDeviceInfoList = new DeviceInfoDAO().findInfo(messageText, directory);
+                    List<Path> resultDeviceInfoList = new DeviceInfo().findInfo(messageText, directory);
                     if (!resultDeviceInfoList.isEmpty()) {
                         for (Path resultDeviseInfo : resultDeviceInfoList){
                             SendPhoto replyPhoto = Response.createPhotoMessage(chatId,
@@ -97,7 +96,7 @@ public class DetailedProcessingUserMessage {
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
-            String findBonusInfo = new BonusInfoDAO().getInfoPhoneNumber(bonusMessageText);
+            String findBonusInfo = new BonusInfo().getInfoPhoneNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()){
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
@@ -116,7 +115,7 @@ public class DetailedProcessingUserMessage {
                 System.out.println("not pass to bonus system");
                 return notPassReplyMessage;
             }
-            String findBonusInfo = new BonusInfoDAO().getInfoCardNumber(bonusMessageText);
+            String findBonusInfo = new BonusInfo().getInfoCardNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()) {
                 replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
@@ -131,7 +130,7 @@ public class DetailedProcessingUserMessage {
 
         //Поиск подробной информации по запрашиваемой акции
 
-        Map<String, String> promoMobileTVInfoMap = PromoInfoDAO.getInstancePromoMobileTV();
+        Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
         if (promoMobileTVInfoMap.containsKey(messageText)) {
             for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
@@ -160,7 +159,7 @@ public class DetailedProcessingUserMessage {
 
         //Поиск подробной информации по запрашиваемой акции
 
-        Map<String, String> promoAppliancesInfoMap = PromoInfoDAO.getInstancePromoAppliances();
+        Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
         if (promoAppliancesInfoMap.containsKey(messageText)) {
             for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
