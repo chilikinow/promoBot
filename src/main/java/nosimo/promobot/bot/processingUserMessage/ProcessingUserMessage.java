@@ -21,7 +21,7 @@ public class ProcessingUserMessage {
     private SendDocument replyDocument;
 
     {
-        startButtonInfo = "Стартовое меню: /start_menu";
+        startButtonInfo = "Главное меню:";
         replyMessageList = new ArrayList<>();
     }
 
