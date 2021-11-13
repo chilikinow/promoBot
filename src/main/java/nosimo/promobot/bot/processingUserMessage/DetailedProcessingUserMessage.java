@@ -5,7 +5,7 @@ import nosimo.promobot.bot.DeviceInfo;
 import nosimo.promobot.bot.PromoInfo;
 import nosimo.promobot.bot.Response;
 import nosimo.promobot.bot.authorization.AuthorizationWithUsername;
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.commons.io.FilenameUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -26,7 +26,7 @@ public class DetailedProcessingUserMessage {
 
     public Object searchAnswer(Long chatId, String userName, String messageText) {
 
-        notPassReplyMessage = Response.createTextMessageWithKeyboardRMK(chatId,
+        notPassReplyMessage = Response.createTextMessageWithKeyboard(chatId,
                 "У Вас нет доступа к данной системе."
                         + "\n\n"
                         + "Для получения доступа необходимо обратится к Управляющему Вашего магазина.",
@@ -56,7 +56,7 @@ public class DetailedProcessingUserMessage {
                                 , "Уточните модель:");
                         return replyMessage;
                     }
-                    Path directory = BotDataDAO.outResources.resolve("dataBaseProducts");
+                    Path directory = BotData.outResources.resolve("dataBaseProducts");
                     List<Path> resultDeviceInfoList = new DeviceInfo().findInfo(messageText, directory);
                     if (!resultDeviceInfoList.isEmpty()) {
                         for (Path resultDeviseInfo : resultDeviceInfoList){
@@ -65,11 +65,11 @@ public class DetailedProcessingUserMessage {
                                     resultDeviseInfo.getParent().resolve(resultDeviseInfo.getFileName()).toString());
                             replyMessageList.add(replyPhoto);
                         }
-                        replyMessageList.add(Response.createTextMessageWithKeyboardRMK(chatId,
+                        replyMessageList.add(Response.createTextMessageWithKeyboard(chatId,
                                 startButtonInfo, Response.TypeKeyboard.START));
                         return replyMessageList;
                     } else {
-                        replyMessage = Response.createTextMessageWithKeyboardRMK(chatId,
+                        replyMessage = Response.createTextMessageWithKeyboard(chatId,
                                 "Устройство не найдено!\n\nСписок доступных для поиска устройств\n" +
                                         "находится в разделе ИНФО стартового меню." + "\n\n" + startButtonInfo
                                 , Response.TypeKeyboard.START);
@@ -98,11 +98,11 @@ public class DetailedProcessingUserMessage {
             }
             String findBonusInfo = new BonusInfo().getInfoPhoneNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()){
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             } else {
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , "Номера телефона нет в базе данных." + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             }
@@ -117,11 +117,11 @@ public class DetailedProcessingUserMessage {
             }
             String findBonusInfo = new BonusInfo().getInfoCardNumber(bonusMessageText);
             if (!findBonusInfo.isEmpty()) {
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , findBonusInfo + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             } else {
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , "Карты лояльности нет в базе данных." + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
             }
@@ -137,18 +137,18 @@ public class DetailedProcessingUserMessage {
                     StringBuilder replyText = new StringBuilder();
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(BotDataDAO.readPromoInfoFileUrl);
+                    replyText.append(BotData.readPromoInfoFileUrl);
                     if (replyText.length() > 3500){
                        while (replyText.length() > 3500){
                            replyMessageList.add(Response.createTextMessage(chatId, replyText.substring(0, 3500)));
                            replyText = new StringBuilder(replyText.substring(3500));
                        }
-                        replyMessageList.add(Response.createTextMessageWithKeyboardRMK(chatId
+                        replyMessageList.add(Response.createTextMessageWithKeyboard(chatId
                                 ,replyText.append("\n\n" + startButtonInfo).toString()
                                 ,Response.TypeKeyboard.START));
                         return replyMessageList;
                     }else{
-                        replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                        replyMessage = Response.createTextMessageWithKeyboard(chatId
                                 ,replyText.append("\n\n" + startButtonInfo).toString()
                                 ,Response.TypeKeyboard.START);
                         return replyMessage;
@@ -166,18 +166,18 @@ public class DetailedProcessingUserMessage {
                     StringBuilder replyText = new StringBuilder();
                     replyText.append(entry.getKey() + "\n\n" + entry.getValue());
                     replyText.append("\n\nПодробности:\n\n");
-                    replyText.append(BotDataDAO.readPromoInfoFileUrl);
+                    replyText.append(BotData.readPromoInfoFileUrl);
                     if (replyText.length() > 3500){
                         while (replyText.length() > 3500){
                             replyMessageList.add(Response.createTextMessage(chatId, replyText.substring(0, 3500)));
                             replyText = new StringBuilder(replyText.substring(3500));
                         }
-                        replyMessageList.add(Response.createTextMessageWithKeyboardRMK(chatId
+                        replyMessageList.add(Response.createTextMessageWithKeyboard(chatId
                                 ,replyText.append("\n\n" + startButtonInfo).toString()
                                 ,Response.TypeKeyboard.START));
                         return replyMessageList;
                     }else{
-                        replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                        replyMessage = Response.createTextMessageWithKeyboard(chatId
                                 ,replyText.append("\n\n" + startButtonInfo).toString()
                                 ,Response.TypeKeyboard.START);
                         return replyMessage;

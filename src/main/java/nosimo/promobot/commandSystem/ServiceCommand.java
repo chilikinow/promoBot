@@ -1,6 +1,6 @@
 package nosimo.promobot.commandSystem;
 
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class ServiceCommand {
 
     public String create() {
 
-        Path phonesInfoPropertiesFile = BotDataDAO.outResources.resolve("phonesInfo.properties");
+        Path phonesInfoPropertiesFile = BotData.outResources.resolve("phonesInfo.properties");
 
         var phonesInfoProperties = new Properties();
         try {
@@ -28,7 +28,7 @@ public class ServiceCommand {
 
         List<String> seviceInfoStringList =  new ArrayList<>();
 
-        Path serviceInfoFile = BotDataDAO.outResources.resolve("serviceInfo.txt");
+        Path serviceInfoFile = BotData.outResources.resolve("serviceInfo.txt");
 
         try {
             seviceInfoStringList = new ArrayList<>(Files.readAllLines(serviceInfoFile));

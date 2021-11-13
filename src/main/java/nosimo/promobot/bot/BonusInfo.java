@@ -1,6 +1,6 @@
 package nosimo.promobot.bot;
 
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
@@ -39,9 +39,9 @@ public class BonusInfo {
     private CookieStore httpCookieStore;
 
     {
-        this.urlBase = BotDataDAO.bonusBaseURI;
-        this.bonusUserName = BotDataDAO.bonusUserName;
-        this.bonusPassword = BotDataDAO.bonusPassword;
+        this.urlBase = BotData.bonusBaseURI;
+        this.bonusUserName = BotData.bonusUserName;
+        this.bonusPassword = BotData.bonusPassword;
 
 
         SSLContext context = null;

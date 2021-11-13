@@ -2,7 +2,7 @@ package nosimo.promobot.bot.processingUserMessage;
 
 import nosimo.promobot.bot.PromoInfo;
 import nosimo.promobot.bot.Response;
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.commandSystem.InfoCommand;
 import nosimo.promobot.commandSystem.ServiceCommand;
 import nosimo.promobot.commandSystem.StartCommand;
@@ -42,7 +42,7 @@ public class ProcessingUserMessage {
             case "Акции Мобайл ТВ": // Запрос акций по Мобильной технике и ТВ
             case "/promo_mobile_tv":
 
-                replyMessage = Response.createTextMessageWithKeyboardRMK
+                replyMessage = Response.createTextMessageWithKeyboard
                         (chatId, "Список акций интернет магазина:\n" +
                                         "https://galaxystore.ru/promo/",
                                 Response.TypeKeyboard.PROMO_MOBILE_TV);
@@ -51,7 +51,7 @@ public class ProcessingUserMessage {
             case "Акции БТ":
             case "/promo_appliances":
 
-                replyMessage = Response.createTextMessageWithKeyboardRMK
+                replyMessage = Response.createTextMessageWithKeyboard
                         (chatId, "Список акций интернет магазина:\n" +
                                         "https://galaxystore.ru/promo/",
                                 Response.TypeKeyboard.PROMO_APPLIANCES);
@@ -66,7 +66,7 @@ public class ProcessingUserMessage {
 
             case "Что можно быстро найти?":
             case "/info":
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , "Доступные для поиска категории:"
                         , Response.TypeKeyboard.INFO);
                 return replyMessage;
@@ -75,40 +75,48 @@ public class ProcessingUserMessage {
             case "/mobile":
 
                 String heading = "Список доступных для поиска устройств:\n\nМобильная электроника:\n\n";
-                Path directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("mobile");
+                Path directory = BotData.outResources.resolve("dataBaseProducts").resolve("mobile");
                 String ending = "\nСписок устройств в процессе пополнения...";
                 String replyTextMessage = new InfoCommand().create(heading, directory, ending);
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , replyTextMessage
                                 + "\n\n"
                                 + "Технические характеристики и USP:\nhttp://uspmobile.ru/"
                                 + "\n\n"
                                 + startButtonInfo
-                        , Response.TypeKeyboard.START);
+                        , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
             case "Телевизоры":
             case "/tv":
 
                 heading = "Список доступных для поиска устройств:\n\nТелевизоры:\n\n";
-                directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("tv");
+                directory = BotData.outResources.resolve("dataBaseProducts").resolve("tv");
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , replyTextMessage + "\n\n" + startButtonInfo
-                        , Response.TypeKeyboard.START);
+                        , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
             case "Бытовая техника": // Запрос акций по Бытовой технике
             case "/appliances":
 
                 heading = "Список доступных для поиска устройств:\n\nБытовая техника:\n\n";
-                directory = BotDataDAO.outResources.resolve("dataBaseProducts").resolve("appliances");
+                directory = BotData.outResources.resolve("dataBaseProducts").resolve("appliances");
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , replyTextMessage + "\n\n" + startButtonInfo
-                        , Response.TypeKeyboard.START);
+                        , Response.TypeKeyboard.INFO);
+                return replyMessage;
+
+            case "Сервис": // Запрос информации о Сервисе
+            case "/service":
+
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
+                        , new ServiceCommand().create() + "\n\n" + startButtonInfo
+                        , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
             case "Программа лояльности": // Поиск Бонусной карты
@@ -120,32 +128,24 @@ public class ProcessingUserMessage {
                 replyMessageList.add(Response.createTextMessage(chatId, "Введите номер телефона или бонусной карты:"));
                 return replyMessageList;
 
-            case "Сервис": // Запрос информации о Сервисе
-            case "/service":
-
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
-                        , new ServiceCommand().create() + "\n\n" + startButtonInfo
-                        , Response.TypeKeyboard.START);
-                return replyMessage;
-
             case "/promo_update": // Обновление файла с акциями
 
                 PromoInfo.updateWorkbook();
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , "База Акций обновлена!" + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
             case "/start_menu": //Стартовое меню
-            case "Назад":
+            case "Главное меню":
 
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId,
+                replyMessage = Response.createTextMessageWithKeyboard(chatId,
                         startButtonInfo, Response.TypeKeyboard.START);
                 return replyMessage;
 
             case "/start": // Первый запуск
 
-                replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+                replyMessage = Response.createTextMessageWithKeyboard(chatId
                         , new StartCommand().create() + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
                 return replyMessage;
@@ -154,7 +154,7 @@ public class ProcessingUserMessage {
 
                 replyDocument = Response.createDocumentMessage(chatId
                         , "test"
-                        , BotDataDAO.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
+                        , BotData.outResources.resolve("dataBaseProducts").resolve("Сервис Плаз.pdf").toString());
                 return replyDocument;
         }
 
@@ -165,7 +165,7 @@ public class ProcessingUserMessage {
 
         //если не найдено ни одного совпадения
         //Стартовое меню
-        replyMessage = Response.createTextMessageWithKeyboardRMK(chatId
+        replyMessage = Response.createTextMessageWithKeyboard(chatId
                 ,"Команда не найдена!" + "\n\n" + startButtonInfo
                 ,Response.TypeKeyboard.START);
         return replyMessage;

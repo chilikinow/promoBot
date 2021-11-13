@@ -1,5 +1,7 @@
 package nosimo.promobot.bot;
 
+import nosimo.promobot.bot.menu.MenuKeyboard;
+import nosimo.promobot.bot.menu.MenuKeyboardInline;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -52,32 +54,32 @@ public class Response {
         return sendDocument;
     }
 
-    public static SendMessage createTextMessageWithKeyboardIKM(Long chatId, String text, String buttonName, String callbackData){
+    public static SendMessage createTextMessageWithKeyboard(Long chatId, String text, String buttonName, String callbackData){
 
         SendMessage sendMessage = createTextMessage(chatId, text);
-        sendMessage.setReplyMarkup(new MenuKeyboard().getMenuIKM(buttonName, callbackData));
+        sendMessage.setReplyMarkup(new MenuKeyboardInline().getMenu(buttonName, callbackData));
 
         return sendMessage;
     }
 
-    public static SendMessage createTextMessageWithKeyboardRMK(Long chatId, String text, TypeKeyboard typeKeyboard){
+    public static SendMessage createTextMessageWithKeyboard(Long chatId, String text, TypeKeyboard typeKeyboard){
 
         SendMessage sendMessage = createTextMessage(chatId, text);
 
         if (typeKeyboard == TypeKeyboard.START) {
-            sendMessage.setReplyMarkup(new MenuKeyboard().getStartMenu());
+            sendMessage.setReplyMarkup(new MenuKeyboardInline().getStartMenu());
             return sendMessage;
         }
         if (typeKeyboard == TypeKeyboard.INFO) {
-            sendMessage.setReplyMarkup(new MenuKeyboard().getInfoMenu());
+            sendMessage.setReplyMarkup(new MenuKeyboardInline().getInfoMenu());
             return sendMessage;
         }
         if (typeKeyboard == TypeKeyboard.PROMO_MOBILE_TV){
-            sendMessage.setReplyMarkup(new MenuKeyboard().getMobileTVPromoMenu());
+            sendMessage.setReplyMarkup(new MenuKeyboardInline().getMobileTVPromoMenu());
             return sendMessage;
         }
         if (typeKeyboard == TypeKeyboard.PROMO_APPLIANCES){
-            sendMessage.setReplyMarkup(new MenuKeyboard().getAppliancesMenu());
+            sendMessage.setReplyMarkup(new MenuKeyboardInline().getAppliancesMenu());
             return sendMessage;
         }
 

@@ -3,7 +3,7 @@ package nosimo.promobot.bot.authorization;
 import nosimo.promobot.bot.Response;
 import nosimo.promobot.commandSystem.StartCommand;
 
-import static nosimo.promobot.bot.botData.BotDataDAO.botPassword;
+import static nosimo.promobot.bot.botData.BotData.botPassword;
 
 public class AuthorizationWithPassword {
 

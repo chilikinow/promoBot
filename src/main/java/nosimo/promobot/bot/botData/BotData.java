@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BotDataDAO {
+public class BotData {
 
     public final static Path outResources;
     public final static String botName;

@@ -1,4 +1,4 @@
-package nosimo.promobot.bot;
+package nosimo.promobot.bot.menu;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ public class InfoMenu {
                 ,"Мобильная техника"
                 ,"Сервис"
                 ,"Телевизоры"
-                ,"Назад");
+                ,"Главное меню");
     }
 }

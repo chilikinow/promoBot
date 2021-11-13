@@ -1,15 +1,18 @@
 package nosimo.promobot.bot;
 
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import nosimo.promobot.bot.processingUserMessage.ProcessingUserMessage;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
@@ -23,13 +26,16 @@ public class Bot extends TelegramLongPollingBot {
     private Long chatId;
     private String messageText;
     private boolean pass;
+    private List<DeleteMessage> deleteMessageList;
+    private boolean canDeleteMessageList;
 
     {
-        botName = BotDataDAO.botName;
-        botToken = BotDataDAO.botToken;
-        botPassword = BotDataDAO.botPassword;
+        botName = BotData.botName;
+        botToken = BotData.botToken;
+        botPassword = BotData.botPassword;
 
         this.pass = false;
+        deleteMessageList = new ArrayList<>();
     }
 
     @Override
@@ -78,6 +84,8 @@ public class Bot extends TelegramLongPollingBot {
 
     public void sendReply(Object reply){
 
+        Message sentOutMessage = new Message();
+
         if (reply instanceof List){
 
            for (Object replyObject: (List)reply){
@@ -88,14 +96,42 @@ public class Bot extends TelegramLongPollingBot {
 
         try {
             if (reply instanceof SendDocument)
-                execute((SendDocument) reply);
+                sentOutMessage = execute((SendDocument) reply);
             if (reply instanceof SendMessage)
-                execute((SendMessage) reply);
+                sentOutMessage = execute((SendMessage) reply);
             if (reply instanceof SendPhoto)
-                execute((SendPhoto) reply);
+                sentOutMessage = execute((SendPhoto) reply);
 
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
+        if (canDeleteMessageList){
+            deleteMessageList.stream().forEach(deleteMessage -> {
+                try {
+                    execute(deleteMessage);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            });
+            deleteMessageList.clear();
+            canDeleteMessageList = false;
+        }
+
+        if(!sentOutMessage.hasReplyMarkup()) {
+            DeleteMessage deleteMessage = new DeleteMessage();
+            deleteMessage.setChatId(String.valueOf(sentOutMessage.getChatId()));
+            deleteMessage.setMessageId(sentOutMessage.getMessageId());
+            deleteMessageList.add(deleteMessage);
+        }else{
+            DeleteMessage deleteMessage = new DeleteMessage();
+            deleteMessage.setChatId(String.valueOf(sentOutMessage.getChatId()));
+            deleteMessage.setMessageId(sentOutMessage.getMessageId());
+            deleteMessageList.add(deleteMessage);
+            canDeleteMessageList = true;
+        }
+
+
+
     }
 }

@@ -1,6 +1,6 @@
 package nosimo.promobot.bot;
 
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,7 +41,7 @@ public class PromoInfo {
         promoMobileTVMap = new HashMap<>();
         promoAppliancesMap = new HashMap<>();
 
-        Path PromoFilePath = BotDataDAO.outResources.resolve("Samsung_Календарь акций.xlsx");
+        Path PromoFilePath = BotData.outResources.resolve("Samsung_Календарь акций.xlsx");
 
         workBook = null;
         try (FileInputStream fIS = new FileInputStream(PromoFilePath.toFile())) {

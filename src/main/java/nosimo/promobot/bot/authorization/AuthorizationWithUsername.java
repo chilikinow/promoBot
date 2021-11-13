@@ -1,6 +1,6 @@
 package nosimo.promobot.bot.authorization;
 
-import nosimo.promobot.bot.botData.BotDataDAO;
+import nosimo.promobot.bot.botData.BotData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +35,7 @@ public class AuthorizationWithUsername {
 
 //        enterUserName = "@" + enterUserName;
 
-        Path userNameFile = BotDataDAO.outResources.resolve("users.txt");
+        Path userNameFile = BotData.outResources.resolve("users.txt");
 
         try {
             usernamelist.addAll(Files.readAllLines(userNameFile));
