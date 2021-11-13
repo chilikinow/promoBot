@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DetailedProcessingUserMessage {
 
@@ -131,7 +132,12 @@ public class DetailedProcessingUserMessage {
         //Поиск подробной информации по запрашиваемой акции
 
         Map<String, String> promoMobileTVInfoMap = PromoInfo.getInstancePromoMobileTV();
-        if (promoMobileTVInfoMap.containsKey(messageText)) {
+        List<String> promoMobileTVInfoKeyList = promoMobileTVInfoMap.keySet().stream().map(key -> {
+           if (key.length() > 30)
+               return key.substring(0, 30);
+            return key;
+        }).collect(Collectors.toList());
+        if (promoMobileTVInfoKeyList.contains(messageText)) {
             for (Map.Entry<String, String> entry : promoMobileTVInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
                     StringBuilder replyText = new StringBuilder();
@@ -160,7 +166,12 @@ public class DetailedProcessingUserMessage {
         //Поиск подробной информации по запрашиваемой акции
 
         Map<String, String> promoAppliancesInfoMap = PromoInfo.getInstancePromoAppliances();
-        if (promoAppliancesInfoMap.containsKey(messageText)) {
+        List<String> promoAppliancesInfoKeyList = promoAppliancesInfoMap.keySet().stream().map(key -> {
+            if (key.length() > 30)
+                return key.substring(0, 30);
+            return key;
+        }).collect(Collectors.toList());
+        if (promoAppliancesInfoKeyList.contains(messageText)) {
             for (Map.Entry<String, String> entry : promoAppliancesInfoMap.entrySet()) {
                 if (entry.getKey().startsWith(messageText)) {
                     StringBuilder replyText = new StringBuilder();

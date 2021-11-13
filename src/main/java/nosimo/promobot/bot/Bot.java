@@ -118,7 +118,7 @@ public class Bot extends TelegramLongPollingBot {
             canDeleteMessageList = false;
         }
 
-        if(!sentOutMessage.hasReplyMarkup()) {
+        if (!sentOutMessage.hasReplyMarkup()) {
             DeleteMessage deleteMessage = new DeleteMessage();
             deleteMessage.setChatId(String.valueOf(sentOutMessage.getChatId()));
             deleteMessage.setMessageId(sentOutMessage.getMessageId());
