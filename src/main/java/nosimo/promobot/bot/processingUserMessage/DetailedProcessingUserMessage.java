@@ -21,7 +21,7 @@ public class DetailedProcessingUserMessage {
     private SendMessage replyMessage;
 
     {
-        startButtonInfo = ProcessingUserMessage.startButtonInfo;
+        startButtonInfo = ProcessingUserMessage.startButtonsInfo;
         replyMessageList = new ArrayList<>();
     }
 
