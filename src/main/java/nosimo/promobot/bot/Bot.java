@@ -13,7 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -35,7 +37,7 @@ public class Bot extends TelegramLongPollingBot {
         botPassword = BotData.botPassword;
 
         this.pass = false;
-        deleteMessageList = new ArrayList<>();
+        deleteMessageList = new LinkedList<>();
     }
 
     @Override
@@ -106,16 +108,20 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
 
-        if (canDeleteMessageList){
-            deleteMessageList.stream().forEach(deleteMessage -> {
-                try {
-                    execute(deleteMessage);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            });
-            deleteMessageList.clear();
-            canDeleteMessageList = false;
+        if (this.canDeleteMessageList){
+            deleteMessageList = deleteMessageList.stream()
+                    .peek(deleteMessage -> {
+                        if (Long.valueOf(deleteMessage.getChatId()).equals(this.chatId)) {
+                            try {
+                                execute(deleteMessage);
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    })
+                    .filter(deleteMessage -> !Long.valueOf(deleteMessage.getChatId()).equals(this.chatId))
+                    .collect(Collectors.toList());
+            this.canDeleteMessageList = false;
         }
 
         if (!sentOutMessage.hasReplyMarkup()) {

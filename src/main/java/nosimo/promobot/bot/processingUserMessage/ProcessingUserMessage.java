@@ -15,15 +15,13 @@ import java.util.*;
 
 public class ProcessingUserMessage {
 
-    public static String startButtonsInfo;
-    public static String buttonsInfo;
+    public static String startButtonInfo;
     private List<Object> replyMessageList;
     private SendMessage replyMessage;
     private SendDocument replyDocument;
 
     {
-        startButtonsInfo = "Главное меню:";
-        buttonsInfo = "Меню:";
+        startButtonInfo = "Стартовое меню: /start_menu";
         replyMessageList = new ArrayList<>();
     }
 
@@ -85,7 +83,7 @@ public class ProcessingUserMessage {
                                 + "\n\n"
                                 + "Технические характеристики и USP:\nhttp://uspmobile.ru/"
                                 + "\n\n"
-                                + buttonsInfo
+                                + startButtonInfo
                         , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
@@ -97,9 +95,7 @@ public class ProcessingUserMessage {
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
                 replyMessage = Response.createTextMessageWithKeyboard(chatId
-                        , replyTextMessage
-                                + "\n\n"
-                                + buttonsInfo
+                        , replyTextMessage + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
@@ -111,9 +107,7 @@ public class ProcessingUserMessage {
                 ending = "\nСписок устройств в процессе пополнения...";
                 replyTextMessage = new InfoCommand().create(heading, directory, ending);
                 replyMessage = Response.createTextMessageWithKeyboard(chatId
-                        , replyTextMessage
-                                + "\n\n"
-                                + buttonsInfo
+                        , replyTextMessage + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
@@ -121,9 +115,7 @@ public class ProcessingUserMessage {
             case "/service":
 
                 replyMessage = Response.createTextMessageWithKeyboard(chatId
-                        , new ServiceCommand().create()
-                                + "\n\n"
-                                + buttonsInfo
+                        , new ServiceCommand().create() + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.INFO);
                 return replyMessage;
 
@@ -140,7 +132,7 @@ public class ProcessingUserMessage {
 
                 PromoInfo.updateWorkbook();
                 replyMessage = Response.createTextMessageWithKeyboard(chatId
-                        , "База Акций обновлена!" + "\n\n" + startButtonsInfo
+                        , "База Акций обновлена!" + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
@@ -148,13 +140,13 @@ public class ProcessingUserMessage {
             case "Главное меню":
 
                 replyMessage = Response.createTextMessageWithKeyboard(chatId,
-                        startButtonsInfo, Response.TypeKeyboard.START);
+                        startButtonInfo, Response.TypeKeyboard.START);
                 return replyMessage;
 
             case "/start": // Первый запуск
 
                 replyMessage = Response.createTextMessageWithKeyboard(chatId
-                        , new StartCommand().create() + "\n\n" + startButtonsInfo
+                        , new StartCommand().create() + "\n\n" + startButtonInfo
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
@@ -174,7 +166,7 @@ public class ProcessingUserMessage {
         //если не найдено ни одного совпадения
         //Стартовое меню
         replyMessage = Response.createTextMessageWithKeyboard(chatId
-                ,"Команда не найдена!" + "\n\n" + startButtonsInfo
+                ,"Команда не найдена!" + "\n\n" + startButtonInfo
                 ,Response.TypeKeyboard.START);
         return replyMessage;
 
