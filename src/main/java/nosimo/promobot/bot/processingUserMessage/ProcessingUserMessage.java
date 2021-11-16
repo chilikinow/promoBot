@@ -21,7 +21,7 @@ public class ProcessingUserMessage {
     private SendDocument replyDocument;
 
     {
-        startButtonInfo = "Стартовое меню: /start_menu";
+        startButtonInfo = "Главное меню:";
         replyMessageList = new ArrayList<>();
     }
 
@@ -136,7 +136,7 @@ public class ProcessingUserMessage {
                         , Response.TypeKeyboard.START);
                 return replyMessage;
 
-            case "/start_menu": //Стартовое меню
+            case "/start_menu": //Главное меню
             case "Главное меню":
 
                 replyMessage = Response.createTextMessageWithKeyboard(chatId,
