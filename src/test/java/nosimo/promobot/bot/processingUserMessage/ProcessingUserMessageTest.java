@@ -55,6 +55,7 @@ class ProcessingUserMessageTest {
                     "https://galaxystore.ru/promo/";
             result = (SendMessage) new ProcessingUserMessage().searchAnswer(chatId, username, messageText);
             assertThat(result.getText()).as(expectedText);
+            new Object().hashCode();
         }
 
         @Test
